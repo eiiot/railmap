@@ -6,9 +6,11 @@ var _mapboxGlControls = require("mapbox-gl-controls");
 mapboxgl.accessToken = 'pk.eyJ1IjoiZG90bHkiLCJhIjoiY2tpbnA0YjljMTVhcTM0cGVzYjZibzEyMSJ9.fmuvKLVnmue6RxfqZjeLPQ';
 var map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy',
-  center: [-96, 37.8],
-  zoom: 3 
+  // container id
+  style: 'mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3',
+  center: [14, 50.3],
+  // starting position
+  zoom: 3.5 // starting zoom
 
 });
 
@@ -36,7 +38,7 @@ class LocationControl { // HERE
   this._map = map;
   this._container = document.createElement('div');
   this._container.className = 'mapboxgl-ctrl';
-  this._container.innerHTML = '<div class="mapboxgl-ctrl-group"> <button class="custom-icon" type="button" title="Europe" aria-label="Europe" aria-pressed="false"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 600 600"><path d="M336.5 160C322 70.7 287.8 8 248 8s-74 62.7-88.5 152h177zM152 256c0 22.2 1.2 43.5 3.3 64h185.3c2.1-20.5 3.3-41.8 3.3-64s-1.2-43.5-3.3-64H155.3c-2.1 20.5-3.3 41.8-3.3 64zm324.7-96c-28.6-67.9-86.5-120.4-158-141.6 24.4 33.8 41.2 84.7 50 141.6h108zM177.2 18.4C105.8 39.6 47.8 92.1 19.3 160h108c8.7-56.9 25.5-107.8 49.9-141.6zM487.4 192H372.7c2.1 21 3.3 42.5 3.3 64s-1.2 43-3.3 64h114.6c5.5-20.5 8.6-41.8 8.6-64s-3.1-43.5-8.5-64zM120 256c0-21.5 1.2-43 3.3-64H8.6C3.2 212.5 0 233.8 0 256s3.2 43.5 8.6 64h114.6c-2-21-3.2-42.5-3.2-64zm39.5 96c14.5 89.3 48.7 152 88.5 152s74-62.7 88.5-152h-177zm159.3 141.6c71.4-21.2 129.4-73.7 158-141.6h-108c-8.8 56.9-25.6 107.8-50 141.6zM19.3 352c28.6 67.9 86.5 120.4 158 141.6-24.4-33.8-41.2-84.7-50-141.6h-108z"/></svg> </button> </div>';
+  this._container.innerHTML = '<div class="mapboxgl-ctrl-group"> <button class="custom-icon" type="button" title="United States" aria-label="United States" aria-pressed="false"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 600 600"><path d="M336.5 160C322 70.7 287.8 8 248 8s-74 62.7-88.5 152h177zM152 256c0 22.2 1.2 43.5 3.3 64h185.3c2.1-20.5 3.3-41.8 3.3-64s-1.2-43.5-3.3-64H155.3c-2.1 20.5-3.3 41.8-3.3 64zm324.7-96c-28.6-67.9-86.5-120.4-158-141.6 24.4 33.8 41.2 84.7 50 141.6h108zM177.2 18.4C105.8 39.6 47.8 92.1 19.3 160h108c8.7-56.9 25.5-107.8 49.9-141.6zM487.4 192H372.7c2.1 21 3.3 42.5 3.3 64s-1.2 43-3.3 64h114.6c5.5-20.5 8.6-41.8 8.6-64s-3.1-43.5-8.5-64zM120 256c0-21.5 1.2-43 3.3-64H8.6C3.2 212.5 0 233.8 0 256s3.2 43.5 8.6 64h114.6c-2-21-3.2-42.5-3.2-64zm39.5 96c14.5 89.3 48.7 152 88.5 152s74-62.7 88.5-152h-177zm159.3 141.6c71.4-21.2 129.4-73.7 158-141.6h-108c-8.8 56.9-25.6 107.8-50 141.6zM19.3 352c28.6 67.9 86.5 120.4 158 141.6-24.4-33.8-41.2-84.7-50-141.6h-108z"/></svg> </button> </div>';
   this._container.addEventListener('click', function(e) {
     switchLocation();
   }, false)
@@ -61,11 +63,11 @@ map.addControl(new _mapboxGlControls.StylesControl({
   }, {
     label: 'Light',
     styleName: 'Light',
-    styleUrl: 'mapbox://styles/dotly/ckoz6vsl50kv117pg6tbt6icm'
+    styleUrl: 'mapbox://styles/dotly/ckpxomwzq0syt17nzenb4p17r'
   }, {
     label: 'Data',
     styleName: 'Data',
-    styleUrl: 'mapbox://styles/dotly/ckoz5zgci1o3617nb0fiz48ig'
+    styleUrl: 'mapbox://styles/dotly/ckpxomzkq08gp19o8o99y0yut'
   }],
   onChange: style => console.log(style)
 }), 'top-left'); // Add geolocate control to the map.
@@ -109,7 +111,7 @@ function aboutMap() {
 
 function switchLocation() {
   console.log("Location Switched");
-  window.location.href = 'http://www.therailmap.com/europe';
+  window.location.href = 'http://www.therailmap.com';
 };
 
 map.on('load', function () {
@@ -263,13 +265,6 @@ map.on('load', function () {
     var railroad = e.features[0].properties.Railway;
     var subdiv = e.features[0].properties.Subdivision;
     var location = e.features[0].properties.Location;
-    var lanes = e.features[0].properties.Lanes; //NEW
-    var milepost = e.features[0].properties.Mile; //NEW
-    var authority = e.features[0].properties['Road Authority']; //NEW
-    var road_speed = e.features[0].properties['Road Speed (km/h)']; //NEW
-    var trains_daily = e.features[0].properties['Total Trains Daily']; //NEW
-    var vehicles_daily = e.features[0].properties['Vehicles Daily']; //NEW
-    var train_speed = e.features[0].properties['Train Max Speed (mph)']; //NEW
     var tracks = e.features[0].properties.Tracks; // Ensure that if the map is zoomed out such that multiple
     // copies of the feature are visible, the popup appears
     // over the copy being pointed to.
@@ -285,7 +280,7 @@ map.on('load', function () {
         closeButton: false,
         closeOnMove: true,
         offset: 10
-      }).setLngLat(coordinates).setHTML("<div style='height:300px;overflow:auto;'><table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Location</td><td>" + location + "</td></tr><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Access</td><td>" + access + "</td></tr><tr><td>Subdivision</td><td>" + subdiv + "</td></tr><tr><td>Milepost</td><td>" + milepost + "</td></tr><tr><td>Lanes</td><td>" + lanes + "</td></tr><tr><td>Road Authority</td><td>" + authority + "</td></tr><tr><td>Road Speed</td><td>" + road_speed + " kph</td></tr><tr><td>Trains per Day</td><td>" + trains_daily + "</td></tr><tr><td>Vehicles per Day</td><td>" + vehicles_daily + "</td></tr><tr><td>Train Speed</td><td>" + train_speed + " mph</td></tr></tbody></table></div>").addTo(map);
+      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Location</td><td>" + location + "</td></tr><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Access</td><td>" + access + "</td></tr><tr><td>Subdivision</td><td>" + subdiv + "</td></tr></tbody><tr><td>Tracks</td><td>" + tracks + "</td></tr></table>").addTo(map);
     }
 
     ;
@@ -328,8 +323,7 @@ map.on('load', function () {
 
   map.on('click', 'CN-Railroad-Bridges', function (e) {
     var coordinates = e.features[0].geometry.coordinates.slice();
-    var name = e.features[0].properties.name;
-    var operator = e.features[0].properties.operator // Ensure that if the map is zoomed out such that multiple
+    var name = e.features[0].properties.name; // Ensure that if the map is zoomed out such that multiple
     // copies of the feature are visible, the popup appears
     // over the copy being pointed to.
 
@@ -344,7 +338,7 @@ map.on('load', function () {
         closeButton: false,
         closeOnMove: true,
         offset: 10
-      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Name</td><td>" + name + "</td></tr><tr><td>Operator</td><td>" + operator + "</td></tr></tbody></table>").addTo(map);
+      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Name</td><td>" + name + "</td></tr><tr></tbody></table>").addTo(map);
     }
 
     ;

@@ -44,7 +44,8 @@ map.addControl(
 	new MapboxGeocoder({
 		accessToken: mapboxgl.accessToken,
 		mapboxgl: mapboxgl,
-		collapsed: true
+		collapsed: true,
+        marker: false
 }),
 'top-left'
 );
