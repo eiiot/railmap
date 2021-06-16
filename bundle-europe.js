@@ -59,7 +59,7 @@ map.addControl(new _mapboxGlControls.StylesControl({
   styles: [{
     label: 'Satellite',
     styleName: 'Satellite',
-    styleUrl: 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy'
+    styleUrl: 'mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3'
   }, {
     label: 'Light',
     styleName: 'Light',
