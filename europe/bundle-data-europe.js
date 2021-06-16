@@ -87,7 +87,7 @@ function aboutMap() {
 
 function switchLocation() {
   console.log("Location Switched");
-  window.location.href = 'http://www.therailmap.com/data;
+  window.location.href = 'http://www.therailmap.com/data';
 };
 
 map.on('load', function () {
