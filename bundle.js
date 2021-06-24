@@ -286,6 +286,7 @@ map.on('load', function () {
     var railroad = e.features[0].properties.Railway;
     var subdiv = e.features[0].properties.Subdivision;
     var location = e.features[0].properties.Location;
+    var tc_num = e.features[0].properties['TC Number'];
     var lanes = e.features[0].properties.Lanes; //NEW
     var milepost = e.features[0].properties.Mile; //NEW
     var authority = e.features[0].properties['Road Authority']; //NEW
@@ -308,7 +309,7 @@ map.on('load', function () {
         closeButton: false,
         closeOnMove: true,
         offset: 10
-      }).setLngLat(coordinates).setHTML("<div style='height:300px;overflow:auto;'><table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Location</td><td>" + location + "</td></tr><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Access</td><td>" + access + "</td></tr><tr><td>Subdivision</td><td>" + subdiv + "</td></tr><tr><td>Milepost</td><td>" + milepost + "</td></tr><tr><td>Lanes</td><td>" + lanes + "</td></tr><tr><td>Road Authority</td><td>" + authority + "</td></tr><tr><td>Road Speed</td><td>" + road_speed + " kph</td></tr><tr><td>Trains per Day</td><td>" + trains_daily + "</td></tr><tr><td>Vehicles per Day</td><td>" + vehicles_daily + "</td></tr><tr><td>Train Speed</td><td>" + train_speed + " mph</td></tr></tbody></table></div>").addTo(map);
+      }).setLngLat(coordinates).setHTML("<div style='height:300px;overflow:auto;'><table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Location</td><td>" + location + "</td></tr><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Access</td><td>" + access + "</td></tr><tr><td>Subdivision</td><td>" + subdiv + "</td></tr><tr><td>Milepost</td><td>" + milepost + "</td></tr><tr><td>TC Number</td><td>" + tc_num + "</td></tr><tr><td>Lanes</td><td>" + lanes + "</td></tr><tr><td>Road Authority</td><td>" + authority + "</td></tr><tr><td>Road Speed</td><td>" + road_speed + " kph</td></tr><tr><td>Trains per Day</td><td>" + trains_daily + "</td></tr><tr><td>Vehicles per Day</td><td>" + vehicles_daily + "</td></tr><tr><td>Train Speed</td><td>" + train_speed + " mph</td></tr></tbody></table></div>").addTo(map);
     }
 
     ;
