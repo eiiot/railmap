@@ -3,6 +3,14 @@
 
 var _mapboxGlControls = require("mapbox-gl-controls");
 
+// URL Stuff //
+
+var url_string = window.location.href;
+var url = new URL(url_string);
+var location = url.searchParams.get("latlng");
+
+// ####### //
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiZG90bHkiLCJhIjoiY2tpbnA0YjljMTVhcTM0cGVzYjZibzEyMSJ9.fmuvKLVnmue6RxfqZjeLPQ';
 var map = new mapboxgl.Map({
   container: 'map',
@@ -88,6 +96,19 @@ function aboutMap() {
 function switchLocation() {
   console.log("Location Switched");
   window.location.href = 'http://www.therailmap.com/data';
+};
+
+window.onload = function() {
+  if(location != null){
+    var latLng = location.split(","); 
+    var lat = parseFloat(latLng[0]);
+    var lng = parseFloat(latLng[1]); 
+    map.flyTo({
+      center: [lng,lat],
+      zoom: 18,
+      essential: true
+    })
+  };
 };
 
 map.on('load', function () {
