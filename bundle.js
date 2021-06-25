@@ -117,7 +117,7 @@ function aboutMap() {
 
 function switchLocation() {
   console.log("Location Switched");
-  window.location.href = 'http://www.therailmap.com/europe';
+  window.location.href = 'https://www.therailmap.com/europe';
 };
 
 window.onload = function() {
