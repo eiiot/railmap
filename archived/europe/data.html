@@ -5,10 +5,10 @@
 <title>The Rail Map</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
-<link href="./styles/csmb.css" rel="stylesheet">
-<link href="./styles/modal.css" rel="stylesheet">
+<link href="https://www.therailmap.com/styles/csmb.css" rel="stylesheet">
+<link href="https://www.therailmap.com/styles/modal.css" rel="stylesheet">
 <link href="https://unpkg.com/mapbox-gl-controls@2.3.0/lib/controls.css" rel="stylesheet">
-<link rel="icon" type="image/png" href="./images/favicon.png"/>
+<link rel="icon" type="image/png" href="../images/favicon.png"/>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
 <style>
     body { margin: 0; padding: 0; }
@@ -47,26 +47,6 @@
     .popup-icons{
       bottom: 10px;
     }
-
-    .disabled-button {
-      -webkit-filter: opacity(.3) drop-shadow(0 0 0 #FFF);
-      filter: opacity(.3) drop-shadow(0 0 0 #FFF);
-      pointer-events: none !important;
-      cursor: not-allowed !important;      
-    }
-
-    .hidden-button {
-      display: none;
-    }
-
-    @font-face {
-        font-family: "San Francisco";
-        font-weight: 400;
-        src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
-    }
-    * {
-        font-family: "San Francisco" !important;
-    }  
     </style>
 </head>
 <body>
@@ -82,7 +62,7 @@
       <h2>The Rail Map</h2>
     </div>
     <div class="modal-body">
-      This map is an interactive way to explore Railroads throught the world. This map includes many features, including Level Crossings, Rail Bridges, and Tunnels.<br>Please see <a href="https://github.com/EliotHertenstein/railmap" target="_blank">GitHub</a> for source code, and more information!
+      This is a data-only version of the rail map.<br>Please see <a href="https://www.therailmap.com">our main website</a> for for more features and information!
       <p>
         <b>Legend</b>
         <table style="max-width:200px;">
@@ -108,7 +88,7 @@
   </div>
 </div>
 
-<script src="bundle.js"></script>
+<script src="bundle-data-europe.js"></script>
 
 </body>
 </html>

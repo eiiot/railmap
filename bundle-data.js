@@ -8,6 +8,7 @@ var _mapboxGlControls = require("mapbox-gl-controls");
 var url_string = window.location.href;
 var url = new URL(url_string);
 var location = url.searchParams.get("latlng");
+var redirect = url.searchParams.get("redirect")
 
 // ####### //
 
@@ -21,6 +22,12 @@ var map = new mapboxgl.Map({
   zoom: 3.5 // starting zoom
 
 });
+
+var mapStyle = 'usa';
+
+if(redirect == 'europe'){
+  switchLocation()
+};
 
 class AboutControl { // HERE
   onAdd(map) {
@@ -94,8 +101,24 @@ function aboutMap() {
 }
 
 function switchLocation() {
-  console.log("Location Switched");
-  window.location.href = 'http://www.therailmap.com/data-europe';
+  if(mapStyle == 'usa'){
+    map.setStyle('mapbox://styles/dotly/ckpxomzkq08gp19o8o99y0yut');
+    mapStyle = 'europe';
+    map.flyTo({
+      center: [14,50.3],
+      zoom: 3.5,
+      essential: true
+    })
+  }
+  else{
+    map.setStyle('mapbox://styles/dotly/ckoz5zgci1o3617nb0fiz48ig');
+    mapStyle = 'usa';
+    map.flyTo({
+      center: [-96, 37.8],
+      zoom: 3,
+      essential: true
+   })
+  } 
 };
 
 window.onload = function() {
