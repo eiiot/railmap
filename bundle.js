@@ -276,7 +276,7 @@ map.on('load', function () {
       new mapboxgl.Popup({
         closeButton: false,
         offset: 10
-      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Division</td><td>" + div + "</td></tr><tr><td>Subdivision</td><td>" + subdiv + "</td></tr><tr><td>Street</td><td>" + street + "</td></tr><tr><td>Crossing ID</td><td>" + crossingid + "</td></tr><tr><td>Milepost</td><td>" + milepost + "</td></tr></tbody></table>").addTo(map);
+      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Division</td><td>" + div + "</td></tr><tr><td>Subdivision</td><td>" + subdiv + "</td></tr><tr><td>Street</td><td>" + street + "</td></tr><tr><td>Crossing ID</td><td>" + crossingid + "</td></tr><tr><td>Milepost</td><td>" + milepost + "</td></tr><tr><td>Link</td><td><a href='https://www.therailmap.com?latlng=" + coordinates[1] + "," + coordinates[0] + "' target='_blank'>Click Me</a></td></tr></tbody></table>").addTo(map);
     }
 
     hoverpopup.remove();
@@ -341,7 +341,7 @@ map.on('load', function () {
       new mapboxgl.Popup({
         closeButton: false,
         offset: 10
-      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Name</td><td>" + brname + "</td></tr><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Id</td><td>" + id + "</td></tr></tbody></table>").addTo(map);
+      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Name</td><td>" + brname + "</td></tr><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Id</td><td>" + id + "</td></tr><tr><td>Link</td><td><a href='https://www.therailmap.com?latlng=" + coordinates[1] + "," + coordinates[0] + "' target='_blank'>Click Me</a></td></tr></tbody></table>").addTo(map);
     }
 
     ;
@@ -413,7 +413,7 @@ map.on('load', function () {
       new mapboxgl.Popup({
         closeButton: false,
         offset: 10
-      }).setLngLat(coordinates).setHTML("<div style='height:300px;overflow:auto;'><table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Location</td><td>" + location + "</td></tr><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Access</td><td>" + access + "</td></tr><tr><td>Subdivision</td><td>" + subdiv + "</td></tr><tr><td>Milepost</td><td>" + milepost + "</td></tr><tr><td>Lanes</td><td>" + lanes + "</td></tr><tr><td>Road Authority</td><td>" + authority + "</td></tr><tr><td>Road Speed</td><td>" + road_speed + " kph</td></tr><tr><td>Trains per Day</td><td>" + trains_daily + "</td></tr><tr><td>Vehicles per Day</td><td>" + vehicles_daily + "</td></tr><tr><td>Train Speed</td><td>" + train_speed + " mph</td></tr></tbody></table></div>").addTo(map);
+      }).setLngLat(coordinates).setHTML("<div style='height:300px;overflow:auto;'><table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Location</td><td>" + location + "</td></tr><tr><td>Railroad</td><td>" + railroad + "</td></tr><tr><td>Access</td><td>" + access + "</td></tr><tr><td>Subdivision</td><td>" + subdiv + "</td></tr><tr><td>Milepost</td><td>" + milepost + "</td></tr><tr><td>Lanes</td><td>" + lanes + "</td></tr><tr><td>Road Authority</td><td>" + authority + "</td></tr><tr><td>Road Speed</td><td>" + road_speed + " kph</td></tr><tr><td>Trains per Day</td><td>" + trains_daily + "</td></tr><tr><td>Vehicles per Day</td><td>" + vehicles_daily + "</td></tr><tr><td>Train Speed</td><td>" + train_speed + " mph</td></tr><tr><td>Link</td><td><a href='https://www.therailmap.com?latlng=" + coordinates[1] + "," + coordinates[0] + "' target='_blank'>Click Me</a></td></tr></tbody></table></div>").addTo(map);
     }
 
     ;
@@ -471,7 +471,7 @@ map.on('load', function () {
       new mapboxgl.Popup({
         closeButton: false,
         offset: 10
-      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Name</td><td>" + name + "</td></tr><tr><td>Operator</td><td>" + operator + "</td></tr></tbody></table>").addTo(map);
+      }).setLngLat(coordinates).setHTML("<table><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Name</td><td>" + name + "</td></tr><tr><td>Operator</td><td>" + operator + "</td></tr><tr><td>Link</td><td><a href='https://www.therailmap.com?latlng=" + coordinates[1] + "," + coordinates[0] + "' target='_blank'>Click Me</a></td></tr></tbody></table>").addTo(map);
     }
 
     ;
