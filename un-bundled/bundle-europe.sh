@@ -1,1 +1,0 @@
-browserify mapbox-europe.js -p esmify > bundle-europe.js

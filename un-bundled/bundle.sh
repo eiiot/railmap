@@ -1,1 +1,0 @@
-browserify mapbox.js -p esmify > bundle.js
