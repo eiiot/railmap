@@ -1,6 +1,8 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 var _mapboxGlControls = require("mapbox-gl-controls");
 
+var version = "v1.3";
+
 // URL Stuff //
 
 var url_string = window.location.href;
@@ -9,6 +11,23 @@ var location = url.searchParams.get("latlng");
 var redirect = url.searchParams.get("redirect")
 
 // ####### //
+var colors = {
+	"gray": "font-weight: bold; color: #1B2B34;",
+	"red": "font-weight: bold; color: #EC5f67;",
+	"orange": "font-weight: bold; color: #F99157;",
+	"yellow": "font-weight: bold; color: #FAC863;",
+	"green": "font-weight: bold; color: #99C794;",
+	"teal": "font-weight: bold; color: #5FB3B3;",
+	"blue": "font-weight: bold; color: #6699CC;",
+	"purple": "font-weight: bold; color: #C594C5;",
+	"brown": "font-weight: bold; color: #AB7967;"
+}
+
+console.log('%cThe Rail Map %c' + version + '!', colors.black, colors.yellow);
+console.log('%cCreated by %cEliot Hertenstein', colors.black, colors.blue);
+console.log('%cSupport Me at these places:', colors.black);
+console.log('%cYouTube: %chttps://www.youtube.com/channel/UCMgxeBL7wpBOjhVHBluvTrQ', colors.red, colors.black);
+console.log('%cPatreon: %chttps://www.patreon.com/eliothertenstein', colors.purple, colors.black);
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZG90bHkiLCJhIjoiY2tpbnA0YjljMTVhcTM0cGVzYjZibzEyMSJ9.fmuvKLVnmue6RxfqZjeLPQ';
 var map = new mapboxgl.Map({

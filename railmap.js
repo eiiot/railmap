@@ -2,6 +2,8 @@ var _mapboxGlControls = require("mapbox-gl-controls");
 
 var style = 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy';
 
+var version = "v1.3";
+
 // URL Stuff //
 
 var url_string = window.location.href;
@@ -10,6 +12,23 @@ var location = url.searchParams.get("latlng");
 var redirect = url.searchParams.get("redirect");
 
 // ####### //
+var colors = {
+	"gray": "font-weight: bold; color: #1B2B34;",
+	"red": "font-weight: bold; color: #EC5f67;",
+	"orange": "font-weight: bold; color: #F99157;",
+	"yellow": "font-weight: bold; color: #FAC863;",
+	"green": "font-weight: bold; color: #99C794;",
+	"teal": "font-weight: bold; color: #5FB3B3;",
+	"blue": "font-weight: bold; color: #6699CC;",
+	"purple": "font-weight: bold; color: #C594C5;",
+	"brown": "font-weight: bold; color: #AB7967;"
+}
+
+console.log('%cThe Rail Map %c' + version + '!', colors.black, colors.yellow);
+console.log('%cCreated by %cEliot Hertenstein', colors.black, colors.blue);
+console.log('%cSupport Me at these places:', colors.black);
+console.log('%cYouTube: %chttps://www.youtube.com/channel/UCMgxeBL7wpBOjhVHBluvTrQ', colors.red, colors.black);
+console.log('%cPatreon: %chttps://www.patreon.com/eliothertenstein', colors.purple, colors.black);
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZG90bHkiLCJhIjoiY2tpbnA0YjljMTVhcTM0cGVzYjZibzEyMSJ9.fmuvKLVnmue6RxfqZjeLPQ';
 var map = new mapboxgl.Map({
