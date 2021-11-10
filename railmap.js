@@ -175,7 +175,7 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-}
+};
 
 function aboutMap() {
   if(modal.style.display == "block"){
@@ -184,7 +184,7 @@ function aboutMap() {
   else {
     modal.style.display = "block";
   };
-}
+};
 
 if(redirect == 'europe'){
   switchLocation();
