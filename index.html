@@ -4,76 +4,26 @@
 <meta charset="utf-8">
 <title>The Rail Map</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
 <link href="./styles/csmb.css" rel="stylesheet">
 <link href="./styles/modal.css" rel="stylesheet">
-<link href="https://unpkg.com/mapbox-gl-controls@2.3.0/lib/controls.css" rel="stylesheet">
 <link rel="icon" type="image/png" href="./images/favicon.png"/>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
+<link href="https://unpkg.com/mapbox-gl-controls@2.3.0/lib/controls.css" rel="stylesheet">
 <script async defer data-domain="therailmap.com" src="https://analytics.eliothertenstein.com/js/plausible.js"></script>
-<style>
-    body { margin: 0; padding: 0; }
-    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
-    table, td, th {
-      border: 1px solid black;
-      text-align: center; 
-      vertical-align: middle;
-    }
-    
-    th, td {
-      padding: 5px;
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
-    .mapboxgl-popup-content {
-        border-radius: 15px;
-    }
-
-    .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
-    .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
-    .mapboxgl-popup-anchor-center .mapboxgl-popup-tip,
-    .mapboxgl-popup-anchor-left .mapboxgl-popup-tip,
-    .mapboxgl-popup-anchor-right .mapboxgl-popup-tip,
-    .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip,
-    .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
-    .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip, 
-    .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip{
-        display:none !important;
-    }
-
-    .popup-icons{
-      bottom: 10px;
-    }
-
-    .disabled-button {
-      -webkit-filter: opacity(.3) drop-shadow(0 0 0 #FFF);
-      filter: opacity(.3) drop-shadow(0 0 0 #FFF);
-      pointer-events: none !important;
-      cursor: not-allowed !important;      
-    }
-
-    .hidden-button {
-      display: none;
-    }
-
-    @font-face {
-        font-family: "San Francisco";
-        font-weight: 400;
-        src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
-    }
-    * {
-        font-family: "San Francisco" !important;
-    }  
-    </style>
+<link rel="stylesheet" href="./styles/index.css">
 </head>
 <body>
 
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
+<div id="loader-div" class="loader-div">
+  <span class="loader">
+    <span></span>
+    <span></span>
+  </span>
+</div>
+
 <div id="map"></div>
 
 <div id="aboutPopup" class="modal">

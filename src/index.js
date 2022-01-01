@@ -1,8 +1,8 @@
 var _mapboxGlControls = require("mapbox-gl-controls");
 
-var style = 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy';
-
 var version = "v1.3";
+
+const loaderDiv = document.getElementById('loader-div');
 
 // URL Stuff //
 
@@ -11,7 +11,7 @@ var url = new URL(url_string);
 var location = url.searchParams.get("latlng");
 var redirect = url.searchParams.get("redirect");
 
-// ####### //
+// LOGGING //
 var colors = {
 	"gray": "font-weight: bold; color: #1B2B34;",
 	"red": "font-weight: bold; color: #EC5f67;",
@@ -30,6 +30,10 @@ console.log('%cSupport Me at these places:', colors.black);
 console.log('%cYouTube: %chttps://www.youtube.com/channel/UCMgxeBL7wpBOjhVHBluvTrQ', colors.red, colors.black);
 console.log('%cPatreon: %chttps://www.patreon.com/eliothertenstein', colors.purple, colors.black);
 
+// Mapbox Stuff //
+
+var style = 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy';
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiZG90bHkiLCJhIjoiY2tpbnA0YjljMTVhcTM0cGVzYjZibzEyMSJ9.fmuvKLVnmue6RxfqZjeLPQ';
 var map = new mapboxgl.Map({
   container: 'map',
@@ -40,44 +44,6 @@ var map = new mapboxgl.Map({
 });
 
 var mapStyle = 'usa';
-
-class AboutControl { 
-  onAdd(map) {
-  this._map = map;
-  this._container = document.createElement('div');
-  this._container.className = 'mapboxgl-ctrl';
-  this._container.innerHTML = '<div class="mapboxgl-ctrl-group"> <button class="custom-icon" type="button" title="About" aria-label="About" aria-pressed="false"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 600 600"><path d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"/> </svg> </button> </div>';
-  this._container.addEventListener('click', function(e) {
-    aboutMap();
-  }, false)
-
-  return this._container;
-  }
-   
-  onRemove() {
-  this._container.parentNode.removeChild(this._container);
-  this._map = undefined;
-  }
-}
-
-class AmtrakControl { 
-  onAdd(map) {
-  this._map = map;
-  this._container = document.createElement('div');
-  this._container.className = 'mapboxgl-ctrl mapbox-amtrak-control';
-  this._container.innerHTML = '<div class="mapboxgl-ctrl-group"> <button class="custom-icon" type="button" title="Amtrak" aria-label="Amtrak" aria-pressed="false"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 600 600"><path d="M264.437 173.779C233.5 172.323 71.9 168.216 0 199.364c19.446 11.487 40.304 23.404 64.792 36.321 71.256-33.337 163.7-45.394 248.716-50.033v-2.16c-16.531-2.019-34.781-5.55-49.071-9.712h0zm72.648 13.067c-63.789 6.367-176.712 24.86-241.056 64.925 23.396 11.771 47.86 23.425 72.302 34.315 67.746-57.756 157.356-83.371 248.673-101.323v-2.117c-23.202 2.729-58.256 4.398-79.919 4.2h0zM201.977 300.554c30.862 12.76 62.789 24.496 89.985 32.34 32.769-65.137 92.008-116.773 201.187-164.091v-2.135c-140.237 38.346-227.993 65.821-291.172 133.887h0z"/> </svg> </button> </div>';
-  this._container.addEventListener('click', function(e) {
-    amtrakSwitch();
-  }, false)
-
-  return this._container;
-  }
-   
-  onRemove() {
-  this._container.parentNode.removeChild(this._container);
-  this._map = undefined;
-  }
-}
 
 class LocationControl { 
   onAdd(map) {
@@ -96,7 +62,45 @@ class LocationControl {
   this._container.parentNode.removeChild(this._container);
   this._map = undefined;
   }
-}
+};
+
+class AmtrakControl { 
+  onAdd(map) {
+  this._map = map;
+  this._container = document.createElement('div');
+  this._container.className = 'mapboxgl-ctrl mapbox-amtrak-control';
+  this._container.innerHTML = '<div class="mapboxgl-ctrl-group"> <button class="custom-icon" type="button" title="Amtrak" aria-label="Amtrak" aria-pressed="false"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 600 600"><path d="M264.437 173.779C233.5 172.323 71.9 168.216 0 199.364c19.446 11.487 40.304 23.404 64.792 36.321 71.256-33.337 163.7-45.394 248.716-50.033v-2.16c-16.531-2.019-34.781-5.55-49.071-9.712h0zm72.648 13.067c-63.789 6.367-176.712 24.86-241.056 64.925 23.396 11.771 47.86 23.425 72.302 34.315 67.746-57.756 157.356-83.371 248.673-101.323v-2.117c-23.202 2.729-58.256 4.398-79.919 4.2h0zM201.977 300.554c30.862 12.76 62.789 24.496 89.985 32.34 32.769-65.137 92.008-116.773 201.187-164.091v-2.135c-140.237 38.346-227.993 65.821-291.172 133.887h0z"/> </svg> </button> </div>';
+  this._container.addEventListener('click', function(e) {
+    amtrakSwitch();
+  }, false)
+
+  return this._container;
+  }
+   
+  onRemove() {
+  this._container.parentNode.removeChild(this._container);
+  this._map = undefined;
+  }
+};
+
+class AboutControl { 
+  onAdd(map) {
+  this._map = map;
+  this._container = document.createElement('div');
+  this._container.className = 'mapboxgl-ctrl';
+  this._container.innerHTML = '<div class="mapboxgl-ctrl-group"> <button class="custom-icon" type="button" title="About" aria-label="About" aria-pressed="false"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 600 600"><path d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"/> </svg> </button> </div>';
+  this._container.addEventListener('click', function(e) {
+    aboutMap();
+  }, false)
+
+  return this._container;
+  }
+   
+  onRemove() {
+  this._container.parentNode.removeChild(this._container);
+  this._map = undefined;
+  }
+};
 
 const navigationControl = new mapboxgl.NavigationControl()
 const fullscreenControl = new mapboxgl.FullscreenControl()
@@ -150,7 +154,6 @@ map.addControl(new mapboxgl.GeolocateControl({
   },
   trackUserLocation: true
 }));
-
 map.addControl(usStyleControl, 'top-left');  
 map.addControl(euStyleControl, 'top-left');  
 map.addControl(mapboxGeocoder, 'top-left');
@@ -171,14 +174,8 @@ euStyleButton.classList.add('hidden-button');
 
 var modal = document.getElementById("aboutPopup");
 
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-};
-
 function aboutMap() {
-  if(modal.style.display == "block"){
+  if (modal.style.display == "block") {
     modal.style.display = "none";
   }
   else {
@@ -186,17 +183,40 @@ function aboutMap() {
   };
 };
 
-if(redirect == 'europe'){
-  switchLocation();
-}
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+
+// REDIRECT HANDLER
+
+if (redirect == 'europe') {
+  map.setStyle('mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3');
+  mapStyle = 'europe';
+  amtrakButton[0].classList.add('hidden-button');
+  switchLocationStyle();
+  map.flyTo({
+    center: [14,50.3],
+    zoom: 3.5,
+    essential: true
+  })
+} else if (redirect == 'amtrak') {
+  map.setStyle('mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp');
+  mapStyle = 'amtrak';
+  locationButton[0].classList.add('hidden-button');
+  styleButton[0].classList.add('hidden-button');
+};
+
+// LOCATION HANDLER
 
 function switchLocation() {
-  if(mapStyle !== 'amtrak'){
-    if(mapStyle !== 'europe'){
+  if (mapStyle !== 'amtrak') {
+    if (mapStyle !== 'europe') {
       map.setStyle('mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3');
       mapStyle = 'europe';
       amtrakButton[0].classList.add('hidden-button');
-      switchStyle();
+      switchLocationStyle();
       map.flyTo({
         center: [14,50.3],
         zoom: 3.5,
@@ -207,7 +227,7 @@ function switchLocation() {
       map.setStyle('mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy');
       mapStyle = 'usa';
       amtrakButton[0].classList.remove('hidden-button');
-      switchStyle();
+      switchLocationStyle();
       map.flyTo({
         center: [-96, 37.8],
         zoom: 3,
@@ -217,20 +237,20 @@ function switchLocation() {
   };
 };
 
-function switchStyle() {
-  if(mapStyle == 'usa'){
+function switchLocationStyle() {
+  if (mapStyle == 'usa') {
     euStyleButton.classList.add('hidden-button');
     usStyleButton.classList.remove('hidden-button');
   }
-  if(mapStyle == 'europe'){
+  if (mapStyle == 'europe') {
     usStyleButton.classList.add('hidden-button');
     euStyleButton.classList.remove('hidden-button');
   }
 }
 
 function amtrakSwitch() {
-  if(mapStyle != 'europe'){
-    if(mapStyle != 'amtrak'){
+  if (mapStyle != 'europe') {
+    if (mapStyle != 'amtrak') {
       map.setStyle('mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp');
       mapStyle = 'amtrak';
       locationButton[0].classList.add('hidden-button');
@@ -245,8 +265,119 @@ function amtrakSwitch() {
   };
 };
 
+async function displayAmtrak() {
+  const geojson = await getTrains();
+  // Add the trains location as a source.
+  map.addSource('trains', {
+      type: 'geojson',
+      data: geojson
+  });
+  // Add the dots to the map.
+  map.addLayer({
+      'id': 'trains',
+      'type': 'circle',
+      'source': 'trains',
+      "paint": {
+        "circle-color": "hsl(203, 68%, 29%)",
+        "circle-radius": 11,
+        "circle-opacity": 1
+      }
+  });
+  // Add the labels to the map.
+  map.addLayer({
+    'id': 'train-numbers',
+    'type': 'symbol',
+    'source': 'trains',
+    'layout': {
+      'text-field': ["to-string", ["get", "trainNum"]],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': 12,
+    },
+    'paint': {
+      'text-color': '#fff',
+    }
+  });
+  
+  async function getTrains(updateSource) {
+      // Make a GET request to the API and return the location of the trains.
+      try {
+          const response = await fetch(
+              'https://api.amtrak.cc/v1/trains',
+              { method: 'GET' }
+          );
+          const trains = await response.json();
+          // returns object of trains with the object num as the train number
+
+          // create a geoJSON object
+          const geoJSON = {
+              type: 'FeatureCollection',
+              features: []
+          };
+          
+          // iterate through trains
+          Object.keys(trains).forEach(key => {
+              const activeTrains = trains[key];
+
+              // iterate through active trains
+              Object.keys(activeTrains).forEach(key => {
+                  const train = activeTrains[key];
+                  // push train to geoJSON
+                  geoJSON.features.push({
+                      type: 'Feature',
+                      geometry: {
+                          type: 'Point',
+                          coordinates: [train.lon, train.lat]
+                      },
+                      properties: train
+                    });
+              });
+          });
+
+          return geoJSON;
+          
+      } catch (err) {
+          // If the updateSource interval is defined, clear the interval to stop updating the source.
+          if (updateSource) clearInterval(updateSource);
+          throw new Error(err);
+      }
+  };
+
+  // Update the source from the API
+  const updateSource = setInterval(async () => {
+    const geojson = await getTrains(updateSource);
+    map.getSource('trains').setData(geojson);
+  }, 60000);
+
+  // When a click event occurs on a feature in the trains layer, open a popup at the location of the feature, with description of the feature.
+  map.on('click', 'trains', function (e) {
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      // create table with all properties
+      const properties = e.features[0].properties;
+      const table = Object.keys(properties).map(key => {
+          // return if key is "stations" or "aliases"
+          if (key === "stations" || key === "aliases" || key === "coordinates") return;
+          return `<tr><td>${key}</td><td>${properties[key]}</td></tr>`;
+      }).join('');
+      const routeName = e.features[0].properties.routeName;
+      const trainNum = e.features[0].properties.trainNum;
+      // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+      new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(`<h3>${routeName} ${trainNum}</h3><table class="train-info">${table}</table>`)
+          .addTo(map);
+  });
+
+  // change cursor to pointer when hovering over trains
+  map.on('mouseenter', 'trains', function () {
+      map.getCanvas().style.cursor = 'pointer';
+  });
+};
+
 window.onload = function() {
-  if(location != null){
+  if (location != null) {
     var latLng = location.split(","); 
     var lat = parseFloat(latLng[0]);
     var lng = parseFloat(latLng[1]); 
@@ -258,13 +389,15 @@ window.onload = function() {
   };
 };
 
-map.on('load', function () {
+map.on('load', async function () {
   var hoverpopup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
     className: "hover",
     offset: 10
   }); 
+
+  displayAmtrak();
   
   ///////////////////
   // UNITED STATES //
@@ -589,4 +722,10 @@ map.on('load', function () {
     map.getCanvas().style.cursor = '';
     hoverpopup.remove();
   });  
+});
+
+map.on('idle',function(){
+  loaderDiv.style.display = 'none';
+  // write "loaded" item to local storage
+  localStorage.setItem('previouslyLoaded', 'true');
 });

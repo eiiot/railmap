@@ -1,5 +1,3 @@
-var _mapboxGlControls = require("mapbox-gl-controls");
-
 var version = "v1.3";
 
 // URL Stuff //
