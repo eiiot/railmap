@@ -45,7 +45,9 @@ if(redirect == 'europe'){
   switchLocation()
 };
 
-class AboutControl { // HERE
+// On-Map Controls //
+
+class AboutControl { 
   onAdd(map) {
   this._map = map;
   this._container = document.createElement('div');
@@ -64,7 +66,7 @@ class AboutControl { // HERE
   }
 }
 
-class LocationControl { // HERE
+class LocationControl { 
   onAdd(map) {
   this._map = map;
   this._container = document.createElement('div');
@@ -83,21 +85,21 @@ class LocationControl { // HERE
   }
 }
 
-const aboutControl = new AboutControl(); // HERE
-const locationControl = new LocationControl(); // HERE
+const aboutControl = new AboutControl(); 
+const locationControl = new LocationControl(); 
 
 map.addControl(new mapboxgl.GeolocateControl({
   positionOptions: {
     enableHighAccuracy: true
   },
   trackUserLocation: true
-})); // Add Search
+}));
 
 map.addControl(new mapboxgl.NavigationControl());
 map.addControl(new mapboxgl.FullscreenControl());
 
-map.addControl(locationControl); // HERE
-map.addControl(aboutControl); // HERE
+map.addControl(locationControl); 
+map.addControl(aboutControl); 
 
 var modal = document.getElementById("aboutPopup");
 
@@ -149,12 +151,3 @@ window.onload = function() {
     })
   };
 };
-
-map.on('load', function () {
-  var hoverpopup = new mapboxgl.Popup({
-    closeButton: false,
-    closeOnClick: false,
-    className: "hover",
-    offset: 10
-  }); 
-});
