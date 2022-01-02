@@ -824,7 +824,7 @@ map.on('load', async function () {
       `<tr><td>Velocity</td><td>${properties['velocity'].toFixed(2)}</td></tr>`,
       `<tr><td>TZ</td><td>${properties['trainTimeZone']}</td></tr>`,
       `<tr><td>State</td><td>${properties['trainState']}</td></tr>`,
-      `<tr><td>Last Station</td><td>${properties['eventName']}</td></tr>`,
+      `<tr><td>Next Station</td><td>${properties['eventName']}</td></tr>`,
       `<tr><td>Origin Station</td><td>${properties['origCode']}</td></tr>`,
       `<tr><td>Destination Station</td><td>${properties['destCode']}</td></tr>`,
       `<tr><td>Timely</td><td>${properties['trainTimely']}</td></tr>`,
