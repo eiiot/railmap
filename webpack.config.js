@@ -1,5 +1,4 @@
 const path = require('path');
-const { experiments } = require('webpack');
 
 module.exports = [
     {
@@ -9,9 +8,6 @@ module.exports = [
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'index.bundle.js',
-    },
-    experiments: {
-      topLevelAwait: true,
     },
   },
   {
