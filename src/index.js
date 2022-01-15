@@ -240,7 +240,7 @@ async function getTrains(updateSource) {
   // Make a GET request to the API and return the location of the trains.
   try {
       const response = await fetch(
-          'https://api.amtrak.cc/v1/trains',
+          'https://api.amtraker.com/v1/trains',
           { method: 'GET' }
       );
       const trains = await response.json();
