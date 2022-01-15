@@ -820,6 +820,7 @@ map.on('load', async function () {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     };
     const table = [
+      `<tr><td>Route</td><td>${properties['routeName']}</td></tr>`,
       `<tr><td>Heading</td><td>${properties['heading']}</td></tr>`,
       `<tr><td>Velocity</td><td>${properties['velocity'].toFixed(2)}</td></tr>`,
       `<tr><td>TZ</td><td>${properties['trainTimeZone']}</td></tr>`,
