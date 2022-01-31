@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>The Rail Map</title>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<link href="./styles/csmb.css" rel="stylesheet">
-<link href="./styles/modal.css" rel="stylesheet">
-<link rel="icon" type="image/png" href="./images/favicon.png"/>
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
-<link href="https://unpkg.com/mapbox-gl-controls@2.3.0/lib/controls.css" rel="stylesheet">
-<script async defer data-domain="therailmap.com" src="https://analytics.eliothertenstein.com/js/plausible.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<link rel="stylesheet" href="./styles/index.css">
+  <meta charset="utf-8">
+  <title>The Rail Map</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link rel="icon" type="image/png" href="./images/favicon.png"/>
+
+  <meta name="description" content="View Railroad Crossings, Live Amtrak, & More!"/>
+  
+  <!-- Styles -->
+  <link href="./styles/csmb.css" rel="stylesheet">
+  <link href="./styles/modal.css" rel="stylesheet">
+  <link href="./styles/index.css" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
+  <link href="https://unpkg.com/mapbox-gl-controls@2.3.0/lib/controls.css" rel="stylesheet">
+  <script async defer data-domain="therailmap.com" src="https://analytics.eliothertenstein.com/js/plausible.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 
 <div id="loader-div" class="loader-div">
   <span class="loader">
     <span></span>
+
     <span></span>
   </span>
 </div>
 
-<div id="map"></div>
+<div id="map">
+</div>
 
 <div id="aboutPopup" class="modal">
   <!-- Modal content -->
