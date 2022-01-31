@@ -12,11 +12,9 @@
   font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   position: relative;
   background-color: #fff;
-  width: 100%;
-  min-width: 240px;
+  width: 240px;
   z-index: 1;
   border-radius: 4px;
-  transition: width .25s, min-width .25s;
 }
 
 .mapboxgl-ctrl-geocoder--input {
@@ -62,8 +60,6 @@
 /* Collapsed */
 .mapboxgl-ctrl-geocoder.mapboxgl-ctrl-geocoder--collapsed {
   width: 50px;
-  min-width: 50px;
-  transition: width .25s, min-width .25s;
 }
 
 /* Suggestions */

@@ -194,7 +194,7 @@ var trainButton = document.getElementsByClassName('mapbox-train-control');
 var usStyleButton = styleButton[0];
 var euStyleButton = styleButton[1];
 
-euStyleButton.classList.add('hidden-button');
+euStyleButton.style.display = "none"
 
 var modal = document.getElementById("aboutPopup");
 
@@ -218,10 +218,10 @@ window.onclick = function(event) {
 if (redirect == 'europe') {
   map.setStyle('mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3');
   mapStyle = 'europe';
-  amtrakButton[0].classList.add('hidden-button');
-  trainButton[0].classList.add('hidden-button');
-  usStyleButton.classList.add('hidden-button');
-  euStyleButton.classList.remove('hidden-button');
+  amtrakButton[0].style.display = "none"
+  trainButton[0].style.display = "none"
+  usStyleButton.style.display = "none"
+  euStyleButton.style.display = "flex"
   map.flyTo({
     center: [14,50.3],
     zoom: 3.5,
@@ -230,8 +230,8 @@ if (redirect == 'europe') {
 } else if (redirect == 'amtrak') {
   map.setStyle('mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp');
   mapStyle = 'amtrak';
-  locationButton[0].classList.add('hidden-button');
-  styleButton[0].classList.add('hidden-button');
+  locationButton[0].style.display = "none"
+  styleButton[0].style.display = "none"
 };
 
 // AMTRAK DATA HANDLER
@@ -315,10 +315,10 @@ function switchLocation(location) {
   if (location == 'europe') {
     map.setStyle('mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3');
     mapStyle = 'europe';
-    amtrakButton[0].classList.add('hidden-button');
-    trainButton[0].classList.add('hidden-button');
-    usStyleButton.classList.add('hidden-button');
-    euStyleButton.classList.remove('hidden-button');
+    amtrakButton[0].style.display = "none"
+    trainButton[0].style.display = "none"
+    usStyleButton.style.display = "none"
+    euStyleButton.style.display = "flex"
     map.flyTo({
       center: [14,50.3],
       zoom: 3.5,
@@ -327,10 +327,10 @@ function switchLocation(location) {
   } else if (location == 'usa') {
     map.setStyle('mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy');
     mapStyle = 'usa';
-    amtrakButton[0].classList.remove('hidden-button');
-    trainButton[0].classList.remove('hidden-button');
-    euStyleButton.classList.add('hidden-button');
-    usStyleButton.classList.remove('hidden-button');
+    amtrakButton[0].style.display = "block"
+    trainButton[0].style.display = "block"
+    euStyleButton.style.display = "none"
+    usStyleButton.style.display = "flex"
     map.flyTo({
       center: [-96, 37.8],
       zoom: 3,
@@ -344,14 +344,14 @@ function amtrakSwitch() {
   if (mapStyle != 'amtrak') {
     map.setStyle('mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp');
     mapStyle = 'amtrak';
-    locationButton[0].classList.add('hidden-button');
-    styleButton[0].classList.add('hidden-button');
+    locationButton[0].style.display = "none"
+    styleButton[0].style.display = "none"
   }   
   else {
     map.setStyle('mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy');
     mapStyle = 'usa';
-    locationButton[0].classList.remove('hidden-button');
-    styleButton[0].classList.remove('hidden-button');
+    locationButton[0].style.display = "block"
+    styleButton[0].style.display = "block"
   };      
 };
 
