@@ -1,4 +1,4 @@
-body { margin: 0; padding: 0; }
+body { margin: 0; padding: 0; overflow: hidden; }
 #map { position: absolute; top: 0; bottom: 0; width: 100%; }
 table, td, th {
   border: 1px solid black;
@@ -135,4 +135,88 @@ table {
 	100% {
 		transform: none;
 	}
+}
+
+
+// Display a cross with CSS only.
+//
+// $size  : px or em
+// $color : color
+// $thickness : px
+@mixin cross($size: 20px, $color: currentColor, $thickness: 1px) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  position: relative;
+  width: $size;
+  height: $size;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: ($size - $thickness) / 2;
+    left: 0;
+    right: 0;
+    height: $thickness;
+    background: $color;
+    border-radius: $thickness;
+  }
+
+  &:before {
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+
+  span {
+    display: block;
+  }
+
+}
+
+
+// Example 1.
+.btn-close {
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: #fff;
+  border-radius: 50%;
+  border: 1px solid #f64900;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 150ms;
+  
+  .icon-cross {
+    @include cross(10px, #000, 2px);   
+  }
+  
+  &:hover,
+  &:focus {
+    transform: rotateZ(90deg);
+  }
+
+}
+
+/* ProductHunt */
+#productHunt {
+  z-index: 0;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-right: -500px;
+  margin-bottom: 20px;
+  transition: 1s;
 }
