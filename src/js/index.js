@@ -428,22 +428,22 @@ map.on('load', async function () {
 
   displayAmtrak();
 
-  if (localStorage.getItem("productHuntHidden") == "true") {
-    productHuntButton.style.display = "none";
-  };
+  // if (localStorage.getItem("productHuntHidden") == "true") {
+  //   document.getElementById("productHunt").style.display = "none";
+  // };
 
-  setTimeout(function() {
-    document.getElementById("productHunt").style.marginRight = "10px";
-  }, 5000);
+  // setTimeout(function() {
+  //   document.getElementById("productHunt").style.marginRight = "10px";
+  // }, 5000);
 
-  // on phCloseButton click, hide productHunt, set localStorage to true
-  document.getElementById("phCloseButton").addEventListener('click', function() {
-    document.getElementById("productHunt").style.marginRight = "-500px";
-    localStorage.setItem("productHuntHidden", "true");
-    setTimeout(() => {
-      document.getElementById("productHunt").style.display = "none";
-    }, 1000);
-  });
+  // // on phCloseButton click, hide productHunt, set localStorage to true
+  // document.getElementById("phCloseButton").addEventListener('click', function() {
+  //   document.getElementById("productHunt").style.marginRight = "-500px";
+  //   localStorage.setItem("productHuntHidden", "true");
+  //   setTimeout(() => {
+  //     document.getElementById("productHunt").style.display = "none";
+  //   }, 1000);
+  // });
   
   ///////////////////
   // UNITED STATES //
