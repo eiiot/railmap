@@ -62,7 +62,7 @@ class LayerControl {
 
 /* eslint-disable complexity,max-statements */
 export default function MapboxLayerControl(props: LayerControlProps) {
-  const styleControl = useControl(
+  const layerControl = useControl(
     () => {
       const ctrl = new LayerControl({
         ...props,

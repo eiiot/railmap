@@ -8,7 +8,9 @@
   "dependencies": {
     "@fontsource/inter": "^4.5.7",
     "@headlessui/react": "^1.5.0",
+    "@mapbox/mapbox-gl-geocoder": "^5.0.0",
     "@types/geojson": "^7946.0.8",
+    "@types/mapbox__mapbox-gl-geocoder": "^4.7.2",
     "mapbox-gl-controls": "^2.3.5",
     "moment": "^2.29.1",
     "next": "latest",

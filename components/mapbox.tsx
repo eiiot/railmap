@@ -7,7 +7,9 @@ import Map, {
   Layer,
 } from 'react-map-gl'
 import StylesControl from './map/StylesControl'
-import MapboxLayerControl from './map/LayerControl'
+import LayerControl from './map/LayerControl'
+import GeocoderControl from './map/GeocoderControl'
+import LocationControl from './map/LocationControl'
 import { LayerProps } from 'react-map-gl'
 import { Feature, FeatureCollection } from 'geojson'
 
@@ -158,12 +160,15 @@ export default function MapboxMap(props: any) {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       style={{ position: 'absolute', width: '100vw', height: '100vh' }}
+      reuseMaps
     >
+      <GeocoderControl mapboxAccessToken={accessToken} />
       <StylesControl styles={styles} />
       <GeolocateControl />
       <NavigationControl />
       <FullscreenControl />
-      <MapboxLayerControl layerIds={['trains', 'train-numbers']} />
+      <LayerControl layerIds={['trains', 'train-numbers']} />
+      <LocationControl />
       {/* <GeocoderControl mapboxAccessToken={accessToken} position="top-left" /> */}
 
       {showTrains ? (
