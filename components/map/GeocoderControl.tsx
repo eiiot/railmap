@@ -39,7 +39,7 @@ type GeocoderControlProps = {
   routing?: boolean
   worldview?: string
 
-  position: ControlPosition
+  position?: ControlPosition
 
   onLoading?: (e: object) => void
   onResults?: (e: object) => void

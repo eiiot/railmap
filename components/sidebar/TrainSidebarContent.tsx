@@ -81,23 +81,6 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
             .stationName
         }
       </div>
-
-      <div className="w-full px-2 pb-4 text-center">
-        {capitalize(
-          (
-            findStation(props.trainData.stations, props.trainData.eventCode)!
-              .postCmnt ??
-            findStation(props.trainData.stations, props.trainData.eventCode)!
-              .estArrCmnt ??
-            findStation(props.trainData.stations, props.trainData.eventCode)!
-              .estDepCmnt ??
-            'unknown'
-          )
-            .toLowerCase()
-            .replace('mi', 'min')
-        )}{' '}
-        @ {props.trainData.eventName}
-      </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-hidden px-2">
         <Tab.Group>
           <Tab.List className="flex w-full space-x-1 rounded-xl bg-blue-900/20 p-1">
@@ -140,7 +123,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                   <h3 className="text-sm font-medium leading-5">Speed</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{(props.trainData.velocity ?? 0).toFixed(1)}mph</li>
+                    <li>{(props.trainData.velocity ?? 0).toFixed(1)} mph</li>
                   </ul>
                   <a
                     href="#"
@@ -161,8 +144,29 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
-                      {props.trainData.eventName ?? 'Unknown'} |{' '}
-                      {props.trainData.eventCode ?? 'UNK'}
+                      {props.trainData.eventName ?? 'Unknown'} [
+                      {props.trainData.eventCode ?? 'UNK'}] |{' '}
+                      {capitalize(
+                        (
+                          findStation(
+                            props.trainData.stations,
+                            props.trainData.eventCode
+                          )!.postCmnt ??
+                          findStation(
+                            props.trainData.stations,
+                            props.trainData.eventCode
+                          )!.estArrCmnt ??
+                          findStation(
+                            props.trainData.stations,
+                            props.trainData.eventCode
+                          )!.estDepCmnt ??
+                          'unknown'
+                        )
+                          .toLowerCase()
+                          .replace('mi', 'min')
+                          // remove a zero if it's the first character
+                          .replace(/^0/, '')
+                      )}
                     </li>
                   </ul>
                   <a

@@ -6,7 +6,7 @@ import Head from 'next/head'
 import Sidebar from '../components/sidebar'
 
 const Map = dynamic(() => import('../components/mapbox'), {
-  loading: () => <p>...</p>,
+  loading: () => <p>Loading Map</p>,
   ssr: false,
 })
 

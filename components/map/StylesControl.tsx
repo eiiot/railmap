@@ -1,4 +1,4 @@
-import { useControl, Marker, ControlPosition } from 'react-map-gl'
+import { useControl, ControlPosition } from 'react-map-gl'
 import { StylesControl } from 'mapbox-gl-controls'
 import { StyleOption } from 'mapbox-gl-controls/lib/StylesControl/types'
 
