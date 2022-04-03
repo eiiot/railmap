@@ -14,9 +14,9 @@ function capitalize(string: string) {
 function titleCase(string: string) {
   return (
     string
-      // split at non-alphanumeric characters
-      .split(/[^\w]/)
-      .map((word) => (word.length > 2 ? capitalize(word) : word))
+      // split at non-alphanumeric characters, and space
+      .split(/[^a-zA-Z0-9\s]/)
+      .map((word) => capitalize(word))
       .join(' ')
   )
 }
@@ -61,7 +61,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['COUNTY']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['FEATURE_TY']) ? (
@@ -71,7 +74,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['FEATURE_TY']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['CITY']) ? (
@@ -81,7 +87,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['CITY']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['COUNTY']) ? (
@@ -91,7 +100,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['COUNTY']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['STATE']) ? (
@@ -101,7 +113,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['STATE']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['ZIP']) ? (
@@ -111,7 +126,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['ZIP']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['FCODE']) ? (
@@ -121,7 +139,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['FCODE']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['FDATE']) ? (
@@ -133,7 +154,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['FDATE']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['GEODATE']) ? (
@@ -145,7 +169,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['GEODATE']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['NAICSDESCR']) ? (
@@ -155,7 +182,10 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['NAICSDESCR']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-blue-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-blue-400"
+                />
               </li>
             ) : null}
           </ul>

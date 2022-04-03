@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import TrainSidebarContent from './sidebar/TrainSidebarContent'
 import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
 import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
@@ -25,7 +25,7 @@ export default function Sidebar(props: any) {
   return (
     <div
       className={classNames(
-        'absolute top-0 z-10 flex h-[calc(100vh-32px)] w-full flex-col transition-transform duration-300 md:top-0 md:m-[10px] md:h-5/6 md:w-[275px] md:translate-y-0 md:flex-row',
+        'absolute top-0 z-10 flex h-[calc(100vh-32px)] w-full flex-col transition-transform duration-300 md:top-0 md:m-[10px] md:h-5/6 md:w-1/5 md:translate-y-0 md:flex-row',
         showSidebar
           ? 'translate-y-0 md:translate-y-0 md:translate-x-0'
           : 'translate-y-[calc(100%)] md:translate-y-0 md:translate-x-[calc(-100%-10px)]'

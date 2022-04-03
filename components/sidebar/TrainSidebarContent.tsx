@@ -41,7 +41,7 @@ function generateBorder(dir: string) {
 
 function timeDifferenceRing(start: string, end: string) {
   start = start ?? 0
-  end = end ?? new Date().toISOString()
+  end = end ?? Date.now()
   const endMoment = moment(end)
   const diff = moment(start).diff(endMoment, 'minutes')
   if (diff < 5) {
@@ -290,7 +290,6 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                         ) : null}
                       </li>
                     </ul>
-
                     <a
                       href="#"
                       className={classNames(

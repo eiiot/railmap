@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>The Rail Map</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+<link href="./styles/csmb.css" rel="stylesheet">
+<link href="./styles/modal.css" rel="stylesheet">
+<link href="https://unpkg.com/mapbox-gl-controls@2.3.0/lib/controls.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="./images/favicon.png"/>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+<script async defer data-domain="therailmap.com" src="https://analytics.eliothertenstein.com/js/plausible.js"></script>
+<style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    table, td, th {
+      border: 1px solid black;
+      text-align: center; 
+      vertical-align: middle;
+    }
+    
+    th, td {
+      padding: 5px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .mapboxgl-popup-content {
+        border-radius: 15px;
+    }
+
+    .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-center .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-left .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-right .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+    .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip, 
+    .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip{
+        display:none !important;
+    }
+
+    .popup-icons{
+      bottom: 10px;
+    }
+    </style>
+</head>
+<body>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
+<div id="map"></div>
+
+<div id="aboutPopup" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>The Rail Map</h2>
+    </div>
+    <div class="modal-body">
+      This is a data-only version of the rail map.<br>Please see <a href="https://www.youtube.com/virtualrailfan">our main website</a> for more features and information!
+      <p>
+        <b>Legend</b>
+        <table style="max-width:200px;">
+          <tr>
+            <th>Name</th><th>Color</th>
+          </tr>
+          <tr>
+            <td>Level Crossing</td><td style="background-color:#fa6b6b;"></td>
+          </tr>
+          <tr>
+            <td>Bridge</td><td style="background-color:#0a85ff;"></td>
+          </tr>
+          <tr>
+            <td>Tunnel</td><td style="background-color:#ca0aff;"></td>
+          </tr>
+          <tr>
+            <td>Defunct Crossing</td><td style="background-color:#a6a6a6;"></td>
+          </tr>
+        </table>
+      </p>
+      <p>Created by Eliot Hertenstein</div></p>
+
+      <p><button class="csmb-flat csmb-round csmb-github popup-icons" style="float: right;" onclick="window.open('https://github.com/EliotHertenstein/railmap', '_blank'); return false;" aria-label="GitHub"></button><button class="csmb-flat csmb-round csmb-twitter popup-icons" style="float: right;" onclick="window.open('https://twitter.com/eiioth', '_blank'); return false;" aria-label="Twitter"></button><button class="csmb-flat csmb-round csmb-medium popup-icons" style="float: right;" onclick="window.open('https://eliothertenstein.medium.com', '_blank'); return false;" aria-label="Medium"></button></p>
+    </div>
+  </div>
+</div>
+
+<script src="./dist/data.bundle.js"></script>
+
+</body>
+</html>

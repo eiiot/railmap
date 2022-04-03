@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>The Rail Map</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link rel="icon" type="image/png" href="./images/favicon.png"/>
+
+  <meta name="description" content="View Railroad Crossings, Live Amtrak, & More!"/>
+  
+  <!-- Styles -->
+  <link href="dist/styles/csmb.css" rel="stylesheet">
+  <link href="dist/styles/modal.css" rel="stylesheet">
+  <link href="dist/styles/index.css" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
+  <link href="https://unpkg.com/mapbox-gl-controls@2.3.0/lib/controls.css" rel="stylesheet">
+  <script async defer data-domain="therailmap.com" src="https://analytics.eliothertenstein.com/js/plausible.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+<div id="loader-div" class="loader-div">
+  <span class="loader">
+    <span></span>
+
+    <span></span>
+  </span>
+</div>
+
+<div id="map">
+</div>
+
+<div id="aboutPopup" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>The Rail Map</h2>
+    </div>
+    <div class="modal-body">
+      This map is an interactive way to explore Railroads throughout the world. This map includes many features, including Level Crossings, Rail Bridges, and Tunnels.<br>Please see <a href="https://github.com/EliotHertenstein/railmap" target="_blank">GitHub</a> for source code, and more information!
+      <p>
+        <b>Legend</b>
+        <table style="max-width:200px;">
+          <tr>
+            <th>Name</th><th>Color</th>
+          </tr>
+          <tr>
+            <td>Level Crossing</td><td style="background-color:#fa6b6b;"></td>
+          </tr>
+          <tr>
+            <td>Bridge</td><td style="background-color:#0a85ff;"></td>
+          </tr>
+          <tr>
+            <td>Tunnel</td><td style="background-color:#ca0aff;"></td>
+          </tr>
+          <tr>
+            <td>Defunct Crossing</td><td style="background-color:#a6a6a6;"></td>
+          </tr>
+        </table>
+      </p>
+      <p>Created by Eliot Hertenstein</div></p>
+
+      <p><button class="csmb-flat csmb-round csmb-github popup-icons" style="float: right;" onclick="window.open('https://github.com/EliotHertenstein/railmap', '_blank'); return false;" aria-label="GitHub"></button><button class="csmb-flat csmb-round csmb-twitter popup-icons" style="float: right;" onclick="window.open('https://twitter.com/eiioth', '_blank'); return false;" aria-label="Twitter"></button><button class="csmb-flat csmb-round csmb-medium popup-icons" style="float: right;" onclick="window.open('https://eliothertenstein.medium.com', '_blank'); return false;" aria-label="Medium"></button></p>
+    </div>
+  </div>
+</div>
+
+<!-- <div id="productHunt">
+  <button type="button" id="phCloseButton" class="btn-close">
+    <span class="icon-cross"></span>
+  </button>
+  <a href="https://www.producthunt.com/posts/the-rail-map?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-the-rail-map" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=329555&theme=light" alt="The Rail Map - View Railroad Crossings, Bridges, Live Amtrak Data & More! | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+</div> -->
+
+<script src="./dist/js/index.bundle.js" type="module"></script>
+
+</body>
+</html>

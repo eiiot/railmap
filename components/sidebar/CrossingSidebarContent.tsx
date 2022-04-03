@@ -110,7 +110,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['RAILROAD']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['RRSUBDIV']) ? (
@@ -120,7 +123,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['RRSUBDIV']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['RRDIV']) ? (
@@ -130,7 +136,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['RRDIV']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['MILEPOST']) ? (
@@ -140,7 +149,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['MILEPOST']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['CROSSING']) ? (
@@ -150,7 +162,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['CROSSING']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['TYPEXING']) ? (
@@ -166,7 +181,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                       : 'Other'}
                   </li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['WHISTBAN']) ? (
@@ -186,7 +204,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                       : 'Unknown Zone Type'}
                   </li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['HIGHWAY']) ? (
@@ -196,7 +217,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['HIGHWAY']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['CountyCode']) ? (
@@ -206,7 +230,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['CountyCode']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['StateCode']) ? (
@@ -219,7 +246,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                       'Unknown State'}
                   </li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['POLCONT']) ? (
@@ -231,7 +261,7 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
                     <a
-                      href={'tel:' + props.crossingData['POLCONT']}
+                      href="tel:{props.crossingData['POLCONT']"
                       className="text-blue-400"
                     >
                       {props.crossingData['POLCONT']}
@@ -239,7 +269,7 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                   </li>
                 </ul>
                 <a
-                  href={'tel:' + props.crossingData['POLCONT']}
+                  href="#"
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
                 />
               </li>
@@ -253,7 +283,7 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
                     <a
-                      href={'tel:' + props.crossingData['RRCONT']}
+                      href="tel:{props.crossingData['RRCONT']"
                       className="text-blue-400"
                     >
                       {props.crossingData['RRCONT']}
@@ -261,7 +291,7 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                   </li>
                 </ul>
                 <a
-                  href={'tel:' + props.crossingData['RRCONT']}
+                  href="#"
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
                 />
               </li>
@@ -275,7 +305,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['EFFDATE']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['EDATE']) ? (
@@ -285,7 +318,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['EDATE']}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['REASON']) ? (
@@ -297,7 +333,10 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{reasonIdData[props.crossingData['REASON'] ?? 0]}</li>
                 </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
+                <a
+                  href="#"
+                  className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['ACC_LINK']) ? (
@@ -315,7 +354,7 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                   </li>
                 </ul>
                 <a
-                  href={props.crossingData['ACC_LINK']}
+                  href="#"
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
                 />
               </li>
@@ -335,7 +374,7 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                   </li>
                 </ul>
                 <a
-                  href={props.crossingData['INV_LINK']}
+                  href="#"
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
                 />
               </li>

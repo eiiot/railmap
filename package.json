@@ -10,16 +10,14 @@
     "@headlessui/react": "^1.5.0",
     "@mapbox/mapbox-gl-geocoder": "^5.0.0",
     "@types/geojson": "^7946.0.8",
-    "amtrak": "^2.8.4",
     "mapbox-gl": "^2.7.1",
     "mapbox-gl-controls": "^2.3.5",
     "moment": "^2.29.1",
-    "next": "^12.1.4",
-    "react": "^18.0.0-rc.3",
-    "react-dom": "^18.0.0-rc.3",
+    "next": "12.1.4",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
     "react-draggable": "^4.4.4",
-    "react-map-gl": "^7.0.10",
-    "tailwindcss-children": "^2.1.0"
+    "react-map-gl": "^7.0.10"
   },
   "devDependencies": {
     "@types/mapbox__mapbox-gl-geocoder": "^4.7.2",
