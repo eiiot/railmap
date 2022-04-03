@@ -1,1 +1,0 @@
-sass --update ./src/styles:./dist/styles --watch

@@ -6,10 +6,11 @@ import Image from 'next/image'
 
 import Sidebar from '../components/sidebar'
 
-const DynamicComponentWithCustomLoading = dynamic(
-  () => import('../components/mapbox'),
-  { loading: () => <p>...</p>, ssr: false }
-)
+const Map = dynamic(() => import('../components/mapbox'), {
+  loading: () => <p>...</p>,
+  ssr: false,
+  // suspense: true,
+})
 
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState(null)
