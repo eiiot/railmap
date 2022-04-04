@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useCallback } from 'react'
 import Map, {
   GeolocateControl,
   FullscreenControl,
   NavigationControl,
   Source,
   Layer,
-  MapRef,
   LngLatBoundsLike,
 } from 'react-map-gl'
 import StylesControl from './map/StylesControl'
@@ -16,7 +15,8 @@ import { LayerProps } from 'react-map-gl'
 import { Feature, FeatureCollection } from 'geojson'
 
 interface CustomMapProps {
-  stylesArray: { label: string; styleName: string; styleUrl: string }[]
+  stylesArray?: { label: string; styleName: string; styleUrl: string }[]
+  mapStyle?: string
   viewState: {
     longitude: number
     latitude: number
@@ -26,11 +26,12 @@ interface CustomMapProps {
   onClickHandler: (e: any) => void
   maxBounds: LngLatBoundsLike
   layerControl?: boolean
-  locationControlLocation: string
+  locationControlLocation?: string
   terrain?: boolean
+  liveTrains: { [key: string]: boolean }
 }
 
-async function getTrains() {
+async function getAmtrak() {
   // Make a GET request to the API and return the location of the trains.
   try {
     const response = await fetch('https://api.amtraker.com/v1/trains', {
@@ -71,10 +72,10 @@ async function getTrains() {
   }
 }
 
-const trainLayerStyle = {
-  id: 'trains',
+const amtrakLayerStyle = {
+  id: 'amtrak',
   type: 'circle',
-  source: 'trains',
+  source: 'amtrak',
   paint: {
     'circle-color': 'hsl(203, 68%, 29%)',
     'circle-radius': 11,
@@ -86,10 +87,10 @@ const trainLayerStyle = {
   },
 } as LayerProps
 
-const trainNumbersLayerStyle = {
-  id: 'train-numbers',
+const amtrakNumbersLayerStyle = {
+  id: 'amtrak-numbers',
   type: 'symbol',
-  source: 'trains',
+  source: 'amtrak',
   layout: {
     'text-field': ['to-string', ['get', 'trainNum']],
     'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
@@ -102,7 +103,7 @@ const trainNumbersLayerStyle = {
 } as LayerProps
 
 export default function MapboxMap(props: CustomMapProps) {
-  const [trainsGeoJSON, setTrainsGeoJSON] = useState<FeatureCollection | null>(
+  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | null>(
     null
   )
   const [cursorSate, setCursorState] = useState('unset')
@@ -118,40 +119,39 @@ export default function MapboxMap(props: CustomMapProps) {
 
   const onLoadHandler = useCallback(() => {
     // integrate the useEffect hook from above but instead run it on load
-    getTrains()
-      .then((geoJSON) => {
-        try {
-          setTrainsGeoJSON(geoJSON!)
-        } catch (error) {
-          console.error(error)
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-
-    const interval = setInterval(async () => {
-      getTrains()
+    if (props.liveTrains.amtrak) {
+      getAmtrak()
         .then((geoJSON) => {
-          setTrainsGeoJSON(geoJSON!)
+          setAmtrakGeoJSON(geoJSON!)
         })
         .catch((error) => {
           console.error(error)
         })
-    }, 60000)
+
+      const interval = setInterval(async () => {
+        getAmtrak()
+          .then((geoJSON) => {
+            setAmtrakGeoJSON(geoJSON!)
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      }, 60000)
+    }
   }, [])
 
-  let terrainProps = null
-  if (props.terrain) {
-    terrainProps = {
-      terrain: { source: 'mapbox-dem', exaggeration: 1.5 },
-    }
-  }
+  let terrainProps = props.terrain
+    ? {
+        terrain: { source: 'mapbox-dem', exaggeration: 1.5 },
+      }
+    : null
 
   return (
     <Map
       initialViewState={props.viewState}
-      mapStyle={props.stylesArray[0].styleUrl}
+      mapStyle={
+        props.stylesArray ? props.stylesArray[0].styleUrl : props.mapStyle
+      }
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
       interactiveLayerIds={props.interactiveLayerIds}
       cursor={cursorSate}
@@ -163,7 +163,7 @@ export default function MapboxMap(props: CustomMapProps) {
       maxBounds={props.maxBounds}
       {...terrainProps}
     >
-      <StylesControl styles={props.stylesArray} />
+      {props.stylesArray ? <StylesControl styles={props.stylesArray} /> : null}
       <GeocoderControl
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
         collapsed
@@ -171,10 +171,14 @@ export default function MapboxMap(props: CustomMapProps) {
       <GeolocateControl />
       <NavigationControl />
       <FullscreenControl />
+
       {props.layerControl ? (
         <LayerControl layerIds={['trains', 'train-numbers']} />
       ) : null}
-      <LocationControl location={props.locationControlLocation} />
+
+      {props.locationControlLocation ? (
+        <LocationControl location={props.locationControlLocation} />
+      ) : null}
 
       {props.terrain ? (
         <Source
@@ -186,10 +190,12 @@ export default function MapboxMap(props: CustomMapProps) {
         />
       ) : null}
 
-      <Source id="trains" type="geojson" data={trainsGeoJSON!}>
-        <Layer {...trainLayerStyle} />
-        <Layer {...trainNumbersLayerStyle} />
-      </Source>
+      {props.liveTrains.amtrak ? (
+        <Source id="amtrak" type="geojson" data={amtrakGeoJSON!}>
+          <Layer {...amtrakLayerStyle} />
+          <Layer {...amtrakNumbersLayerStyle} />
+        </Source>
+      ) : null}
     </Map>
   )
 }

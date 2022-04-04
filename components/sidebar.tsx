@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import TrainSidebarContent from './sidebar/TrainSidebarContent'
+import TrainSidebarContent from './sidebar/AmtrakSidebarContent'
 import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
 import CNCrossingSidebarContent from './sidebar/CNCrossingSidebarContent'
 import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
@@ -43,7 +43,7 @@ export default function Sidebar(props: any) {
         <div className="py-2"></div>
       </div>
       {props.featureData ? (
-        props.featureData.mapboxLayerId === 'trains' ? (
+        props.featureData.mapboxLayerId === 'amtrak' ? (
           <TrainSidebarContent
             className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
             trainData={props.featureData}

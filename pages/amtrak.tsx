@@ -26,24 +26,6 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  const mapStyles = [
-    {
-      label: 'Satellite',
-      styleName: 'Satellite',
-      styleUrl: 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy',
-    },
-    {
-      label: 'Light',
-      styleName: 'Light',
-      styleUrl: 'mapbox://styles/dotly/ckoz6vsl50kv117pg6tbt6icm',
-    },
-    {
-      label: 'Data',
-      styleName: 'Data',
-      styleUrl: 'mapbox://styles/dotly/ckoz5zgci1o3617nb0fiz48ig',
-    },
-  ]
-
   const mapViewState = {
     longitude: -100,
     latitude: 40,
@@ -55,13 +37,7 @@ const Home: NextPage = () => {
     [-49.0, 83.3],
   ] as LngLatBoundsLike
 
-  const mapInteractiveLayerIds = [
-    'amtrak',
-    'Railroad-Crossings',
-    'Railroad-Bridges',
-    'CN-Railroad-Crossings',
-    'CN-Railroad-Bridges',
-  ]
+  const mapInteractiveLayerIds = ['amtrak', 'amtrak-stations']
 
   const liveTrains = {
     amtrak: true,
@@ -73,13 +49,11 @@ const Home: NextPage = () => {
       <div className="h-screen w-screen">
         <Map
           onClickHandler={featureClickHandler}
-          stylesArray={mapStyles}
+          mapStyle="mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp"
+          liveTrains={liveTrains}
           viewState={mapViewState}
           maxBounds={mapMaxBounds}
           interactiveLayerIds={mapInteractiveLayerIds}
-          liveTrains={liveTrains}
-          layerControl
-          locationControlLocation="/europe"
           terrain
         />
       </div>

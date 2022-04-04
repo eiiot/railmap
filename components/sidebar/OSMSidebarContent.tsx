@@ -47,7 +47,7 @@ const OSMSidebarContent = (props: OSMSidebarContentProps) => {
                   </ul>
                   <a
                     className={
-                      'absolute inset-0 rounded-md ring-2' + props.ringColor
+                      'absolute inset-0 rounded-md ring-2 ' + props.ringColor
                     }
                   />
                 </li>
@@ -61,7 +61,7 @@ const OSMSidebarContent = (props: OSMSidebarContentProps) => {
                   </ul>
                   <a
                     className={
-                      'absolute inset-0 rounded-md ring-2' + props.ringColor
+                      'absolute inset-0 rounded-md ring-2 ' + props.ringColor
                     }
                   />
                 </li>
@@ -75,7 +75,7 @@ const OSMSidebarContent = (props: OSMSidebarContentProps) => {
                   </ul>
                   <a
                     className={
-                      'absolute inset-0 rounded-md ring-2' + props.ringColor
+                      'absolute inset-0 rounded-md ring-2 ' + props.ringColor
                     }
                   />
                 </li>

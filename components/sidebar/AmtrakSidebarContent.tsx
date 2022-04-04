@@ -42,8 +42,7 @@ function generateBorder(dir: string) {
 function timeDifferenceRing(start: string, end: string) {
   start = start ?? 0
   end = end ?? new Date().toISOString()
-  const endMoment = moment(end)
-  const diff = moment(start).diff(endMoment, 'minutes')
+  const diff = moment(end).diff(moment(start), 'minutes')
   if (diff < 5) {
     return 'ring-green-500'
   }
@@ -237,7 +236,9 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
                       {moment
-                        .duration(-moment().diff(props.trainData.lastValTS))
+                        .duration(
+                          -moment().diff(moment.utc(props.trainData.lastValTS))
+                        )
                         .humanize(true) ?? 'Unknown'}
                     </li>
                   </ul>
@@ -246,8 +247,8 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                     className={classNames(
                       'absolute inset-0 rounded-md',
                       `${timeDifferenceRing(
-                        moment().toString(),
-                        props.trainData.lastValTS
+                        moment().toISOString(),
+                        moment.utc(props.trainData.lastValTS).toISOString()
                       )} ring-2`
                     )}
                   />
@@ -300,8 +301,10 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                       className={classNames(
                         'absolute inset-0 rounded-md',
                         `${timeDifferenceRing(
-                          station.postDep ?? station.estDep,
-                          station.schDep
+                          moment
+                            .utc(station.postDep ?? station.estDep)
+                            .toISOString(),
+                          moment.utc(station.schDep).toISOString()
                         )} ring-2`
                       )}
                     />

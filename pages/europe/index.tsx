@@ -69,6 +69,7 @@ const Home: NextPage = () => {
           viewState={mapViewState}
           maxBounds={mapMaxBounds}
           interactiveLayerIds={mapInteractiveLayerIds}
+          liveTrains={{}}
           locationControlLocation="/"
           terrain
         />
