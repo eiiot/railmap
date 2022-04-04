@@ -21,13 +21,15 @@ const Home: NextPage = () => {
   ] as LngLatBoundsLike
 
   return (
-    <Map
-      initialViewState={mapViewState}
-      maxBounds={mapMaxBounds}
-      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-      mapStyle="mapbox://styles/dotly/ckpxomzkq08gp19o8o99y0yut"
-      style={{ position: 'absolute', width: '100vw', height: '100vh' }}
-    ></Map>
+    <div className="h-screen w-screen">
+      <Map
+        initialViewState={mapViewState}
+        maxBounds={mapMaxBounds}
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
+        mapStyle="mapbox://styles/dotly/ckpxomzkq08gp19o8o99y0yut"
+        style={{ position: 'absolute', width: '100vw', height: '100vh' }}
+      />
+    </div>
   )
 }
 

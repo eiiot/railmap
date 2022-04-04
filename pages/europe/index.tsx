@@ -62,15 +62,17 @@ const Home: NextPage = () => {
   return (
     <>
       <Sidebar featureData={featureData}></Sidebar>
-      <Map
-        onClickHandler={featureClickHandler}
-        stylesArray={mapStyles}
-        viewState={mapViewState}
-        maxBounds={mapMaxBounds}
-        interactiveLayerIds={mapInteractiveLayerIds}
-        locationControlLocation="/"
-        terrain
-      />
+      <div className="h-screen w-screen">
+        <Map
+          onClickHandler={featureClickHandler}
+          stylesArray={mapStyles}
+          viewState={mapViewState}
+          maxBounds={mapMaxBounds}
+          interactiveLayerIds={mapInteractiveLayerIds}
+          locationControlLocation="/"
+          terrain
+        />
+      </div>
     </>
   )
 }

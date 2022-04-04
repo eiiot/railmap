@@ -3,10 +3,11 @@ import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 
 import Sidebar from '../components/sidebar'
+import Loader from '../components/loader'
 import { LngLatBoundsLike } from 'react-map-gl'
 
 const Map = dynamic(() => import('../components/mapbox'), {
-  loading: () => <p>Loading Map</p>,
+  loading: () => <Loader />,
   ssr: false,
 })
 
@@ -65,16 +66,18 @@ const Home: NextPage = () => {
   return (
     <>
       <Sidebar featureData={featureData}></Sidebar>
-      <Map
-        onClickHandler={featureClickHandler}
-        stylesArray={mapStyles}
-        viewState={mapViewState}
-        maxBounds={mapMaxBounds}
-        interactiveLayerIds={mapInteractiveLayerIds}
-        layerControl
-        locationControlLocation="/europe"
-        terrain
-      />
+      <div className="h-screen w-screen">
+        <Map
+          onClickHandler={featureClickHandler}
+          stylesArray={mapStyles}
+          viewState={mapViewState}
+          maxBounds={mapMaxBounds}
+          interactiveLayerIds={mapInteractiveLayerIds}
+          layerControl
+          locationControlLocation="/europe"
+          terrain
+        />
+      </div>
     </>
   )
 }
