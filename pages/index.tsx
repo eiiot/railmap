@@ -73,6 +73,7 @@ const Home: NextPage = () => {
         interactiveLayerIds={mapInteractiveLayerIds}
         layerControl
         locationControlLocation="/europe"
+        terrain
       />
     </>
   )

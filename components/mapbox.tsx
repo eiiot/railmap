@@ -27,23 +27,14 @@ interface CustomMapProps {
   maxBounds: LngLatBoundsLike
   layerControl?: boolean
   locationControlLocation: string
+  terrain?: boolean
 }
 
 export default function MapboxMap(props: CustomMapProps) {
   const [trainsGeoJSON, setTrainsGeoJSON] = useState<FeatureCollection | null>(
     null
   )
-
   const [cursorSate, setCursorState] = useState('unset')
-
-  const mapRef = useRef<MapRef | null>(null)
-
-  const onLoad = useCallback(() => {
-    console.log('Map loaded')
-    // mapRef.current?.on('click', (e: any) => {
-    //   console.log(e)
-    // })
-  }, [])
 
   async function getTrains() {
     // Make a GET request to the API and return the location of the trains.
@@ -151,6 +142,13 @@ export default function MapboxMap(props: CustomMapProps) {
     },
   } as LayerProps
 
+  let terrainProps = null
+  if (props.terrain) {
+    terrainProps = {
+      terrain: { source: 'mapbox-dem', exaggeration: 1.5 },
+    }
+  }
+
   return (
     <Map
       initialViewState={props.viewState}
@@ -161,10 +159,9 @@ export default function MapboxMap(props: CustomMapProps) {
       onClick={props.onClickHandler}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onLoad={onLoad}
-      ref={mapRef}
       style={{ position: 'absolute', width: '100vw', height: '100vh' }}
       maxBounds={props.maxBounds}
+      {...terrainProps}
     >
       <StylesControl styles={props.stylesArray} />
       <GeocoderControl
@@ -178,6 +175,16 @@ export default function MapboxMap(props: CustomMapProps) {
         <LayerControl layerIds={['trains', 'train-numbers']} />
       ) : null}
       <LocationControl location={props.locationControlLocation} />
+
+      {props.terrain ? (
+        <Source
+          id="mapbox-dem"
+          type="raster-dem"
+          url="mapbox://mapbox.mapbox-terrain-dem-v1"
+          tileSize={512}
+          maxzoom={14}
+        />
+      ) : null}
 
       <Source id="trains" type="geojson" data={trainsGeoJSON!}>
         <Layer {...trainLayerStyle} />
