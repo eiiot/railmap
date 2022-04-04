@@ -15,9 +15,6 @@ import LocationControl from './map/LocationControl'
 import { LayerProps } from 'react-map-gl'
 import { Feature, FeatureCollection } from 'geojson'
 
-const accessToken =
-  'pk.eyJ1IjoiZG90bHkiLCJhIjoiY2tpbnA0YjljMTVhcTM0cGVzYjZibzEyMSJ9.fmuvKLVnmue6RxfqZjeLPQ'
-
 interface CustomMapProps {
   stylesArray: { label: string; styleName: string; styleUrl: string }[]
   viewState: {
@@ -160,7 +157,7 @@ export default function MapboxMap(props: CustomMapProps) {
     <Map
       {...viewState}
       mapStyle={props.stylesArray[0].styleUrl}
-      mapboxAccessToken={accessToken}
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
       interactiveLayerIds={props.interactiveLayerIds}
       cursor={cursorSate}
       onClick={props.onClickHandler}
@@ -172,7 +169,9 @@ export default function MapboxMap(props: CustomMapProps) {
       style={{ position: 'absolute', width: '100vw', height: '100vh' }}
       maxBounds={props.maxBounds}
     >
-      <GeocoderControl mapboxAccessToken={accessToken} />
+      <GeocoderControl
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
+      />
       <StylesControl styles={props.stylesArray} />
       <GeolocateControl />
       <NavigationControl />

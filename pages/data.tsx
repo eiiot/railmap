@@ -39,7 +39,7 @@ const Home: NextPage = () => {
       <Map
         initialViewState={mapViewState}
         maxBounds={mapMaxBounds}
-        mapboxAccessToken="pk.eyJ1IjoiZG90bHkiLCJhIjoiY2tpbnA0YjljMTVhcTM0cGVzYjZibzEyMSJ9.fmuvKLVnmue6RxfqZjeLPQ"
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
         mapStyle="mapbox://styles/dotly/ckoz5zgci1o3617nb0fiz48ig"
         style={{ position: 'absolute', width: '100vw', height: '100vh' }}
       ></Map>
