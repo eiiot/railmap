@@ -34,8 +34,6 @@ export default function MapboxMap(props: CustomMapProps) {
     null
   )
 
-  const [viewState, setViewState] = useState(props.viewState)
-
   const [cursorSate, setCursorState] = useState('unset')
 
   const mapRef = useRef<MapRef | null>(null)
@@ -155,7 +153,7 @@ export default function MapboxMap(props: CustomMapProps) {
 
   return (
     <Map
-      {...viewState}
+      initialViewState={props.viewState}
       mapStyle={props.stylesArray[0].styleUrl}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
       interactiveLayerIds={props.interactiveLayerIds}
@@ -163,7 +161,6 @@ export default function MapboxMap(props: CustomMapProps) {
       onClick={props.onClickHandler}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onMove={(evt) => setViewState(evt.viewState)}
       onLoad={onLoad}
       ref={mapRef}
       style={{ position: 'absolute', width: '100vw', height: '100vh' }}
