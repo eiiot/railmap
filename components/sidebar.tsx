@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import TrainSidebarContent from './sidebar/TrainSidebarContent'
 import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
+import CNCrossingSidebarContent from './sidebar/CNCrossingSidebarContent'
 import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
+import OSMSidebarContent from './sidebar/OSMSidebarContent'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -56,9 +58,27 @@ export default function Sidebar(props: any) {
             className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
             bridgeData={props.featureData}
           />
+        ) : props.featureData.mapboxLayerId === 'CN-Railroad-Crossings' ? (
+          <CNCrossingSidebarContent
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            crossingData={props.featureData}
+          />
+        ) : props.featureData.mapboxLayerId === 'CN-Railroad-Bridges' ||
+          props.featureData.mapboxLayerId === 'EU-Railroad-Bridges' ? (
+          <OSMSidebarContent
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            osmData={props.featureData}
+            ringColor="ring-blue-400"
+          />
+        ) : props.featureData.mapboxLayerId === 'EU-Railroad-Crossings' ? (
+          <OSMSidebarContent
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            osmData={props.featureData}
+            ringColor="ring-red-400"
+          />
         ) : (
-          <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-md bg-white">
-            <span>Error: Unknown Layer</span>
+          <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-md bg-white text-center">
+            <span>No additional information is available for this object</span>
           </div>
         )
       ) : (

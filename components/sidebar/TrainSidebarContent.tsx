@@ -72,7 +72,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
   return (
     <div className={props.className}>
       <div className="w-full px-2 py-4 text-center text-2xl">
-        {props.trainData.routeName}
+        {props.trainData.routeName} {props.trainData.trainNum}
       </div>
       <div className="text-md w-full px-2 pb-2 text-center">
         {props.trainData.stations[0].stationName} -&gt;{' '}

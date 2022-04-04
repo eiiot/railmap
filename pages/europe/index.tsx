@@ -3,10 +3,10 @@ import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
-import Sidebar from '../components/sidebar'
+import Sidebar from '../../components/sidebar'
 import { LngLatBoundsLike } from 'react-map-gl'
 
-const Map = dynamic(() => import('../components/mapbox'), {
+const Map = dynamic(() => import('../../components/mapbox'), {
   loading: () => <p>Loading Map</p>,
   ssr: false,
 })
@@ -30,37 +30,34 @@ const Home: NextPage = () => {
     {
       label: 'Satellite',
       styleName: 'Satellite',
-      styleUrl: 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy',
+      styleUrl: 'mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3/draft', // CHANGE TO PRODUCTION
     },
     {
       label: 'Light',
       styleName: 'Light',
-      styleUrl: 'mapbox://styles/dotly/ckoz6vsl50kv117pg6tbt6icm',
+      styleUrl: 'mapbox://styles/dotly/ckpxomwzq0syt17nzenb4p17r',
     },
     {
       label: 'Data',
       styleName: 'Data',
-      styleUrl: 'mapbox://styles/dotly/ckoz5zgci1o3617nb0fiz48ig',
+      styleUrl: 'mapbox://styles/dotly/ckpxomzkq08gp19o8o99y0yut',
     },
   ]
 
   const mapViewState = {
-    longitude: -100,
-    latitude: 40,
+    longitude: 8,
+    latitude: 49,
     zoom: 3.5,
   }
 
   const mapMaxBounds = [
-    [-178.2, 6.6],
-    [-49.0, 83.3],
+    [-28.9, 23.2],
+    [125.5, 75.5],
   ] as LngLatBoundsLike
 
   const mapInteractiveLayerIds = [
-    'trains',
-    'Railroad-Crossings',
-    'Railroad-Bridges',
-    'CN-Railroad-Crossings',
-    'CN-Railroad-Bridges',
+    'EU-Railroad-Crossings',
+    'EU-Railroad-Bridges',
   ]
 
   return (
@@ -85,8 +82,7 @@ const Home: NextPage = () => {
         viewState={mapViewState}
         maxBounds={mapMaxBounds}
         interactiveLayerIds={mapInteractiveLayerIds}
-        layerControl
-        locationControlLocation="/europe"
+        locationControlLocation="/"
       />
     </>
   )

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 interface LocationControlProps {
   position?: ControlPosition
+  location: string
   // locationIds: Array<string>
 }
 // set onClick using props.onClick
@@ -36,7 +37,7 @@ export default function MapboxLocationControl(props: LocationControlProps) {
 
       mapboxCtrlButton.addEventListener('click', () => {
         console.log('click')
-        router.push('/europe')
+        router.push(props.location)
       })
 
       return this._container

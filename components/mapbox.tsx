@@ -1,10 +1,12 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Map, {
   GeolocateControl,
   FullscreenControl,
   NavigationControl,
   Source,
   Layer,
+  MapRef,
+  LngLatBoundsLike,
 } from 'react-map-gl'
 import StylesControl from './map/StylesControl'
 import LayerControl from './map/LayerControl'
@@ -16,32 +18,37 @@ import { Feature, FeatureCollection } from 'geojson'
 const accessToken =
   'pk.eyJ1IjoiZG90bHkiLCJhIjoiY2tpbnA0YjljMTVhcTM0cGVzYjZibzEyMSJ9.fmuvKLVnmue6RxfqZjeLPQ'
 
-const styles = [
-  {
-    label: 'Satellite',
-    styleName: 'Satellite',
-    styleUrl: 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy',
-  },
-  {
-    label: 'Light',
-    styleName: 'Light',
-    styleUrl: 'mapbox://styles/dotly/ckoz6vsl50kv117pg6tbt6icm',
-  },
-  {
-    label: 'Data',
-    styleName: 'Data',
-    styleUrl: 'mapbox://styles/dotly/ckoz5zgci1o3617nb0fiz48ig',
-  },
-]
+interface CustomMapProps {
+  stylesArray: { label: string; styleName: string; styleUrl: string }[]
+  viewState: {
+    longitude: number
+    latitude: number
+    zoom: number
+  }
+  interactiveLayerIds: string[]
+  onClickHandler: (e: any) => void
+  maxBounds: LngLatBoundsLike
+  layerControl?: boolean
+  locationControlLocation: string
+}
 
-export default function MapboxMap(props: any) {
+export default function MapboxMap(props: CustomMapProps) {
   const [trainsGeoJSON, setTrainsGeoJSON] = useState<FeatureCollection | null>(
     null
   )
 
-  const [showTrains, setShowTrains] = useState(true)
+  const [viewState, setViewState] = useState(props.viewState)
 
   const [cursorSate, setCursorState] = useState('unset')
+
+  const mapRef = useRef<MapRef | null>(null)
+
+  const onLoad = useCallback(() => {
+    console.log('Map loaded')
+    // mapRef.current?.on('click', (e: any) => {
+    //   console.log(e)
+    // })
+  }, [])
 
   async function getTrains() {
     // Make a GET request to the API and return the location of the trains.
@@ -96,7 +103,11 @@ export default function MapboxMap(props: any) {
   useEffect(() => {
     getTrains()
       .then((geoJSON) => {
-        setTrainsGeoJSON(geoJSON!)
+        try {
+          setTrainsGeoJSON(geoJSON!)
+        } catch (error) {
+          console.error(error)
+        }
       })
       .catch((error) => {
         console.error(error)
@@ -147,36 +158,34 @@ export default function MapboxMap(props: any) {
 
   return (
     <Map
-      initialViewState={{
-        longitude: -96,
-        latitude: 37.8,
-        zoom: 3.5,
-      }}
-      mapStyle="mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy"
+      {...viewState}
+      mapStyle={props.stylesArray[0].styleUrl}
       mapboxAccessToken={accessToken}
-      interactiveLayerIds={['trains', 'Railroad-Crossings', 'Railroad-Bridges']}
+      interactiveLayerIds={props.interactiveLayerIds}
       cursor={cursorSate}
       onClick={props.onClickHandler}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onMove={(evt) => setViewState(evt.viewState)}
+      onLoad={onLoad}
+      ref={mapRef}
       style={{ position: 'absolute', width: '100vw', height: '100vh' }}
-      reuseMaps
+      maxBounds={props.maxBounds}
     >
       <GeocoderControl mapboxAccessToken={accessToken} />
-      <StylesControl styles={styles} />
+      <StylesControl styles={props.stylesArray} />
       <GeolocateControl />
       <NavigationControl />
       <FullscreenControl />
-      <LayerControl layerIds={['trains', 'train-numbers']} />
-      <LocationControl />
-      {/* <GeocoderControl mapboxAccessToken={accessToken} position="top-left" /> */}
-
-      {showTrains ? (
-        <Source id="trains" type="geojson" data={trainsGeoJSON!}>
-          <Layer {...trainLayerStyle} />
-          <Layer {...trainNumbersLayerStyle} />
-        </Source>
+      {props.layerControl ? (
+        <LayerControl layerIds={['trains', 'train-numbers']} />
       ) : null}
+      <LocationControl location={props.locationControlLocation} />
+
+      <Source id="trains" type="geojson" data={trainsGeoJSON!}>
+        <Layer {...trainLayerStyle} />
+        <Layer {...trainNumbersLayerStyle} />
+      </Source>
     </Map>
   )
 }
