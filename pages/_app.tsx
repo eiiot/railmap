@@ -10,6 +10,31 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+        <title>The Rail Map</title>
+        <meta name="title" content="The Rail Map" />
+        <meta
+          name="description"
+          content="View Railroad Crossings, Live Amtrak, & More!"
+        />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://therailmap.com/" />
+        <meta property="og:title" content="The Rail Map" />
+        <meta
+          property="og:description"
+          content="View Railroad Crossings, Live Amtrak, & More!"
+        />
+        <meta property="og:image" content="/meta.png" />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://therailmap.com" />
+        <meta property="twitter:title" content="The Rail Map" />
+        <meta
+          property="twitter:description"
+          content="View Railroad Crossings, Live Amtrak, & More!"
+        />
+        <meta property="twitter:image" content="/meta.png" />
+
         <link
           rel="apple-touch-icon"
           sizes="180x180"

@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
-import Head from 'next/head'
 
 import Sidebar from '../../components/sidebar'
 import { LngLatBoundsLike } from 'react-map-gl'
@@ -62,19 +61,6 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>The Rail Map</title>
-        <meta
-          name="viewport"
-          content="initial-scale=1,maximum-scale=1,user-scalable=no"
-        />
-        <link rel="icon" type="image/png" href="/images/favicon.png" />
-
-        <meta
-          name="description"
-          content="View Railroad Crossings, Live Amtrak, & More!"
-        />
-      </Head>
       <Sidebar featureData={featureData}></Sidebar>
       <Map
         onClickHandler={featureClickHandler}
