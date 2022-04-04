@@ -53,6 +53,7 @@ const Home: NextPage = () => {
           liveTrains={liveTrains}
           viewState={mapViewState}
           maxBounds={mapMaxBounds}
+          amtrakLocationControlLocation="/"
           interactiveLayerIds={mapInteractiveLayerIds}
           terrain
         />

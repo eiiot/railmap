@@ -80,6 +80,7 @@ const Home: NextPage = () => {
           liveTrains={liveTrains}
           layerControl
           locationControlLocation="/europe"
+          amtrakLocationControlLocation="/amtrak"
           terrain
         />
       </div>
