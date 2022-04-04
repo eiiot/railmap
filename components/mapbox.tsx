@@ -169,10 +169,11 @@ export default function MapboxMap(props: CustomMapProps) {
       style={{ position: 'absolute', width: '100vw', height: '100vh' }}
       maxBounds={props.maxBounds}
     >
+      <StylesControl styles={props.stylesArray} />
       <GeocoderControl
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
+        collapsed
       />
-      <StylesControl styles={props.stylesArray} />
       <GeolocateControl />
       <NavigationControl />
       <FullscreenControl />
