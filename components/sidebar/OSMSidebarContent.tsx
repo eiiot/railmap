@@ -28,13 +28,6 @@ const OSMSidebarContent = (props: OSMSidebarContentProps) => {
         <div className="w-full px-2 py-4 text-center text-2xl">
           {props.osmData['name'] ?? 'Unknown Name'}
         </div>
-        {/* <div className="text-md w-full px-2 pb-2 text-center">
-        {props.osmData.stations[0].stationName} -&gt;{' '}
-        {
-          props.osmData.stations[props.osmData.stations.length - 1]
-            .stationName
-        }
-      </div> */}
         <div className="flex w-full max-w-md flex-[1] flex-col overflow-y-scroll px-2">
           <div className="bg-white p-3">
             <ul className="w-full children:mb-4">

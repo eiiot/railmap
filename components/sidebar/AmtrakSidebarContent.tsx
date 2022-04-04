@@ -42,7 +42,7 @@ function generateBorder(dir: string) {
 function timeDifferenceRing(start: string, end: string) {
   start = start ?? 0
   end = end ?? new Date().toISOString()
-  const diff = moment(end).diff(moment(start), 'minutes')
+  const diff = 0 - moment(end).diff(moment(start), 'minutes')
   if (diff < 5) {
     return 'ring-green-500'
   }
@@ -84,7 +84,6 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
         <Tab.Group>
           <Tab.List className="flex w-full space-x-1 rounded-xl bg-blue-900/20 p-1">
             <Tab
-              key="Info"
               className={({ selected }) =>
                 classNames(
                   'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-white',
@@ -98,7 +97,6 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
               Information
             </Tab>
             <Tab
-              key="Stations"
               className={({ selected }) =>
                 classNames(
                   'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-white',
@@ -113,12 +111,9 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
             </Tab>
           </Tab.List>
           <Tab.Panels className="mt-2 flex-[1] overflow-auto">
-            <Tab.Panel key="Speed" className="bg-white p-3">
+            <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
-                <li
-                  key="speed"
-                  className="hover:bg-coolGray-100 relative rounded-md p-3"
-                >
+                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">Speed</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
@@ -133,10 +128,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                   />
                 </li>
                 {/* Red if late, green otherwise */}
-                <li
-                  key="station"
-                  className="hover:bg-coolGray-100 relative rounded-md p-3"
-                >
+                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">
                     Last Station
                   </h3>
@@ -189,10 +181,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                     )}
                   />
                 </li>
-                <li
-                  key="heading"
-                  className="hover:bg-coolGray-100 relative rounded-md p-3"
-                >
+                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">Heading</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
@@ -208,10 +197,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                     )}
                   />
                 </li>
-                <li
-                  key="tz"
-                  className="hover:bg-coolGray-100 relative rounded-md p-3"
-                >
+                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">Time Zone</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
@@ -225,10 +211,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                     )}
                   />
                 </li>
-                <li
-                  key="key"
-                  className="hover:bg-coolGray-100 relative rounded-md p-3"
-                >
+                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">
                     Last Updated
                   </h3>
@@ -244,18 +227,19 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                   </ul>
                   <a
                     href="#"
-                    className={classNames(
-                      'absolute inset-0 rounded-md',
-                      `${timeDifferenceRing(
+                    className={
+                      'absolute inset-0 rounded-md ring-2' +
+                      ' ' +
+                      timeDifferenceRing(
                         moment().toISOString(),
                         moment.utc(props.trainData.lastValTS).toISOString()
-                      )} ring-2`
-                    )}
+                      )
+                    }
                   />
                 </li>
               </ul>
             </Tab.Panel>
-            <Tab.Panel key="Stations" className="bg-white p-3">
+            <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
                 {props.trainData.stations.map((station: any, index: number) => (
                   <li

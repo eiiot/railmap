@@ -37,7 +37,7 @@ async function getAmtrak() {
     const response = await fetch('https://api.amtraker.com/v1/trains', {
       method: 'GET',
     })
-    const trains = await response.json()
+    const trainNums = await response.json()
     // returns object of trains with the object num as the train number
 
     // create a geoJSON object
@@ -46,13 +46,13 @@ async function getAmtrak() {
       features: [],
     } as FeatureCollection
 
-    // iterate through trains
-    Object.keys(trains).forEach((key) => {
-      const activeTrains = trains[key]
+    // iterate through the train numbers
+    Object.keys(trainNums).forEach((num) => {
+      const trains = trainNums[num]
 
-      // iterate through active trains
-      Object.keys(activeTrains).forEach((key) => {
-        const train = activeTrains[key] // type of train is object
+      // iterate through trains
+      Object.keys(trains).forEach((key) => {
+        const train = trains[key] // type of train is object
         const trainObject = {
           type: 'Feature',
           geometry: {

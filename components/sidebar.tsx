@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import TrainSidebarContent from './sidebar/AmtrakSidebarContent'
+import AmtrakSidebarContent from './sidebar/AmtrakSidebarContent'
 import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
 import CNCrossingSidebarContent from './sidebar/CNCrossingSidebarContent'
 import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
 import OSMSidebarContent from './sidebar/OSMSidebarContent'
+import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -44,7 +45,7 @@ export default function Sidebar(props: any) {
       </div>
       {props.featureData ? (
         props.featureData.mapboxLayerId === 'amtrak' ? (
-          <TrainSidebarContent
+          <AmtrakSidebarContent
             className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
             trainData={props.featureData}
           />
@@ -76,6 +77,11 @@ export default function Sidebar(props: any) {
             osmData={props.featureData}
             ringColor="ring-red-400"
           />
+        ) : props.featureData.mapboxLayerId === 'amtrak-stations' ? (
+          <AmtrakStationSidebarContent
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            stationData={props.featureData}
+          />
         ) : (
           <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-md bg-white text-center">
             <span>No additional information is available for this object</span>
@@ -88,7 +94,7 @@ export default function Sidebar(props: any) {
       )}
       <div
         className={classNames(
-          'my-[35vh] mx-2 hidden rounded-md bg-white md:block',
+          'my-[35vh] mx-2 hidden rounded-md bg-white shadow-lg md:block',
           showSidebar ? 'cursor-w-resize' : 'cursor-e-resize'
         )}
         onClick={onClickHandler}
