@@ -169,10 +169,10 @@ export default function MapboxMap(props: CustomMapProps) {
       {props.stylesArray ? <StylesControl styles={props.stylesArray} /> : null}
       <GeolocateControl />
       <NavigationControl />
-      <FullscreenControl />
+      <FullscreenControl containerId="body" />
 
       {props.layerControl ? (
-        <LayerControl layerIds={['trains', 'train-numbers']} />
+        <LayerControl layerIds={['amtrak', 'amtrak-numbers']} />
       ) : null}
 
       {props.locationControlLocation ? (
