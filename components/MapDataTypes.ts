@@ -225,3 +225,14 @@ export interface CNCrossingData {
   Fatality?: number;
   "Urban Y/N"?: string;
 }
+
+export interface Station {
+  id: number
+  city2: string
+  objectid: number
+  state: string
+  stfips: number
+  stncode: string
+  stnname: string
+  urban: string
+}

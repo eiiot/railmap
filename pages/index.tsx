@@ -17,7 +17,7 @@ const Map = dynamic(() => import('../components/mapbox'), {
 
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState<{
-    [key: string]: string | number | boolean
+    [key: string]: unknown
   } | null>(null)
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
@@ -144,16 +144,16 @@ const Home: NextPage = () => {
     // integrate the useEffect hook from above but instead run it on load
     getAmtrak()
       .then((geoJSON) => {
-        setAmtrakGeoJSON(geoJSON!)
+        setAmtrakGeoJSON(geoJSON)
       })
       .catch((error) => {
         console.error(error)
       })
 
-    const interval = setInterval(async () => {
+    setInterval(async () => {
       getAmtrak()
         .then((geoJSON) => {
-          setAmtrakGeoJSON(geoJSON!)
+          setAmtrakGeoJSON(geoJSON)
         })
         .catch((error) => {
           console.error(error)
@@ -168,7 +168,6 @@ const Home: NextPage = () => {
       <Sidebar featureData={featureData}></Sidebar>
       <div className="h-screen w-screen">
         <Map
-          layerControl
           terrain
           amtrakLocationControlLocation="/amtrak"
           initialViewState={mapViewState}
@@ -181,7 +180,7 @@ const Home: NextPage = () => {
         >
           <StylesControl styles={stylesSwitcherStyles} />
           <LayerControl layerIds={['amtrak', 'amtrak-numbers']} />
-          <Source data={amtrakGeoJSON!} id="amtrak" type="geojson">
+          <Source data={amtrakGeoJSON} id="amtrak" type="geojson">
             <Layer {...amtrakLayerStyle} />
             <Layer {...amtrakNumbersLayerStyle} />
           </Source>

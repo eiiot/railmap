@@ -1,4 +1,4 @@
-import { useControl, ControlPosition, MapboxMap } from 'react-map-gl'
+import { ControlPosition, MapboxMap, useControl } from 'react-map-gl'
 import { useRouter } from 'next/router'
 
 interface LocationControlProps {
@@ -14,8 +14,8 @@ export default function MapboxLocationControl(props: LocationControlProps) {
   const router = useRouter()
 
   class LocationControl {
-    locationIds: any
-    _map: any
+    locationIds: unknown
+    _map: unknown
     _container: HTMLDivElement | undefined
     className: string | undefined
     // constructor(options?: LocationControlProps) {
@@ -43,19 +43,19 @@ export default function MapboxLocationControl(props: LocationControlProps) {
     }
 
     onRemove() {
-      this._container!.parentNode!.removeChild(this._container!)
+      this._container?.parentNode?.removeChild(this._container)
       this._map = undefined
     }
   }
 
-  const locationControl = useControl(
+  useControl(
     () => {
       const ctrl = new LocationControl()
       return ctrl
     },
     {
       position: props.position,
-    }
+    },
   )
 
   return null

@@ -1,9 +1,5 @@
-import { useControl, ControlPosition, MapboxStyle } from 'react-map-gl'
-import {
-  MapboxStyleDefinition,
-  MapboxStyleSwitcherControl,
-  MapboxStyleSwitcherOptions,
-} from 'mapbox-gl-style-switcher'
+import { ControlPosition, useControl } from 'react-map-gl'
+import { MapboxStyleDefinition, MapboxStyleSwitcherControl } from 'mapbox-gl-style-switcher'
 
 interface StylesControlProps {
   styles: MapboxStyleDefinition[]
@@ -12,14 +8,14 @@ interface StylesControlProps {
 
 /* eslint-disable complexity,max-statements */
 export default function MapboxStyleControl(props: StylesControlProps) {
-  const styleControl = useControl(
+  useControl(
     () => {
       const ctrl = new MapboxStyleSwitcherControl(props.styles)
       return ctrl
     },
     {
       position: props.position,
-    }
+    },
   )
 
   return null

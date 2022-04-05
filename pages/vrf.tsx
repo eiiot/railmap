@@ -1,13 +1,7 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
-import {
-  FullscreenControl,
-  Layer,
-  LayerProps,
-  LngLatBoundsLike,
-  Source,
-} from 'react-map-gl'
+import { FullscreenControl, Layer, LayerProps, LngLatBoundsLike, Source } from 'react-map-gl'
 import GeocoderControl from '../components/map/GeocoderControl'
 import { Feature, FeatureCollection } from 'geojson'
 import { GeolocateControl, NavigationControl } from 'react-map-gl'
@@ -71,7 +65,7 @@ async function getCameras() {
         lng: number
         name: string
         type: string
-      }
+      },
     ] = await response.json()
 
     // create a geoJSON object
@@ -111,13 +105,9 @@ async function getCameras() {
 }
 
 const Home: NextPage = () => {
-  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<
-    FeatureCollection | undefined
-  >(undefined)
+  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
-  const [camerasGeoJSON, setCamerasGeoJSON] = useState<
-    FeatureCollection | undefined
-  >(undefined)
+  const [camerasGeoJSON, setCamerasGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
   const mapViewState = {
     longitude: -100,
@@ -169,22 +159,9 @@ const Home: NextPage = () => {
       // conditional circle color, based on camera status
       // if type = st_online, color = green
       // if type = st_offline, color = red
-      'circle-color': [
-        'case',
-        ['==', ['get', 'type'], 'st_online'],
-        '#00ff00',
-        '#ff0000',
-      ],
+      'circle-color': ['case', ['==', ['get', 'type'], 'st_online'], '#00ff00', '#ff0000'],
       'circle-radius': 7,
-      'circle-opacity': [
-        'interpolate',
-        ['exponential', 0.66],
-        ['zoom'],
-        2,
-        0,
-        22,
-        1,
-      ],
+      'circle-opacity': ['interpolate', ['exponential', 0.66], ['zoom'], 2, 0, 22, 1],
     },
     layout: {
       // Make the layer visible by default.
@@ -217,15 +194,7 @@ const Home: NextPage = () => {
       ],
       'text-halo-width': 1,
       'text-halo-blur': 2,
-      'text-opacity': [
-        'interpolate',
-        ['exponential', 0.66],
-        ['zoom'],
-        6,
-        0,
-        22,
-        1,
-      ],
+      'text-opacity': ['interpolate', ['exponential', 0.66], ['zoom'], 6, 0, 22, 1],
     },
   } as LayerProps
 
@@ -233,7 +202,7 @@ const Home: NextPage = () => {
     // integrate the useEffect hook from above but instead run it on load
     getAmtrak()
       .then((geoJSON) => {
-        setAmtrakGeoJSON(geoJSON!)
+        setAmtrakGeoJSON(geoJSON)
       })
       .catch((error) => {
         console.error(error)
@@ -241,16 +210,16 @@ const Home: NextPage = () => {
 
     getCameras()
       .then((geoJSON) => {
-        setCamerasGeoJSON(geoJSON!)
+        setCamerasGeoJSON(geoJSON)
       })
       .catch((error) => {
         console.error(error)
       })
 
-    const interval = setInterval(async () => {
+    setInterval(async () => {
       getAmtrak()
         .then((geoJSON) => {
-          setAmtrakGeoJSON(geoJSON!)
+          setAmtrakGeoJSON(geoJSON)
         })
         .catch((error) => {
           console.error(error)
@@ -258,7 +227,7 @@ const Home: NextPage = () => {
 
       getCameras()
         .then((geoJSON) => {
-          setCamerasGeoJSON(geoJSON!)
+          setCamerasGeoJSON(geoJSON)
         })
         .catch((error) => {
           console.error(error)
@@ -270,26 +239,27 @@ const Home: NextPage = () => {
     <div className="h-screen w-screen">
       <Map
         initialViewState={mapViewState}
-        maxBounds={mapMaxBounds}
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
         mapStyle="mapbox://styles/dotly/ckqo4p5i80jyj19oie9icbu52"
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
+        maxBounds={mapMaxBounds}
         style={{ position: 'absolute', width: '100vw', height: '100vh' }}
         onLoad={onLoadHandler}
       >
         <GeocoderControl
-          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
           collapsed
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
         />
         <GeolocateControl />
         <NavigationControl />
         <FullscreenControl />
 
-        <Source id="amtrak" type="geojson" data={amtrakGeoJSON!}>
+        <Source data={amtrakGeoJSON} id="amtrak" type="geojson">
           <Layer {...amtrakLayerStyle} />
           <Layer {...amtrakNumbersLayerStyle} />
         </Source>
 
-        <Source id="cameras" type="geojson" data={camerasGeoJSON}>
+        <Source data={camerasGeoJSON} id="cameras" type="geojson">
           <Layer {...camerasLayerStyle} />
           <Layer {...cameraLabelsLayerStyle} />
         </Source>

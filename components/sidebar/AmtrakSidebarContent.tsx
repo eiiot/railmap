@@ -87,7 +87,7 @@ function capitalize(string: string) {
 }
 
 const TrainSidebarContent = (props: TrainSidebarContentProps) => {
-  props.trainData.stations =
+  const stations =
     typeof props.trainData.stations === 'string'
       ? JSON.parse(props.trainData.stations)
       : props.trainData.stations
@@ -97,8 +97,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
         {props.trainData.routeName} {props.trainData.trainNum}
       </div>
       <div className="text-md w-full px-2 pb-2 text-center">
-        {props.trainData.stations[0].stationName} -&gt;{' '}
-        {props.trainData.stations[props.trainData.stations.length - 1].stationName}
+        {stations[0].stationName} -&gt; {stations[stations.length - 1].stationName}
       </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-hidden px-2">
         <Tab.Group>
@@ -154,12 +153,9 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                       ] |{' '}
                       {capitalize(
                         (
-                          findStation(props.trainData.stations, props.trainData.eventCode)
-                            .postCmnt ??
-                          findStation(props.trainData.stations, props.trainData.eventCode)
-                            .estArrCmnt ??
-                          findStation(props.trainData.stations, props.trainData.eventCode)
-                            .estDepCmnt ??
+                          findStation(stations, props.trainData.eventCode).postCmnt ??
+                          findStation(stations, props.trainData.eventCode).estArrCmnt ??
+                          findStation(stations, props.trainData.eventCode).estDepCmnt ??
                           'unknown'
                         )
                           .toLowerCase()
@@ -173,9 +169,9 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                     className={classNames(
                       'absolute inset-0 rounded-md',
                       `ring-2 ${timeDifferenceRing(
-                        findStation(props.trainData.stations, props.trainData.eventCode).postDep ??
-                          findStation(props.trainData.stations, props.trainData.eventCode).estDep,
-                        findStation(props.trainData.stations, props.trainData.eventCode).schDep,
+                        findStation(stations, props.trainData.eventCode).postDep ??
+                          findStation(stations, props.trainData.eventCode).estDep,
+                        findStation(stations, props.trainData.eventCode).schDep,
                       )}`,
                     )}
                     href="#"
@@ -234,7 +230,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
             </Tab.Panel>
             <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
-                {props.trainData.stations.map((station: station) => (
+                {stations.map((station: station) => (
                   <li key={station.code} className="hover:bg-coolGray-100 relative rounded-md p-3">
                     <h3 className="text-sm font-medium leading-5">{station.stationName}</h3>
 

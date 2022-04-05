@@ -3,6 +3,7 @@ import Map, {
   FullscreenControl,
   GeolocateControl,
   LngLatBoundsLike,
+  MapLayerMouseEvent,
   MapboxEvent,
   NavigationControl,
   Source,
@@ -13,7 +14,7 @@ import LocationControl from './map/LocationControl'
 interface CustomMapProps {
   mapStyle: string
   interactiveLayerIds: string[]
-  onClickHandler: (e: any) => void
+  onClickHandler: (e: MapLayerMouseEvent) => void
   maxBounds: LngLatBoundsLike
   initialViewState: {
     longitude: number

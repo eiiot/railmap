@@ -1,4 +1,4 @@
-import { useControl, ControlPosition, MapboxMap } from 'react-map-gl'
+import { ControlPosition, MapboxMap, useControl } from 'react-map-gl'
 
 interface LayerControlProps {
   position?: ControlPosition
@@ -6,12 +6,12 @@ interface LayerControlProps {
 }
 
 class LayerControl {
-  layerIds: any
-  _map: any
+  layerIds: Array<string>
+  _map: unknown
   _container: HTMLDivElement | undefined
   className: string | undefined
-  constructor(options?: LayerControlProps) {
-    this.layerIds = options?.layerIds
+  constructor(options: LayerControlProps) {
+    this.layerIds = options.layerIds
   }
 
   onAdd(map: MapboxMap) {
@@ -43,7 +43,9 @@ class LayerControl {
             this.className = 'active'
             map.setLayoutProperty(layerId, 'visibility', 'visible')
           }
-        } catch (error) {}
+        } catch (error) {
+          console.log(error)
+        }
       })
     })
 
@@ -51,7 +53,7 @@ class LayerControl {
   }
 
   onRemove() {
-    this._container!.parentNode!.removeChild(this._container!)
+    this._container?.parentNode?.removeChild(this._container)
     this._map = undefined
   }
 }
@@ -60,7 +62,7 @@ class LayerControl {
 
 /* eslint-disable complexity,max-statements */
 export default function MapboxLayerControl(props: LayerControlProps) {
-  const layerControl = useControl(
+  useControl(
     () => {
       const ctrl = new LayerControl({
         ...props,
@@ -69,7 +71,7 @@ export default function MapboxLayerControl(props: LayerControlProps) {
     },
     {
       position: props.position,
-    }
+    },
   )
 
   return null

@@ -13,44 +13,23 @@ const Map = dynamic(() => import('../components/mapbox'), {
   ssr: false,
 })
 
-interface Station {
-  id: number
-  city2: string
-  objectid: number
-  state: string
-  stfips: number
-  stncode: string
-  stnname: string
-  urban: string
-}
-
-interface StationData {
-  id: number
-  city2: string
-  objectid: number
-  state: string
-  stfips: number
-  stncode: string
-  stnname: string
-  urban: string
-  mapboxLayerId: string
-}
-
 const Home: NextPage = () => {
-  const [featureData, setFeatureData] = useState<{ [key: string]: any } | null>(null)
+  const [featureData, setFeatureData] = useState<{
+    [key: string]: unknown
+  } | null>(null)
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
     if (e.features) {
-      const clickedFeature = e.features[0].properties as Station
-      const stationData: StationData = {
+      const clickedFeature = e.features[0].properties
+      const featureDataObject = {
         ...clickedFeature,
         mapboxLayerId: e.features[0].layer.id,
       }
-      setFeatureData(stationData)
+      setFeatureData(featureDataObject)
     }
   }, [])
 
-  const onTrainClick = useCallback((train: trainData, mainMapboxMap) => {
+  const trainButtonClickHandler = useCallback((train: trainData, mainMapboxMap) => {
     const { lon, lat } = train
     console.log(lon, lat)
     console.log(train)
@@ -176,7 +155,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Sidebar featureData={featureData} onTrainClick={onTrainClick}></Sidebar>
+      <Sidebar featureData={featureData} onTrainClick={trainButtonClickHandler}></Sidebar>
       <div className="h-screen w-screen">
         <Map
           terrain

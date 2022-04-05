@@ -15,7 +15,7 @@ const Map = dynamic(() => import('../../components/mapbox'), {
 
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState<{
-    [key: string]: string | number | boolean
+    [key: string]: unknown
   } | null>(null)
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {

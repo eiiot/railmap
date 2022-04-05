@@ -7,6 +7,7 @@ import OSMSidebarContent from './sidebar/OSMSidebarContent'
 import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
 import { MapRef } from 'react-map-gl'
 import { trainData } from './amtrakTypes'
+import { CNCrossingData, USBridgeData, USCrossingData } from './MapDataTypes'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -18,7 +19,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar(props: SidebarProps) {
-  const [showSidebar, setShowSidebar] = useState(false)
+  const [showSidebar, setShowSidebar] = useState<boolean>(false)
 
   // on change of featureData show sidebar
   useEffect(() => {
@@ -53,22 +54,22 @@ export default function Sidebar(props: SidebarProps) {
         props.featureData.mapboxLayerId === 'amtrak' ? (
           <AmtrakSidebarContent
             className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            trainData={props.featureData}
+            trainData={props.featureData as unknown as trainData}
           />
         ) : props.featureData.mapboxLayerId === 'Railroad-Crossings' ? (
           <CrossingSidebarContent
             className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            crossingData={props.featureData}
+            crossingData={props.featureData as unknown as USCrossingData}
           />
         ) : props.featureData.mapboxLayerId === 'Railroad-Bridges' ? (
           <BridgeSidebarContent
-            bridgeData={props.featureData}
+            bridgeData={props.featureData as unknown as USBridgeData}
             className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
           />
         ) : props.featureData.mapboxLayerId === 'CN-Railroad-Crossings' ? (
           <CNCrossingSidebarContent
             className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            crossingData={props.featureData}
+            crossingData={props.featureData as unknown as CNCrossingData}
           />
         ) : props.featureData.mapboxLayerId === 'CN-Railroad-Bridges' ||
           props.featureData.mapboxLayerId === 'EU-Railroad-Bridges' ? (

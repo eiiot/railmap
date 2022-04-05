@@ -18,7 +18,7 @@ module.exports = {
       },
     ],
     'sort-imports': [
-      'error',
+      'warn',
       {
         ignoreCase: false,
         ignoreDeclarationSort: true,
