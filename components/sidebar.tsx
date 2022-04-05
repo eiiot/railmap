@@ -15,7 +15,7 @@ function classNames(...classes: string[]) {
 
 interface SidebarProps {
   featureData: { [key: string]: unknown } | null
-  onTrainClick?: (train: trainData, mainMapboxMap: MapRef) => void
+  onTrainClick?: (train: trainData, railmap: MapRef) => void
 }
 
 export default function Sidebar(props: SidebarProps) {
@@ -35,7 +35,7 @@ export default function Sidebar(props: SidebarProps) {
   return (
     <div
       className={classNames(
-        'absolute top-[calc(50vh)] z-10 flex h-[calc(50vh-32px)] w-full flex-col transition-transform duration-300 md:top-0 md:m-[10px] md:h-5/6 md:w-[300px] md:translate-y-0 md:flex-row',
+        'fixed bottom-[32px] z-10 flex h-[calc(70vh-32px)] w-full flex-col transition-transform duration-300 md:top-0 md:m-[10px] md:h-5/6 md:w-[300px] md:translate-y-0 md:flex-row',
         showSidebar
           ? 'translate-y-0 md:translate-y-0 md:translate-x-0'
           : 'translate-y-[calc(100%)] md:translate-y-0 md:translate-x-[calc(-100%-10px)]',

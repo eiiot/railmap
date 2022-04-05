@@ -19,7 +19,7 @@ interface AmtrakStationSidebarContentProps {
   /** Array of style options */
   stationData: StationData
   className: string
-  onTrainClick: (train: trainData, mainMapboxMap: MapRef) => void
+  onTrainClick: (train: trainData, railmap: MapRef) => void
 }
 
 interface stationTrain extends station {
@@ -74,7 +74,7 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
     getStationTrains()
   }, [getStationTrains])
 
-  const { mainMapboxMap } = useMap()
+  const { railmap } = useMap()
 
   return (
     <div className={props.className}>
@@ -92,7 +92,7 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
                   onClick={() => {
                     if (props.onTrainClick) {
                       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      props.onTrainClick(train.train, mainMapboxMap!)
+                      props.onTrainClick(train.train, railmap!)
                     }
                   }}
                 >

@@ -30,12 +30,12 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  const trainButtonClickHandler = useCallback((train: trainData, mainMapboxMap) => {
+  const trainButtonClickHandler = useCallback((train: trainData, railmap) => {
     const { lon, lat } = train
     console.log(lon, lat)
     console.log(train)
-    console.log(mainMapboxMap)
-    mainMapboxMap.flyTo({ center: [lon, lat], zoom: 13, duration: 2000 })
+    console.log(railmap)
+    railmap.flyTo({ center: [lon, lat], zoom: 13, duration: 2000 })
     const featureDataObject = {
       ...train,
       mapboxLayerId: 'amtrak',
