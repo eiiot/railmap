@@ -1,14 +1,13 @@
+import { CNCrossingData } from '../MapDataTypes'
+
 interface CNCrossingSidebarContentProps {
   /** Array of style options */
-  crossingData: { [key: string]: string | number | boolean }
+  crossingData: CNCrossingData
   className: string
 }
 
-function isEmptyOrSpaces(input: any) {
-  if (typeof input !== 'string') {
-    return false
-  }
-  return input === null || input.match(/^ *$/) !== null
+function isEmptyOrSpaces(str: string | number | undefined) {
+  return typeof str == 'number' || str === undefined || str.match(/^ *$/) !== null
 }
 
 const CNCrossingSidebarContent = (props: CNCrossingSidebarContentProps) => {
@@ -99,9 +98,7 @@ const CNCrossingSidebarContent = (props: CNCrossingSidebarContentProps) => {
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['Total Trains Daily']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Total Trains Daily
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Total Trains Daily</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['Total Trains Daily']}</li>
@@ -111,9 +108,7 @@ const CNCrossingSidebarContent = (props: CNCrossingSidebarContentProps) => {
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['Vehicles Daily']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Vehicles Daily
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Vehicles Daily</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['Vehicles Daily']}</li>
@@ -123,9 +118,7 @@ const CNCrossingSidebarContent = (props: CNCrossingSidebarContentProps) => {
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['Train Max Speed (mph)']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Train Max Speed
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Train Max Speed</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['Train Max Speed (mph)']} mph</li>
@@ -139,11 +132,7 @@ const CNCrossingSidebarContent = (props: CNCrossingSidebarContentProps) => {
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    {(
-                      (props.crossingData['Road Speed (km/h)'] as number) /
-                      1.609
-                    ).toFixed(1)}{' '}
-                    mph
+                    {((props.crossingData['Road Speed (km/h)'] as number) / 1.609).toFixed(1)} mph
                   </li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
@@ -204,9 +193,7 @@ const CNCrossingSidebarContent = (props: CNCrossingSidebarContentProps) => {
                 <h3 className="text-sm font-medium leading-5">Urban</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>
-                    {props.crossingData['Urban Y/N'] == 'Y' ? 'Yes' : 'No'}
-                  </li>
+                  <li>{props.crossingData['Urban Y/N'] == 'Y' ? 'Yes' : 'No'}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
@@ -223,9 +210,7 @@ const CNCrossingSidebarContent = (props: CNCrossingSidebarContentProps) => {
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['Road Authority']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Road Authority
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Road Authority</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['Road Authority']}</li>

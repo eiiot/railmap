@@ -1,9 +1,10 @@
 import { Tab } from '@headlessui/react'
 import moment from 'moment'
+import { station, trainData } from '../amtrakTypes'
 
 interface TrainSidebarContentProps {
   /** Array of style options */
-  trainData: any
+  trainData: trainData
   className: string
 }
 
@@ -39,9 +40,10 @@ function generateBorder(dir: string) {
   return ''
 }
 
-function timeDifferenceRing(start: string, end: string) {
-  start = start ?? 0
-  end = end ?? new Date().toISOString()
+function timeDifferenceRing(start: string | null | undefined, end: string | null | undefined) {
+  if (!(start && end)) {
+    return 'ring-red-500'
+  }
   const diff = 0 - moment(end).diff(moment(start), 'minutes')
   if (diff < 5) {
     return 'ring-green-500'
@@ -55,8 +57,29 @@ function timeDifferenceRing(start: string, end: string) {
   return 'ring-red-500'
 }
 
-function findStation(stations: Array<{ [key: string]: string }>, code: string) {
-  return stations.find((station) => station.code == code)
+function findStation(stations: station[], code: string) {
+  return (
+    stations.find((station?) => station.code == code) ?? {
+      trainNum: null,
+      code: null,
+      tz: null,
+      bus: null,
+      schArr: null,
+      schDep: null,
+      schMnt: null,
+      autoArr: null,
+      autoDep: null,
+      postArr: null,
+      postDep: null,
+      postCmnt: null,
+      estArr: null,
+      estDep: null,
+      estArrCmnt: null,
+      estDepCmnt: null,
+      stationName: null,
+      stationTimely: null,
+    }
+  )
 }
 
 function capitalize(string: string) {
@@ -75,10 +98,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
       </div>
       <div className="text-md w-full px-2 pb-2 text-center">
         {props.trainData.stations[0].stationName} -&gt;{' '}
-        {
-          props.trainData.stations[props.trainData.stations.length - 1]
-            .stationName
-        }
+        {props.trainData.stations[props.trainData.stations.length - 1].stationName}
       </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-hidden px-2">
         <Tab.Group>
@@ -90,7 +110,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                   'ring-white ring-opacity-60 ring-offset-2  focus:outline-none ',
                   selected
                     ? 'bg-white text-black shadow'
-                    : 'text-white hover:bg-white/[0.12] hover:text-gray-100'
+                    : 'text-white hover:bg-white/[0.12] hover:text-gray-100',
                 )
               }
             >
@@ -103,7 +123,7 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                   'ring-white ring-opacity-60 ring-offset-2  focus:outline-none ',
                   selected
                     ? 'bg-white text-black shadow'
-                    : 'text-white hover:bg-white/[0.12] hover:text-gray-100'
+                    : 'text-white hover:bg-white/[0.12] hover:text-gray-100',
                 )
               }
             >
@@ -120,65 +140,45 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                     <li>{(props.trainData.velocity ?? 0).toFixed(1)} mph</li>
                   </ul>
                   <a
+                    className={classNames('absolute inset-0 rounded-md', 'ring-2 ring-blue-400')}
                     href="#"
-                    className={classNames(
-                      'absolute inset-0 rounded-md',
-                      'ring-2 ring-blue-400'
-                    )}
                   />
                 </li>
                 {/* Red if late, green otherwise */}
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                  <h3 className="text-sm font-medium leading-5">
-                    Last Station
-                  </h3>
+                  <h3 className="text-sm font-medium leading-5">Last Station</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
-                      {props.trainData.eventName ?? 'Unknown'} [
-                      {props.trainData.eventCode ?? 'UNK'}] |{' '}
+                      {props.trainData.eventName ?? 'Unknown'} [{props.trainData.eventCode ?? 'UNK'}
+                      ] |{' '}
                       {capitalize(
                         (
-                          findStation(
-                            props.trainData.stations,
-                            props.trainData.eventCode
-                          )!.postCmnt ??
-                          findStation(
-                            props.trainData.stations,
-                            props.trainData.eventCode
-                          )!.estArrCmnt ??
-                          findStation(
-                            props.trainData.stations,
-                            props.trainData.eventCode
-                          )!.estDepCmnt ??
+                          findStation(props.trainData.stations, props.trainData.eventCode)
+                            .postCmnt ??
+                          findStation(props.trainData.stations, props.trainData.eventCode)
+                            .estArrCmnt ??
+                          findStation(props.trainData.stations, props.trainData.eventCode)
+                            .estDepCmnt ??
                           'unknown'
                         )
                           .toLowerCase()
                           .replace('mi', 'min')
                           // remove a zero if it's the first character
-                          .replace(/^0/, '')
+                          .replace(/^0/, ''),
                       )}
                     </li>
                   </ul>
                   <a
-                    href="#"
                     className={classNames(
                       'absolute inset-0 rounded-md',
                       `ring-2 ${timeDifferenceRing(
-                        findStation(
-                          props.trainData.stations,
-                          props.trainData.eventCode
-                        )!.postDep ??
-                          findStation(
-                            props.trainData.stations,
-                            props.trainData.eventCode
-                          )!.estDep,
-                        findStation(
-                          props.trainData.stations,
-                          props.trainData.eventCode
-                        )!.schDep
-                      )}`
+                        findStation(props.trainData.stations, props.trainData.eventCode).postDep ??
+                          findStation(props.trainData.stations, props.trainData.eventCode).estDep,
+                        findStation(props.trainData.stations, props.trainData.eventCode).schDep,
+                      )}`,
                     )}
+                    href="#"
                   />
                 </li>
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
@@ -188,13 +188,13 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                     <li>{props.trainData.heading ?? 'Unknown'}</li>
                   </ul>
                   <a
-                    href="#"
                     className={classNames(
                       'absolute inset-0 rounded-md',
                       `ring-2 ring-blue-400 ${generateBorder(
-                        props.trainData.heading
-                      )} border-blue-400`
+                        props.trainData.heading,
+                      )} border-blue-400`,
                     )}
+                    href="#"
                   />
                 </li>
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
@@ -204,93 +204,70 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                     <li>{props.trainData.trainTimeZone ?? 'Unknown'}</li>
                   </ul>
                   <a
+                    className={classNames('absolute inset-0 rounded-md', 'ring-2 ring-blue-400')}
                     href="#"
-                    className={classNames(
-                      'absolute inset-0 rounded-md',
-                      'ring-2 ring-blue-400'
-                    )}
                   />
                 </li>
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                  <h3 className="text-sm font-medium leading-5">
-                    Last Updated
-                  </h3>
+                  <h3 className="text-sm font-medium leading-5">Last Updated</h3>
                   {/* Red if more than 15 minutes */}
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
                       {moment
-                        .duration(
-                          -moment().diff(moment.utc(props.trainData.lastValTS))
-                        )
+                        .duration(-moment().diff(moment.utc(props.trainData.lastValTS)))
                         .humanize(true) ?? 'Unknown'}
                     </li>
                   </ul>
                   <a
-                    href="#"
                     className={
                       'absolute inset-0 rounded-md ring-2' +
                       ' ' +
                       timeDifferenceRing(
                         moment().toISOString(),
-                        moment.utc(props.trainData.lastValTS).toISOString()
+                        moment.utc(props.trainData.lastValTS).toISOString(),
                       )
                     }
+                    href="#"
                   />
                 </li>
               </ul>
             </Tab.Panel>
             <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
-                {props.trainData.stations.map((station: any, index: number) => (
-                  <li
-                    key={station.code}
-                    className="hover:bg-coolGray-100 relative rounded-md p-3"
-                  >
-                    <h3 className="text-sm font-medium leading-5">
-                      {station.stationName}
-                    </h3>
+                {props.trainData.stations.map((station: station) => (
+                  <li key={station.code} className="hover:bg-coolGray-100 relative rounded-md p-3">
+                    <h3 className="text-sm font-medium leading-5">{station.stationName}</h3>
 
                     <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                       <li>
                         {station.postCmnt ? (
                           <>
-                            Left{' '}
-                            {station.postCmnt
-                              .toLowerCase()
-                              .replace('mi', 'min')}{' '}
-                            at {moment(station.postDep).format('h:mm a')}
+                            Left {station.postCmnt.toLowerCase().replace('mi', 'min')} at{' '}
+                            {moment(station.postDep).format('h:mm a')}
                           </>
                         ) : station.estArrCmnt ? (
                           <>
-                            Arriving{' '}
-                            {station.estArrCmnt
-                              .toLowerCase()
-                              .replace('mi', 'min')}{' '}
-                            at {moment(station.estArr).format('h:mm a')}
+                            Arriving {station.estArrCmnt.toLowerCase().replace('mi', 'min')} at{' '}
+                            {moment(station.estArr).format('h:mm a')}
                           </>
                         ) : station.estDepCmnt ? (
                           <>
-                            Leaving{' '}
-                            {station.estDepCmnt
-                              .toLowerCase()
-                              .replace('mi', 'min')}{' '}
-                            at {moment(station.estDep).format('h:mm a')}
+                            Leaving {station.estDepCmnt.toLowerCase().replace('mi', 'min')} at{' '}
+                            {moment(station.estDep).format('h:mm a')}
                           </>
                         ) : null}
                       </li>
                     </ul>
 
                     <a
-                      href="#"
                       className={classNames(
                         'absolute inset-0 rounded-md',
                         `${timeDifferenceRing(
-                          moment
-                            .utc(station.postDep ?? station.estDep)
-                            .toISOString(),
-                          moment.utc(station.schDep).toISOString()
-                        )} ring-2`
+                          moment.utc(station.postDep ?? station.estDep).toISOString(),
+                          moment.utc(station.schDep).toISOString(),
+                        )} ring-2`,
                       )}
+                      href="#"
                     />
                   </li>
                 ))}

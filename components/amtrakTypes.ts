@@ -23,29 +23,32 @@ export interface station {
   code: string; //code of station
   tz: string; //timezone of station (EST, EDT, CST, CDT, PST, or PDT)
   bus: boolean; //true if bus at stop
-  schArr: Date; //scheduled arrival at station
-  schDep: Date; //scheduled departure from station
+  schArr: string; //scheduled arrival at station
+  schDep: string; //scheduled departure from station
   schMnt: string; //variable from amtrak, not sure use of but could be related to any maintnence the train will go through at this station
   autoArr: boolean; //has the train arrived at this station already?
   autoDep: boolean; //has the train departed from this station already?
-  postArr?: Date; //actual arrival at station
-  postDep?: Date; //actual departure from station
+  postArr?: string; //actual arrival at station
+  postDep?: string; //actual departure from station
   postCmnt?: string; //how late it departed in english
-  estArr?: Date; //estimated arrival at station
-  estDep?: Date; //estimated departure from station
+  estArr?: string; //estimated arrival at station
+  estDep?: string; //estimated departure from station
   estArrCmnt?: string; //how early/late train will be in english
   estDepCmnt?: string; //how early/late train will be in english
+  stationName?: string; //name of station
+  stationTimely?: string; //is the train on time?
+
 }
 
 export interface stationMin {
   trainNum: number; //number of the train station is from
-  schArr: Date; //scheduled arrival at station
-  schDep: Date; //scheduled departure from station
-  postArr?: Date; //actual arrival at station
-  postDep?: Date; //actual departure from station
+  schArr: string; //scheduled arrival at station
+  schDep: string; //scheduled departure from station
+  postArr?: string; //actual arrival at station
+  postDep?: string; //actual departure from station
   postCmnt?: string; //how late it departed in english
-  estArr?: Date; //estimated arrival at station
-  estDep?: Date; //estimated departure from station
+  estArr?: string; //estimated arrival at station
+  estDep?: string; //estimated departure from station
   estArrCmnt?: string; //how early/late train will be in english
   estDepCmnt?: string; //how early/late train will be in english
 }
@@ -81,7 +84,7 @@ export interface trainDataRaw { //DONT USE THIS FOR GOD'S SAKE
   TrainNum: string;
   Velocity: string;
   Stations: stationRaw[];
-};
+}
 
 export interface trainData {
   routeName: string; //name of the route
@@ -92,9 +95,9 @@ export interface trainData {
   lon: number; //current longitude position of train
   heading: string; //heading of the train in N, NE, E, SE, S, etc.
   velocity: number;
-  lastValTS: Date; //Date object which train was last updated
+  lastValTS: string; //string object which train was last updated
   trainTimeZone: string, //the current time zone of the train
-  lastArr: Date; //Date object which train arrived at final destination, null if still uncompleted
+  lastArr: string; //string object which train arrived at final destination, null if still uncompleted
   trainState: string; //state of the train ("Predeparture", "Active", or "Completed")
   statusMsg: string; //status of the train (" " if normal, "SERVICE DISRUPTION" if the obvious has happened)
   serviceDisruption: boolean; //true if a service disruption
@@ -102,8 +105,10 @@ export interface trainData {
   destCode: string; //final destination
   origCode: string; //origin station
   originTZ: string; //timezone of origin station (EST, EDT, CST, CDT, PST, or PDT)
-  origSchDep: Date; //scheduled original departure for train
+  origSchDep: string; //scheduled original departure for train
   aliases: number[]; //train numbers which also refer to this train
-  updatedAt: Date; //the time this data was retrieved from the server
+  updatedAt: string; //the time this data was retrieved from the server
   stations: station[]; //
-};
+  eventName: string; //name of the upcoming event
+  trainTimely: string; //true if train is on time
+}

@@ -1,16 +1,28 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import moment from 'moment'
-import { trainData, station } from '../amtrakTypes'
-import { MapboxMap, MapRef, useMap } from 'react-map-gl'
+import { station, trainData } from '../amtrakTypes'
+import { MapRef, useMap } from 'react-map-gl'
+
+interface StationData {
+  id?: number
+  city2?: string
+  objectid?: number
+  state?: string
+  stfips?: number
+  stncode?: string
+  stnname?: string
+  urban?: string
+  mapboxLayerId?: 'amtrak'
+}
 
 interface AmtrakStationSidebarContentProps {
   /** Array of style options */
-  stationData: { [key: string]: string }
+  stationData: StationData
   className: string
-  onTrainClick?: (train: trainData, mainMapboxMap: MapRef) => void
+  onTrainClick: (train: trainData, mainMapboxMap: MapRef) => void
 }
 
-interface stationTrains extends station {
+interface stationTrain extends station {
   train: trainData
 }
 
@@ -30,33 +42,32 @@ function timeDifferenceRing(start: string, end: string) {
   return 'ring-red-500'
 }
 
-const AmtrakStationSidebarContent = (
-  props: AmtrakStationSidebarContentProps
-) => {
-  const [stationTrains, setStationTrains] = useState([] as stationTrains[])
+const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) => {
+  const [stationTrains, setStationTrains] = useState([] as stationTrain[])
 
   // set the station trains to an API call
   const getStationTrains = useCallback(async () => {
     const response = await fetch(`https://api.amtraker.com/v1/trains`)
     const trainNums: { [key: number]: trainData[] } = await response.json()
-    const stations: stationTrains[] = []
+    const trains: stationTrain[] = []
     for (const trainNum in trainNums) {
       trainNums[trainNum].forEach((train: trainData) => {
         train.stations.forEach((station: station) => {
           if (station.code === props.stationData['stncode'] && station.estArr) {
-            stations.push({
+            trains.push({
               ...station,
               train: train,
-            })
+            } as stationTrain)
           }
         })
       })
     }
+    console.log(trains)
     // order stations by closest estArr
-    stations.sort((a, b) => {
+    trains.sort((a, b) => {
       return moment(a.estArr).diff(moment(b.estArr))
     })
-    setStationTrains(stations)
+    setStationTrains(trains)
   }, [props.stationData['stncode']])
 
   useEffect(() => {
@@ -76,9 +87,11 @@ const AmtrakStationSidebarContent = (
             {stationTrains.length > 0 ? (
               stationTrains.map((train) => (
                 <li
+                  key={train.train.trainNum}
                   className="hover:bg-coolGray-100 relative cursor-pointer rounded-md p-3"
                   onClick={() => {
                     if (props.onTrainClick) {
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                       props.onTrainClick(train.train, mainMapboxMap!)
                     }
                   }}
@@ -89,31 +102,27 @@ const AmtrakStationSidebarContent = (
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
-                      Arriving{' '}
-                      {train.estArrCmnt!.toLowerCase().replace('mi', 'min')}{' '}
-                      {moment(train.estArr).fromNow()} (
-                      {moment(train.estArr).format('h:mm a')})
+                      Arriving {train.estArrCmnt?.toLowerCase().replace('mi', 'min')}{' '}
+                      {moment(train.estArr).fromNow()} ({moment(train.estArr).format('h:mm a')})
                     </li>
                   </ul>
 
                   <a
-                    href="#"
                     className={
                       'absolute inset-0 rounded-md ring-2' +
                       ' ' +
                       timeDifferenceRing(
                         moment.utc(train.estArr).toISOString(),
-                        moment.utc(train.schArr).toISOString()
+                        moment.utc(train.schArr).toISOString(),
                       )
                     }
+                    href="#"
                   />
                 </li>
               ))
             ) : (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  No Trains Available
-                </h3>
+                <h3 className="text-sm font-medium leading-5">No Trains Available</h3>
               </li>
             )}
           </ul>

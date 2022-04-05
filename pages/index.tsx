@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 
 import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
-import { Layer, LayerProps, LngLatBoundsLike, Source } from 'react-map-gl'
+import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
 import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 import LayerControl from '../components/map/LayerControl'
-import { Feature, FeatureCollection } from 'geojson'
 import StylesControl from '../components/map/StylesControl'
+import { Feature, FeatureCollection } from 'geojson'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
@@ -16,12 +16,12 @@ const Map = dynamic(() => import('../components/mapbox'), {
 })
 
 const Home: NextPage = () => {
-  const [featureData, setFeatureData] = useState<{ [key: string]: any } | null>(
-    null
-  )
+  const [featureData, setFeatureData] = useState<{
+    [key: string]: string | number | boolean
+  } | null>(null)
 
-  const featureClickHandler = useCallback((e: any) => {
-    if (e.features[0]) {
+  const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
+    if (e.features) {
       const clickedFeature = e.features[0].properties
       const featureDataObject = {
         ...clickedFeature,
@@ -97,9 +97,7 @@ const Home: NextPage = () => {
     },
   }
 
-  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<
-    FeatureCollection | undefined
-  >(undefined)
+  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
   async function getAmtrak() {
     // Make a GET request to the API and return the location of the trains.
@@ -170,20 +168,20 @@ const Home: NextPage = () => {
       <Sidebar featureData={featureData}></Sidebar>
       <div className="h-screen w-screen">
         <Map
-          onClickHandler={featureClickHandler}
-          mapStyle={stylesSwitcherStyles[0].uri}
-          initialViewState={mapViewState}
-          maxBounds={mapMaxBounds}
-          interactiveLayerIds={mapInteractiveLayerIds}
-          onLoad={onLoadHandler}
           layerControl
-          locationControlLocation="/europe"
-          amtrakLocationControlLocation="/amtrak"
           terrain
+          amtrakLocationControlLocation="/amtrak"
+          initialViewState={mapViewState}
+          interactiveLayerIds={mapInteractiveLayerIds}
+          locationControlLocation="/europe"
+          mapStyle={stylesSwitcherStyles[0].uri}
+          maxBounds={mapMaxBounds}
+          onClickHandler={featureClickHandler}
+          onLoad={onLoadHandler}
         >
           <StylesControl styles={stylesSwitcherStyles} />
           <LayerControl layerIds={['amtrak', 'amtrak-numbers']} />
-          <Source id="amtrak" type="geojson" data={amtrakGeoJSON!}>
+          <Source data={amtrakGeoJSON!} id="amtrak" type="geojson">
             <Layer {...amtrakLayerStyle} />
             <Layer {...amtrakNumbersLayerStyle} />
           </Source>

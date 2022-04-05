@@ -1,22 +1,14 @@
-import { useState, useCallback, forwardRef } from 'react'
+import { useCallback, useState } from 'react'
 import Map, {
-  GeolocateControl,
   FullscreenControl,
+  GeolocateControl,
+  LngLatBoundsLike,
+  MapboxEvent,
   NavigationControl,
   Source,
-  Layer,
-  LngLatBoundsLike,
-  MapRef,
-  MapboxMap,
-  useMap,
-  MapboxEvent,
 } from 'react-map-gl'
-import StylesControl from './map/StylesControl'
-import LayerControl from './map/LayerControl'
 import GeocoderControl from './map/GeocoderControl'
 import LocationControl from './map/LocationControl'
-import { LayerProps } from 'react-map-gl'
-import { Feature, FeatureCollection } from 'geojson'
 
 interface CustomMapProps {
   mapStyle: string
@@ -39,14 +31,14 @@ interface CustomMapProps {
 const MapboxGlMap = (props: CustomMapProps) => {
   const [cursorSate, setCursorState] = useState('unset')
 
-  const onMouseEnter = useCallback((e: any) => {
+  const onMouseEnter = useCallback(() => {
     setCursorState('pointer')
   }, [])
-  const onMouseLeave = useCallback((e: any) => {
+  const onMouseLeave = useCallback(() => {
     setCursorState('unset')
   }, [])
 
-  let terrainProps = props.terrain
+  const terrainProps = props.terrain
     ? {
         terrain: { source: 'mapbox-dem', exaggeration: 1.5 },
       }
@@ -54,23 +46,23 @@ const MapboxGlMap = (props: CustomMapProps) => {
 
   return (
     <Map
+      cursor={cursorSate}
       id="mainMapboxMap"
       initialViewState={props.initialViewState}
+      interactiveLayerIds={props.interactiveLayerIds}
       mapStyle={props.mapStyle}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-      interactiveLayerIds={props.interactiveLayerIds}
-      cursor={cursorSate}
+      maxBounds={props.maxBounds}
+      style={{ position: 'absolute', width: '100%', height: '100%' }}
       onClick={props.onClickHandler}
+      onLoad={props.onLoad ? props.onLoad : void 0}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onLoad={props.onLoad ? props.onLoad : void 0}
-      style={{ position: 'absolute', width: '100%', height: '100%' }}
-      maxBounds={props.maxBounds}
       {...terrainProps}
     >
       <GeocoderControl
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
         collapsed
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string}
       />
       <GeolocateControl />
       <NavigationControl />
@@ -93,10 +85,10 @@ const MapboxGlMap = (props: CustomMapProps) => {
       {props.terrain ? (
         <Source
           id="mapbox-dem"
+          maxzoom={14}
+          tileSize={512}
           type="raster-dem"
           url="mapbox://mapbox.mapbox-terrain-dem-v1"
-          tileSize={512}
-          maxzoom={14}
         />
       ) : null}
 

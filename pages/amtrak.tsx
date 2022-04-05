@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 
 import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
-import { Layer, LayerProps, LngLatBoundsLike, Source } from 'react-map-gl'
+import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
 import { trainData } from '../components/amtrakTypes'
 import { Feature, FeatureCollection } from 'geojson'
 
@@ -13,19 +13,40 @@ const Map = dynamic(() => import('../components/mapbox'), {
   ssr: false,
 })
 
-const Home: NextPage = () => {
-  const [featureData, setFeatureData] = useState<{ [key: string]: any } | null>(
-    null
-  )
+interface Station {
+  id: number
+  city2: string
+  objectid: number
+  state: string
+  stfips: number
+  stncode: string
+  stnname: string
+  urban: string
+}
 
-  const featureClickHandler = useCallback((e: any) => {
-    if (e.features[0]) {
-      const clickedFeature = e.features[0].properties
-      const featureDataObject = {
+interface StationData {
+  id: number
+  city2: string
+  objectid: number
+  state: string
+  stfips: number
+  stncode: string
+  stnname: string
+  urban: string
+  mapboxLayerId: string
+}
+
+const Home: NextPage = () => {
+  const [featureData, setFeatureData] = useState<{ [key: string]: any } | null>(null)
+
+  const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
+    if (e.features) {
+      const clickedFeature = e.features[0].properties as Station
+      const stationData: StationData = {
         ...clickedFeature,
         mapboxLayerId: e.features[0].layer.id,
       }
-      setFeatureData(featureDataObject)
+      setFeatureData(stationData)
     }
   }, [])
 
@@ -87,9 +108,7 @@ const Home: NextPage = () => {
     },
   }
 
-  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<
-    FeatureCollection | undefined
-  >(undefined)
+  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
   async function getAmtrak() {
     // Make a GET request to the API and return the location of the trains.
@@ -136,16 +155,16 @@ const Home: NextPage = () => {
     // integrate the useEffect hook from above but instead run it on load
     getAmtrak()
       .then((geoJSON) => {
-        setAmtrakGeoJSON(geoJSON!)
+        setAmtrakGeoJSON(geoJSON)
       })
       .catch((error) => {
         console.error(error)
       })
 
-    const interval = setInterval(async () => {
+    setInterval(async () => {
       getAmtrak()
         .then((geoJSON) => {
-          setAmtrakGeoJSON(geoJSON!)
+          setAmtrakGeoJSON(geoJSON)
         })
         .catch((error) => {
           console.error(error)
@@ -160,16 +179,16 @@ const Home: NextPage = () => {
       <Sidebar featureData={featureData} onTrainClick={onTrainClick}></Sidebar>
       <div className="h-screen w-screen">
         <Map
-          onClickHandler={featureClickHandler}
-          mapStyle="mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp"
-          initialViewState={mapViewState}
-          maxBounds={mapMaxBounds}
-          onLoad={onLoadHandler}
-          amtrakLocationControlLocation="/"
-          interactiveLayerIds={mapInteractiveLayerIds}
           terrain
+          amtrakLocationControlLocation="/"
+          initialViewState={mapViewState}
+          interactiveLayerIds={mapInteractiveLayerIds}
+          mapStyle="mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp"
+          maxBounds={mapMaxBounds}
+          onClickHandler={featureClickHandler}
+          onLoad={onLoadHandler}
         >
-          <Source id="amtrak" type="geojson" data={amtrakGeoJSON!}>
+          <Source data={amtrakGeoJSON} id="amtrak" type="geojson">
             <Layer {...amtrakLayerStyle} />
             <Layer {...amtrakNumbersLayerStyle} />
           </Source>

@@ -1,9 +1,8 @@
+import { USBridgeData } from '../MapDataTypes'
+
 interface BridgeSidebarContentProps {
   /** Array of style options */
-  bridgeData: {
-    NAME: string
-    [key: string]: string | number
-  }
+  bridgeData: USBridgeData
   className: string
 }
 
@@ -11,29 +10,21 @@ function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + (string.slice(1) ?? '').toLowerCase()
 }
 
-function titleCase(string: string) {
-  return (
-    string
-      // split at non-alphanumeric characters
-      .split(/[^\w]/)
-      .map((word) => (word.length > 2 ? capitalize(word) : word))
-      .join(' ')
-  )
+function titleCase(input: string | number) {
+  if (typeof input === 'string') {
+    return (
+      input
+        // split at non-alphanumeric characters
+        .split(/[^\w]/)
+        .map((word) => (word.length > 2 ? capitalize(word) : word))
+        .join(' ')
+    )
+  } else {
+    return input
+  }
 }
 
-// NAME: 'UNION PACIFIC; STREAM/RIVER' // Name
-// RAILWAY_NM: 'UNION PACIFIC' // Railroad Name
-// FEATURE_TY: 'STREAM/RIVER' // Feature Type
-// CITY: 'CALIENTE' // City
-// COUNTY: 'LINCOLN' // County
-// STATE: 'NV' // State
-// ZIP: '89008' // Zip Code
-// FCODE: 46003 // Feature Code
-// FDATE: '1999/08/20 00:00:00+00' // Date of Creation
-// GEODATE: '2009/01/22 00:00:00+00' // Date of Last Update
-// NAICSDESCR: 'BRIDGE, TUNNEL, AND HIGHWAY OPERATIONS' // NAICS Description
-
-function isEmptyOrSpaces(str: any) {
+function isEmptyOrSpaces(str: string | number | undefined) {
   return typeof str == 'number' || str == null || str.match(/^ *$/) !== null
 }
 
@@ -125,9 +116,7 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['FDATE']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Date of Creation
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Date of Creation</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['FDATE']}</li>
@@ -137,9 +126,7 @@ const BridgeSidebarContent = (props: BridgeSidebarContentProps) => {
             ) : null}
             {!isEmptyOrSpaces(props.bridgeData['GEODATE']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Date of Last Update
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Date of Last Update</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.bridgeData['GEODATE']}</li>

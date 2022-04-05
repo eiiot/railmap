@@ -1,18 +1,12 @@
 interface OSMSidebarContentProps {
   /** Array of style options */
-  osmData: { [key: string]: string }
+  osmData: { name?: string; operator?: string; usage?: string; electrified?: string }
   className: string
   ringColor: string
 }
 
-function isEmptyOrSpaces(input: any) {
-  if (typeof input !== 'string') {
-    if (input === undefined || input === null) {
-      return true
-    }
-    return false
-  }
-  return input.match(/^ *$/) !== null
+function isEmptyOrSpaces(str: string | number | undefined) {
+  return typeof str == 'number' || str === undefined || str.match(/^ *$/) !== null
 }
 
 const OSMSidebarContent = (props: OSMSidebarContentProps) => {
@@ -37,11 +31,7 @@ const OSMSidebarContent = (props: OSMSidebarContentProps) => {
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>{props.osmData['operator']}</li>
                   </ul>
-                  <a
-                    className={
-                      'absolute inset-0 rounded-md ring-2 ' + props.ringColor
-                    }
-                  />
+                  <a className={'absolute inset-0 rounded-md ring-2 ' + props.ringColor} />
                 </li>
               ) : null}
               {!isEmptyOrSpaces(props.osmData['usage']) ? (
@@ -51,11 +41,7 @@ const OSMSidebarContent = (props: OSMSidebarContentProps) => {
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>{props.osmData['usage']}</li>
                   </ul>
-                  <a
-                    className={
-                      'absolute inset-0 rounded-md ring-2 ' + props.ringColor
-                    }
-                  />
+                  <a className={'absolute inset-0 rounded-md ring-2 ' + props.ringColor} />
                 </li>
               ) : null}
               {!isEmptyOrSpaces(props.osmData['electrified']) ? (
@@ -65,11 +51,7 @@ const OSMSidebarContent = (props: OSMSidebarContentProps) => {
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>{props.osmData['electrified']}</li>
                   </ul>
-                  <a
-                    className={
-                      'absolute inset-0 rounded-md ring-2 ' + props.ringColor
-                    }
-                  />
+                  <a className={'absolute inset-0 rounded-md ring-2 ' + props.ringColor} />
                 </li>
               ) : null}
             </ul>

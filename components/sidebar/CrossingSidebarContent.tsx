@@ -1,6 +1,10 @@
+// OBJECTID
+
+import { USCrossingData } from '../MapDataTypes'
+
 interface CrossingSidebarContentProps {
   /** Array of style options */
-  crossingData: { [key: string]: string }
+  crossingData: USCrossingData
   className: string
 }
 
@@ -71,20 +75,28 @@ const stateCodes = {
   '56': 'Wyoming',
 } as { [key: string]: string }
 
-function isEmptyOrSpaces(str: any) {
-  console.log(typeof str)
-  return typeof str == 'number' || str === null || str.match(/^ *$/) !== null
+function isEmptyOrSpaces(str: string | number | undefined) {
+  return typeof str == 'number' || str === undefined || str.match(/^ *$/) !== null
 }
 
 function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + (string.slice(1) ?? '').toLowerCase()
 }
 
-function titleCase(string: string) {
-  return string
-    .split(' ')
-    .map((word) => capitalize(word))
-    .join(' ')
+function titleCase(input: unknown) {
+  if (typeof input === 'string') {
+    return (
+      input
+        // split at non-alphanumeric characters
+        .split(/[^\w]/)
+        .map((word) => (word.length > 2 ? capitalize(word) : word))
+        .join(' ')
+    )
+  } else if (typeof input === 'number') {
+    return input.toString()
+  } else {
+    return ''
+  }
 }
 
 const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
@@ -214,63 +226,49 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <h3 className="text-sm font-medium leading-5">State</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>
-                    {stateCodes[props.crossingData['StateCode']] ??
-                      'Unknown State'}
-                  </li>
+                  {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+                  <li>{stateCodes[props.crossingData['StateCode']!] ?? 'Unknown State'}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['POLCONT']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Emergency Telephone
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Emergency Telephone</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    <a
-                      href={'tel:' + props.crossingData['POLCONT']}
-                      className="text-blue-400"
-                    >
+                    <a className="text-blue-400" href={'tel:' + props.crossingData['POLCONT']}>
                       {props.crossingData['POLCONT']}
                     </a>
                   </li>
                 </ul>
                 <a
-                  href={'tel:' + props.crossingData['POLCONT']}
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                  href={'tel:' + props.crossingData['POLCONT']}
                 />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['RRCONT']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Railroad Contact
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Railroad Contact</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    <a
-                      href={'tel:' + props.crossingData['RRCONT']}
-                      className="text-blue-400"
-                    >
+                    <a className="text-blue-400" href={'tel:' + props.crossingData['RRCONT']}>
                       {props.crossingData['RRCONT']}
                     </a>
                   </li>
                 </ul>
                 <a
-                  href={'tel:' + props.crossingData['RRCONT']}
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                  href={'tel:' + props.crossingData['RRCONT']}
                 />
               </li>
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['EFFDATE']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Effective Date
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Effective Date</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{props.crossingData['EFFDATE']}</li>
@@ -290,9 +288,7 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
             ) : null}
             {!isEmptyOrSpaces(props.crossingData['REASON']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">
-                  Reason for Edit
-                </h3>
+                <h3 className="text-sm font-medium leading-5">Reason for Edit</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>{reasonIdData[props.crossingData['REASON'] ?? 0]}</li>
@@ -306,17 +302,14 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    <a
-                      href={props.crossingData['ACC_LINK']}
-                      className="text-blue-400"
-                    >
+                    <a className="text-blue-400" href={props.crossingData['ACC_LINK']}>
                       Click Here
                     </a>
                   </li>
                 </ul>
                 <a
-                  href={props.crossingData['ACC_LINK']}
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                  href={props.crossingData['ACC_LINK']}
                 />
               </li>
             ) : null}
@@ -326,17 +319,14 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    <a
-                      href={props.crossingData['INV_LINK']}
-                      className="text-blue-400"
-                    >
+                    <a className="text-blue-400" href={props.crossingData['INV_LINK']}>
                       Click Here
                     </a>
                   </li>
                 </ul>
                 <a
-                  href={props.crossingData['INV_LINK']}
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
+                  href={props.crossingData['INV_LINK']}
                 />
               </li>
             ) : null}
