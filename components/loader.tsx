@@ -1,6 +1,6 @@
 export default function Loader() {
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="absolute top-0 bottom-0 flex w-full items-center justify-center">
       <svg
         className="h-16 w-16 animate-spin"
         viewBox="0 0 512 512"

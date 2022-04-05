@@ -149,7 +149,7 @@ const MapboxGlMap = (props: CustomMapProps) => {
       cursor={cursorSate}
       id="mainMapboxMap"
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-      style={{ position: 'absolute', width: '100%', height: '100%' }}
+      style={{ position: 'absolute', top: 0, bottom: 0, width: '100%' }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       {...props}
