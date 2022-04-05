@@ -132,6 +132,8 @@ interface CustomMapProps extends MapTypes, OtherMapTypes {
   onMouseLeave?: never
 }
 
+// End bad code (maybe)
+
 const MapboxGlMap = (props: CustomMapProps) => {
   const [cursorSate, setCursorState] = useState('unset')
 
