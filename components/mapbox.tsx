@@ -63,7 +63,7 @@ const MapboxGlMap = (props: CustomMapProps) => {
     >
       <GeocoderControl
         collapsed
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string}
+        accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string}
       />
       <GeolocateControl />
       <NavigationControl />

@@ -2,12 +2,13 @@ import { useCallback, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import { FullscreenControl, Layer, LayerProps, LngLatBoundsLike, Source } from 'react-map-gl'
+import Loader from '../components/loader'
 import GeocoderControl from '../components/map/GeocoderControl'
 import { Feature, FeatureCollection } from 'geojson'
 import { GeolocateControl, NavigationControl } from 'react-map-gl'
 
 const Map = dynamic(() => import('react-map-gl'), {
-  loading: () => <p>Loading Map</p>,
+  loading: () => <Loader />,
   ssr: false,
 })
 
