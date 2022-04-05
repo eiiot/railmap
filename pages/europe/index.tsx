@@ -3,7 +3,8 @@ import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 
 import Sidebar from '../../components/sidebar'
-import { LngLatBoundsLike } from 'react-map-gl'
+import { LngLatBoundsLike, MapboxStyle } from 'react-map-gl'
+import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 
 const Map = dynamic(() => import('../../components/mapbox'), {
   loading: () => <p>Loading Map</p>,
@@ -24,21 +25,18 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  const mapStyles = [
+  const mapStyles: MapboxStyleDefinition[] = [
     {
-      label: 'Satellite',
-      styleName: 'Satellite',
-      styleUrl: 'mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3/draft', // CHANGE TO PRODUCTION
+      title: 'Satellite',
+      uri: 'mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3/draft', // CHANGE TO PRODUCTION
     },
     {
-      label: 'Light',
-      styleName: 'Light',
-      styleUrl: 'mapbox://styles/dotly/ckpxomwzq0syt17nzenb4p17r',
+      title: 'Light',
+      uri: 'mapbox://styles/dotly/ckpxomwzq0syt17nzenb4p17r',
     },
     {
-      label: 'Data',
-      styleName: 'Data',
-      styleUrl: 'mapbox://styles/dotly/ckpxomzkq08gp19o8o99y0yut',
+      title: 'Data',
+      uri: 'mapbox://styles/dotly/ckpxomzkq08gp19o8o99y0yut',
     },
   ]
 

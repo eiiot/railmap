@@ -1,26 +1,20 @@
-import { useControl, ControlPosition } from 'react-map-gl'
-import { StylesControl } from 'mapbox-gl-controls'
-import { StyleOption } from 'mapbox-gl-controls/lib/StylesControl/types'
+import { useControl, ControlPosition, MapboxStyle } from 'react-map-gl'
+import {
+  MapboxStyleDefinition,
+  MapboxStyleSwitcherControl,
+  MapboxStyleSwitcherOptions,
+} from 'mapbox-gl-style-switcher'
 
 interface StylesControlProps {
-  /** Array of style options */
-  styles?: StyleOption[]
-
-  /** Triggered on style change */
+  styles: MapboxStyleDefinition[]
   position?: ControlPosition
-
-  onLoading?: (e: object) => void
-  onChange?: (e: object) => void
-  onError?: (e: object) => void
 }
 
 /* eslint-disable complexity,max-statements */
 export default function MapboxStyleControl(props: StylesControlProps) {
   const styleControl = useControl(
     () => {
-      const ctrl = new StylesControl({
-        ...props,
-      })
+      const ctrl = new MapboxStyleSwitcherControl(props.styles)
       return ctrl
     },
     {

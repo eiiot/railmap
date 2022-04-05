@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
 import { LngLatBoundsLike } from 'react-map-gl'
+import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
@@ -25,21 +26,18 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  const mapStyles = [
+  const mapStyles: MapboxStyleDefinition[] = [
     {
-      label: 'Satellite',
-      styleName: 'Satellite',
-      styleUrl: 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy',
+      title: 'Satellite',
+      uri: 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy',
     },
     {
-      label: 'Light',
-      styleName: 'Light',
-      styleUrl: 'mapbox://styles/dotly/ckoz6vsl50kv117pg6tbt6icm',
+      title: 'Light',
+      uri: 'mapbox://styles/dotly/ckoz6vsl50kv117pg6tbt6icm',
     },
     {
-      label: 'Data',
-      styleName: 'Data',
-      styleUrl: 'mapbox://styles/dotly/ckoz5zgci1o3617nb0fiz48ig',
+      title: 'Data',
+      uri: 'mapbox://styles/dotly/ckoz5zgci1o3617nb0fiz48ig',
     },
   ]
 

@@ -13,9 +13,10 @@ import GeocoderControl from './map/GeocoderControl'
 import LocationControl from './map/LocationControl'
 import { LayerProps } from 'react-map-gl'
 import { Feature, FeatureCollection } from 'geojson'
+import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 
 interface CustomMapProps {
-  stylesArray?: { label: string; styleName: string; styleUrl: string }[]
+  stylesArray?: MapboxStyleDefinition[]
   mapStyle?: string
   viewState: {
     longitude: number
@@ -149,9 +150,7 @@ export default function MapboxMap(props: CustomMapProps) {
   return (
     <Map
       initialViewState={props.viewState}
-      mapStyle={
-        props.stylesArray ? props.stylesArray[0].styleUrl : props.mapStyle
-      }
+      mapStyle={props.stylesArray ? props.stylesArray[0].uri : props.mapStyle}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
       interactiveLayerIds={props.interactiveLayerIds}
       cursor={cursorSate}
@@ -163,11 +162,11 @@ export default function MapboxMap(props: CustomMapProps) {
       maxBounds={props.maxBounds}
       {...terrainProps}
     >
-      {props.stylesArray ? <StylesControl styles={props.stylesArray} /> : null}
       <GeocoderControl
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
         collapsed
       />
+      {props.stylesArray ? <StylesControl styles={props.stylesArray} /> : null}
       <GeolocateControl />
       <NavigationControl />
       <FullscreenControl />

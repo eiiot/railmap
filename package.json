@@ -12,7 +12,7 @@
     "@types/geojson": "^7946.0.8",
     "@types/mapbox__mapbox-gl-geocoder": "^4.7.2",
     "mapbox-gl": "^2.7.1",
-    "mapbox-gl-controls": "^2.3.5",
+    "mapbox-gl-style-switcher": "^1.0.11",
     "moment": "^2.29.1",
     "next": "latest",
     "react": "^17.0.2",
