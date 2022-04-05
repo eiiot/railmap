@@ -104,9 +104,10 @@ const amtrakNumbersLayerStyle = {
 } as LayerProps
 
 export default function MapboxMap(props: CustomMapProps) {
-  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | null>(
-    null
-  )
+  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<
+    FeatureCollection | undefined
+  >(undefined)
+
   const [cursorSate, setCursorState] = useState('unset')
 
   const onMouseEnter = useCallback((e: any) => {
