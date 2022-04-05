@@ -7,6 +7,7 @@ import Loader from '../components/loader'
 import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
 import { trainData } from '../components/amtrakTypes'
 import { Feature, FeatureCollection } from 'geojson'
+import LocationControl from '../components/map/LocationControl'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
@@ -158,19 +159,30 @@ const Home: NextPage = () => {
       <Sidebar featureData={featureData} onTrainClick={trainButtonClickHandler}></Sidebar>
       <div className="h-screen w-screen">
         <Map
-          terrain
-          amtrakLocationControlLocation="/"
           initialViewState={mapViewState}
           interactiveLayerIds={mapInteractiveLayerIds}
           mapStyle="mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp"
           maxBounds={mapMaxBounds}
-          onClickHandler={featureClickHandler}
+          terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
+          onClick={featureClickHandler}
           onLoad={onLoadHandler}
         >
+          <LocationControl
+            location="/"
+            svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 600 600"><path d="M264.437 173.779C233.5 172.323 71.9 168.216 0 199.364c19.446 11.487 40.304 23.404 64.792 36.321 71.256-33.337 163.7-45.394 248.716-50.033v-2.16c-16.531-2.019-34.781-5.55-49.071-9.712h0zm72.648 13.067c-63.789 6.367-176.712 24.86-241.056 64.925 23.396 11.771 47.86 23.425 72.302 34.315 67.746-57.756 157.356-83.371 248.673-101.323v-2.117c-23.202 2.729-58.256 4.398-79.919 4.2h0zM201.977 300.554c30.862 12.76 62.789 24.496 89.985 32.34 32.769-65.137 92.008-116.773 201.187-164.091v-2.135c-140.237 38.346-227.993 65.821-291.172 133.887h0z"/> </svg>'
+          />
+
           <Source data={amtrakGeoJSON} id="amtrak" type="geojson">
             <Layer {...amtrakLayerStyle} />
             <Layer {...amtrakNumbersLayerStyle} />
           </Source>
+          <Source
+            id="mapbox-dem"
+            maxzoom={14}
+            tileSize={512}
+            type="raster-dem"
+            url="mapbox://mapbox.mapbox-terrain-dem-v1"
+          />
         </Map>
       </div>
     </>

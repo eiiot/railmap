@@ -3,10 +3,11 @@ import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 
 import Sidebar from '../../components/sidebar'
-import { LngLatBoundsLike } from 'react-map-gl'
+import { LngLatBoundsLike, Source } from 'react-map-gl'
 import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 import StylesControl from '../../components/map/StylesControl'
 import { MapLayerMouseEvent } from 'mapbox-gl'
+import LocationControl from '../../components/map/LocationControl'
 
 const Map = dynamic(() => import('../../components/mapbox'), {
   loading: () => <p>Loading Map</p>,
@@ -62,15 +63,26 @@ const Home: NextPage = () => {
       <Sidebar featureData={featureData}></Sidebar>
       <div className="h-screen w-screen">
         <Map
-          terrain
           initialViewState={mapViewState}
           interactiveLayerIds={mapInteractiveLayerIds}
-          locationControlLocation="/"
           mapStyle={stylesSwitcherStyles[0].uri}
           maxBounds={mapMaxBounds}
-          onClickHandler={featureClickHandler}
+          terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
+          onClick={featureClickHandler}
         >
           <StylesControl styles={stylesSwitcherStyles} />
+          <LocationControl
+            location="/"
+            svg='<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="m17.36 2.64l-1.41 1.42A6.978 6.978 0 0 1 18 9a7 7 0 0 1-7 7c-1.85 0-3.63-.74-4.94-2.05l-1.42 1.41A8.945 8.945 0 0 0 10 17.93V20H6v2h10v-2h-4v-2.06c4.55-.51 8-4.36 8-8.94c0-2.38-.95-4.67-2.64-6.36M11 3.5A5.5 5.5 0 0 0 5.5 9a5.5 5.5 0 0 0 5.5 5.5A5.5 5.5 0 0 0 16.5 9A5.5 5.5 0 0 0 11 3.5m0 2c1.94 0 3.5 1.57 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 7.5 9A3.5 3.5 0 0 1 11 5.5Z"/></svg>'
+          />
+
+          <Source
+            id="mapbox-dem"
+            maxzoom={14}
+            tileSize={512}
+            type="raster-dem"
+            url="mapbox://mapbox.mapbox-terrain-dem-v1"
+          />
         </Map>
       </div>
     </>
