@@ -248,7 +248,7 @@ const Home: NextPage = () => {
         <GeocoderControl
           collapsed
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
+          accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
         />
         <GeolocateControl />
         <NavigationControl />

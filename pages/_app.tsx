@@ -12,52 +12,32 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>The Rail Map</title>
-        <meta name="title" content="The Rail Map" />
-        <meta
-          name="description"
-          content="View Railroad Crossings, Live Amtrak, & More!"
-        />
+        <meta content="The Rail Map" name="title" />
+        <meta content="View Railroad Crossings, Live Amtrak, & More!" name="description" />
 
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://therailmap.com/" />
-        <meta property="og:title" content="The Rail Map" />
-        <meta
-          property="og:description"
-          content="View Railroad Crossings, Live Amtrak, & More!"
-        />
-        <meta property="og:image" content="/meta.png" />
+        <meta content="website" property="og:type" />
+        <meta content="https://therailmap.com/" property="og:url" />
+        <meta content="The Rail Map" property="og:title" />
+        <meta content="View Railroad Crossings, Live Amtrak, & More!" property="og:description" />
+        <meta content="/meta.png" property="og:image" />
 
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://therailmap.com" />
-        <meta property="twitter:title" content="The Rail Map" />
+        <meta content="summary_large_image" property="twitter:card" />
+        <meta content="https://therailmap.com" property="twitter:url" />
+        <meta content="The Rail Map" property="twitter:title" />
         <meta
+          content="View Railroad Crossings, Live Amtrak, & More!"
           property="twitter:description"
-          content="View Railroad Crossings, Live Amtrak, & More!"
         />
-        <meta property="twitter:image" content="/meta.png" />
+        <meta content="/meta.png" property="twitter:image" />
 
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-        <meta name="msapplication-TileColor" content="#ffeb60" />
-        <meta name="theme-color" content="#ffeb60" />
-        <meta name="og:theme-color" content="#ffeb60" />
+        <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+        <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png" />
+        <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png" />
+        <link href="/site.webmanifest" rel="manifest" />
+        <link color="#5bbad5" href="/safari-pinned-tab.svg" rel="mask-icon" />
+        <meta content="#ffeb60" name="msapplication-TileColor" />
+        <meta content="#ffeb60" name="theme-color" />
+        <meta content="#ffeb60" name="og:theme-color" />
       </Head>
       <MapProvider>
         <Component {...pageProps}></Component>

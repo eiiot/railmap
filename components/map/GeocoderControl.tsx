@@ -4,7 +4,6 @@
 import { ReactElement, useState } from 'react'
 import { ControlPosition, Marker, useControl } from 'react-map-gl'
 import MapboxGeocoder, { GeocoderOptions } from '@mapbox/mapbox-gl-geocoder'
-d
 // type GeocoderControlProps = {
 //   mapboxAccessToken: string
 //   origin?: string
@@ -50,8 +49,6 @@ d
 // }
 
 interface GeocoderControlProps extends GeocoderOptions {
-  mapboxAccessToken: string
-
   position?: ControlPosition
 
   onLoading?: (e: object) => void
@@ -78,7 +75,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
     () => {
       const ctrl = new MapboxGeocoder({
         ...props,
-        accessToken: props.mapboxAccessToken,
+        accessToken: props.accessToken,
       })
       ctrl.on('loading', props.onLoading ?? noop)
       ctrl.on('results', props.onResults ?? noop)
