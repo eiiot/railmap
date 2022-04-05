@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import Sidebar from '../../components/sidebar'
 import { LngLatBoundsLike, MapboxStyle } from 'react-map-gl'
 import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
+import StylesControl from '../../components/map/StylesControl'
 
 const Map = dynamic(() => import('../../components/mapbox'), {
   loading: () => <p>Loading Map</p>,
@@ -12,7 +13,9 @@ const Map = dynamic(() => import('../../components/mapbox'), {
 })
 
 const Home: NextPage = () => {
-  const [featureData, setFeatureData] = useState(null)
+  const [featureData, setFeatureData] = useState<{ [key: string]: any } | null>(
+    null
+  )
 
   const featureClickHandler = useCallback((e: any) => {
     if (e.features[0]) {
@@ -25,7 +28,7 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  const mapStyles: MapboxStyleDefinition[] = [
+  const stylesSwitcherStyles: MapboxStyleDefinition[] = [
     {
       title: 'Satellite',
       uri: 'mapbox://styles/dotly/ckpnekd8308ff18t4n0cc1jo3/draft', // CHANGE TO PRODUCTION
@@ -61,15 +64,16 @@ const Home: NextPage = () => {
       <Sidebar featureData={featureData}></Sidebar>
       <div className="h-screen w-screen">
         <Map
+          mapStyle={stylesSwitcherStyles[0].uri}
           onClickHandler={featureClickHandler}
-          stylesArray={mapStyles}
-          viewState={mapViewState}
+          initialViewState={mapViewState}
           maxBounds={mapMaxBounds}
           interactiveLayerIds={mapInteractiveLayerIds}
-          liveTrains={{}}
           locationControlLocation="/"
           terrain
-        />
+        >
+          <StylesControl styles={stylesSwitcherStyles} />
+        </Map>
       </div>
     </>
   )

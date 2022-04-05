@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, forwardRef } from 'react'
 import Map, {
   GeolocateControl,
   FullscreenControl,
@@ -6,6 +6,10 @@ import Map, {
   Source,
   Layer,
   LngLatBoundsLike,
+  MapRef,
+  MapboxMap,
+  useMap,
+  MapboxEvent,
 } from 'react-map-gl'
 import StylesControl from './map/StylesControl'
 import LayerControl from './map/LayerControl'
@@ -13,102 +17,26 @@ import GeocoderControl from './map/GeocoderControl'
 import LocationControl from './map/LocationControl'
 import { LayerProps } from 'react-map-gl'
 import { Feature, FeatureCollection } from 'geojson'
-import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 
 interface CustomMapProps {
-  stylesArray?: MapboxStyleDefinition[]
-  mapStyle?: string
-  viewState: {
+  mapStyle: string
+  interactiveLayerIds: string[]
+  onClickHandler: (e: any) => void
+  maxBounds: LngLatBoundsLike
+  initialViewState: {
     longitude: number
     latitude: number
     zoom: number
   }
-  interactiveLayerIds: string[]
-  onClickHandler: (e: any) => void
-  maxBounds: LngLatBoundsLike
   layerControl?: boolean
   locationControlLocation?: string
   amtrakLocationControlLocation?: string
   terrain?: boolean
-  liveTrains: { [key: string]: boolean }
+  children?: React.ReactNode
+  onLoad?: (map: MapboxEvent) => void
 }
 
-async function getAmtrak() {
-  // Make a GET request to the API and return the location of the trains.
-  try {
-    const response = await fetch('https://api.amtraker.com/v1/trains', {
-      method: 'GET',
-    })
-    const trainNums = await response.json()
-    // returns object of trains with the object num as the train number
-
-    // create a geoJSON object
-    const geoJSON = {
-      type: 'FeatureCollection',
-      features: [],
-    } as FeatureCollection
-
-    // iterate through the train numbers
-    Object.keys(trainNums).forEach((num) => {
-      const trains = trainNums[num]
-
-      // iterate through trains
-      Object.keys(trains).forEach((key) => {
-        const train = trains[key] // type of train is object
-        const trainObject = {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [train.lon, train.lat],
-          },
-          properties: { ...train },
-        } as Feature
-        // push train to geoJSON
-        geoJSON.features.push(trainObject)
-      })
-    })
-
-    return geoJSON
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const amtrakLayerStyle = {
-  id: 'amtrak',
-  type: 'circle',
-  source: 'amtrak',
-  paint: {
-    'circle-color': 'hsl(203, 68%, 29%)',
-    'circle-radius': 11,
-    'circle-opacity': 1,
-  },
-  layout: {
-    // Make the layer visible by default.
-    visibility: 'visible',
-  },
-} as LayerProps
-
-const amtrakNumbersLayerStyle = {
-  id: 'amtrak-numbers',
-  type: 'symbol',
-  source: 'amtrak',
-  layout: {
-    'text-field': ['to-string', ['get', 'trainNum']],
-    'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-    'text-size': 12,
-    visibility: 'visible',
-  },
-  paint: {
-    'text-color': '#fff',
-  },
-} as LayerProps
-
-export default function MapboxMap(props: CustomMapProps) {
-  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<
-    FeatureCollection | undefined
-  >(undefined)
-
+const MapboxGlMap = (props: CustomMapProps) => {
   const [cursorSate, setCursorState] = useState('unset')
 
   const onMouseEnter = useCallback((e: any) => {
@@ -116,29 +44,6 @@ export default function MapboxMap(props: CustomMapProps) {
   }, [])
   const onMouseLeave = useCallback((e: any) => {
     setCursorState('unset')
-  }, [])
-
-  const onLoadHandler = useCallback(() => {
-    // integrate the useEffect hook from above but instead run it on load
-    if (props.liveTrains.amtrak) {
-      getAmtrak()
-        .then((geoJSON) => {
-          setAmtrakGeoJSON(geoJSON!)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-
-      const interval = setInterval(async () => {
-        getAmtrak()
-          .then((geoJSON) => {
-            setAmtrakGeoJSON(geoJSON!)
-          })
-          .catch((error) => {
-            console.error(error)
-          })
-      }, 60000)
-    }
   }, [])
 
   let terrainProps = props.terrain
@@ -149,15 +54,16 @@ export default function MapboxMap(props: CustomMapProps) {
 
   return (
     <Map
-      initialViewState={props.viewState}
-      mapStyle={props.stylesArray ? props.stylesArray[0].uri : props.mapStyle}
+      id="mainMapboxMap"
+      initialViewState={props.initialViewState}
+      mapStyle={props.mapStyle}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
       interactiveLayerIds={props.interactiveLayerIds}
       cursor={cursorSate}
       onClick={props.onClickHandler}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onLoad={onLoadHandler}
+      onLoad={props.onLoad ? props.onLoad : void 0}
       style={{ position: 'absolute', width: '100%', height: '100%' }}
       maxBounds={props.maxBounds}
       {...terrainProps}
@@ -166,14 +72,9 @@ export default function MapboxMap(props: CustomMapProps) {
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
         collapsed
       />
-      {props.stylesArray ? <StylesControl styles={props.stylesArray} /> : null}
       <GeolocateControl />
       <NavigationControl />
       <FullscreenControl containerId="body" />
-
-      {props.layerControl ? (
-        <LayerControl layerIds={['amtrak', 'amtrak-numbers']} />
-      ) : null}
 
       {props.locationControlLocation ? (
         <LocationControl
@@ -199,12 +100,9 @@ export default function MapboxMap(props: CustomMapProps) {
         />
       ) : null}
 
-      {props.liveTrains.amtrak ? (
-        <Source id="amtrak" type="geojson" data={amtrakGeoJSON!}>
-          <Layer {...amtrakLayerStyle} />
-          <Layer {...amtrakNumbersLayerStyle} />
-        </Source>
-      ) : null}
+      {props.children}
     </Map>
   )
 }
+
+export default MapboxGlMap

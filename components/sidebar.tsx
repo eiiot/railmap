@@ -27,7 +27,7 @@ export default function Sidebar(props: any) {
   return (
     <div
       className={classNames(
-        'absolute top-0 z-10 flex h-[calc(100vh-32px)] w-full flex-col transition-transform duration-300 md:top-0 md:m-[10px] md:h-5/6 md:w-[275px] md:translate-y-0 md:flex-row',
+        'absolute top-[calc(50vh)] z-10 flex h-[calc(50vh-32px)] w-full flex-col transition-transform duration-300 md:top-0 md:m-[10px] md:h-5/6 md:w-[300px] md:translate-y-0 md:flex-row',
         showSidebar
           ? 'translate-y-0 md:translate-y-0 md:translate-x-0'
           : 'translate-y-[calc(100%)] md:translate-y-0 md:translate-x-[calc(-100%-10px)]'
@@ -45,49 +45,50 @@ export default function Sidebar(props: any) {
       {props.featureData ? (
         props.featureData.mapboxLayerId === 'amtrak' ? (
           <AmtrakSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
             trainData={props.featureData}
           />
         ) : props.featureData.mapboxLayerId === 'Railroad-Crossings' ? (
           <CrossingSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
             crossingData={props.featureData}
           />
         ) : props.featureData.mapboxLayerId === 'Railroad-Bridges' ? (
           <BridgeSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
             bridgeData={props.featureData}
           />
         ) : props.featureData.mapboxLayerId === 'CN-Railroad-Crossings' ? (
           <CNCrossingSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
             crossingData={props.featureData}
           />
         ) : props.featureData.mapboxLayerId === 'CN-Railroad-Bridges' ||
           props.featureData.mapboxLayerId === 'EU-Railroad-Bridges' ? (
           <OSMSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
             osmData={props.featureData}
             ringColor="ring-blue-400"
           />
         ) : props.featureData.mapboxLayerId === 'EU-Railroad-Crossings' ? (
           <OSMSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
             osmData={props.featureData}
             ringColor="ring-red-400"
           />
         ) : props.featureData.mapboxLayerId === 'amtrak-stations' ? (
           <AmtrakStationSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-md bg-white"
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
             stationData={props.featureData}
+            onTrainClick={props.onTrainClick}
           />
         ) : (
-          <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-md bg-white text-center">
+          <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-t-md bg-white text-center md:rounded-md">
             <span>No additional information is available for this object</span>
           </div>
         )
       ) : (
-        <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-md bg-white">
+        <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-t-md bg-white md:rounded-md">
           <span>No Content Selected</span>
         </div>
       )}

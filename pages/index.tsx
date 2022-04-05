@@ -4,8 +4,11 @@ import dynamic from 'next/dynamic'
 
 import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
-import { LngLatBoundsLike } from 'react-map-gl'
+import { Layer, LayerProps, LngLatBoundsLike, Source } from 'react-map-gl'
 import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
+import LayerControl from '../components/map/LayerControl'
+import { Feature, FeatureCollection } from 'geojson'
+import StylesControl from '../components/map/StylesControl'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
@@ -13,7 +16,9 @@ const Map = dynamic(() => import('../components/mapbox'), {
 })
 
 const Home: NextPage = () => {
-  const [featureData, setFeatureData] = useState(null)
+  const [featureData, setFeatureData] = useState<{ [key: string]: any } | null>(
+    null
+  )
 
   const featureClickHandler = useCallback((e: any) => {
     if (e.features[0]) {
@@ -26,7 +31,7 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  const mapStyles: MapboxStyleDefinition[] = [
+  const stylesSwitcherStyles: MapboxStyleDefinition[] = [
     {
       title: 'Satellite',
       uri: 'mapbox://styles/dotly/ckoxhacbh01n417tdqjw1evgy',
@@ -60,9 +65,105 @@ const Home: NextPage = () => {
     'CN-Railroad-Bridges',
   ]
 
-  const liveTrains = {
-    amtrak: true,
+  //  * Live Amtrak Trains * //
+
+  const amtrakLayerStyle: LayerProps = {
+    id: 'amtrak',
+    type: 'circle',
+    source: 'amtrak',
+    paint: {
+      'circle-color': 'hsl(203, 68%, 29%)',
+      'circle-radius': 11,
+      'circle-opacity': 1,
+    },
+    layout: {
+      // Make the layer visible by default.
+      visibility: 'visible',
+    },
   }
+
+  const amtrakNumbersLayerStyle: LayerProps = {
+    id: 'amtrak-numbers',
+    type: 'symbol',
+    source: 'amtrak',
+    layout: {
+      'text-field': ['to-string', ['get', 'trainNum']],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': 12,
+      visibility: 'visible',
+    },
+    paint: {
+      'text-color': '#fff',
+    },
+  }
+
+  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<
+    FeatureCollection | undefined
+  >(undefined)
+
+  async function getAmtrak() {
+    // Make a GET request to the API and return the location of the trains.
+    try {
+      const response = await fetch('https://api.amtraker.com/v1/trains', {
+        method: 'GET',
+      })
+      const trainNums = await response.json()
+      // returns object of trains with the object num as the train number
+
+      // create a geoJSON object
+      const geoJSON = {
+        type: 'FeatureCollection',
+        features: [],
+      } as FeatureCollection
+
+      // iterate through the train numbers
+      Object.keys(trainNums).forEach((num) => {
+        const trains = trainNums[num]
+
+        // iterate through trains
+        Object.keys(trains).forEach((key) => {
+          const train = trains[key] // type of train is object
+          const trainObject = {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [train.lon, train.lat],
+            },
+            properties: { ...train },
+          } as Feature
+          // push train to geoJSON
+          geoJSON.features.push(trainObject)
+        })
+      })
+
+      return geoJSON
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onLoadHandler = useCallback(() => {
+    // integrate the useEffect hook from above but instead run it on load
+    getAmtrak()
+      .then((geoJSON) => {
+        setAmtrakGeoJSON(geoJSON!)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    const interval = setInterval(async () => {
+      getAmtrak()
+        .then((geoJSON) => {
+          setAmtrakGeoJSON(geoJSON!)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }, 60000)
+  }, [])
+
+  // * End Live Amtrak Trains * //
 
   return (
     <>
@@ -70,16 +171,23 @@ const Home: NextPage = () => {
       <div className="h-screen w-screen">
         <Map
           onClickHandler={featureClickHandler}
-          stylesArray={mapStyles}
-          viewState={mapViewState}
+          mapStyle={stylesSwitcherStyles[0].uri}
+          initialViewState={mapViewState}
           maxBounds={mapMaxBounds}
           interactiveLayerIds={mapInteractiveLayerIds}
-          liveTrains={liveTrains}
+          onLoad={onLoadHandler}
           layerControl
           locationControlLocation="/europe"
           amtrakLocationControlLocation="/amtrak"
           terrain
-        />
+        >
+          <StylesControl styles={stylesSwitcherStyles} />
+          <LayerControl layerIds={['amtrak', 'amtrak-numbers']} />
+          <Source id="amtrak" type="geojson" data={amtrakGeoJSON!}>
+            <Layer {...amtrakLayerStyle} />
+            <Layer {...amtrakNumbersLayerStyle} />
+          </Source>
+        </Map>
       </div>
     </>
   )

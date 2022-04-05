@@ -1,11 +1,13 @@
 import { useCallback, useState, useEffect } from 'react'
 import moment from 'moment'
 import { trainData, station } from '../amtrakTypes'
+import { MapboxMap, MapRef, useMap } from 'react-map-gl'
 
 interface AmtrakStationSidebarContentProps {
   /** Array of style options */
   stationData: { [key: string]: string }
   className: string
+  onTrainClick?: (train: trainData, mainMapboxMap: MapRef) => void
 }
 
 interface stationTrains extends station {
@@ -61,6 +63,8 @@ const AmtrakStationSidebarContent = (
     getStationTrains()
   }, [getStationTrains])
 
+  const { mainMapboxMap } = useMap()
+
   return (
     <div className={props.className}>
       <div className="w-full px-2 py-4 text-center text-2xl">
@@ -71,7 +75,14 @@ const AmtrakStationSidebarContent = (
           <ul className="w-full children:mb-4">
             {stationTrains.length > 0 ? (
               stationTrains.map((train) => (
-                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
+                <li
+                  className="hover:bg-coolGray-100 relative cursor-pointer rounded-md p-3"
+                  onClick={() => {
+                    if (props.onTrainClick) {
+                      props.onTrainClick(train.train, mainMapboxMap!)
+                    }
+                  }}
+                >
                   <h3 className="text-sm font-medium leading-5">
                     {train.train.routeName} {train.train.trainNum}
                   </h3>
@@ -79,8 +90,9 @@ const AmtrakStationSidebarContent = (
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
                       Arriving{' '}
-                      {train.estArrCmnt!.toLowerCase().replace('mi', 'min')} on{' '}
-                      {moment(train.estArr).format('ddd, h:mm a z')}
+                      {train.estArrCmnt!.toLowerCase().replace('mi', 'min')}{' '}
+                      {moment(train.estArr).fromNow()} (
+                      {moment(train.estArr).format('h:mm a')})
                     </li>
                   </ul>
 

@@ -1,10 +1,11 @@
 import '../styles/globals.css'
-import 'mapbox-gl/dist/mapbox-gl.css' 
+import 'mapbox-gl/dist/mapbox-gl.css'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 import 'mapbox-gl-style-switcher/styles.css'
 import '@fontsource/inter'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { MapProvider } from 'react-map-gl'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -58,7 +59,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#ffeb60" />
         <meta name="og:theme-color" content="#ffeb60" />
       </Head>
-      <Component {...pageProps} />
+      <MapProvider>
+        <Component {...pageProps}></Component>
+      </MapProvider>
     </>
   )
 }
