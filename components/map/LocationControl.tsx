@@ -36,7 +36,6 @@ export default function MapboxLocationControl(props: LocationControlProps) {
       this._container.appendChild(mapboxCtrlGroup)
 
       mapboxCtrlButton.addEventListener('click', () => {
-        console.log('click')
         router.push(props.location)
       })
 

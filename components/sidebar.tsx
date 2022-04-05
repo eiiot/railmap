@@ -21,7 +21,6 @@ export default function Sidebar(props: any) {
   }, [props.featureData])
 
   function onClickHandler(e: any) {
-    console.log('click', e)
     setShowSidebar(!showSidebar)
   }
 

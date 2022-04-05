@@ -43,9 +43,7 @@ class LayerControl {
             this.className = 'active'
             map.setLayoutProperty(layerId, 'visibility', 'visible')
           }
-        } catch (error) {
-          console.log(error)
-        }
+        } catch (error) {}
       })
     })
 

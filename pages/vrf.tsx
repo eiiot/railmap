@@ -1,8 +1,16 @@
 import React, { useCallback, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
-import { Layer, LayerProps, LngLatBoundsLike, Source } from 'react-map-gl'
+import {
+  FullscreenControl,
+  Layer,
+  LayerProps,
+  LngLatBoundsLike,
+  Source,
+} from 'react-map-gl'
+import GeocoderControl from '../components/map/GeocoderControl'
 import { Feature, FeatureCollection } from 'geojson'
+import { GeolocateControl, NavigationControl } from 'react-map-gl'
 
 const Map = dynamic(() => import('react-map-gl'), {
   loading: () => <p>Loading Map</p>,
@@ -65,8 +73,6 @@ async function getCameras() {
         type: string
       }
     ] = await response.json()
-
-    console.log(cameras)
 
     // create a geoJSON object
     const geoJSON = {
@@ -228,7 +234,6 @@ const Home: NextPage = () => {
     getAmtrak()
       .then((geoJSON) => {
         setAmtrakGeoJSON(geoJSON!)
-        console.log(geoJSON)
       })
       .catch((error) => {
         console.error(error)
@@ -271,6 +276,14 @@ const Home: NextPage = () => {
         style={{ position: 'absolute', width: '100vw', height: '100vh' }}
         onLoad={onLoadHandler}
       >
+        <GeocoderControl
+          mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
+          collapsed
+        />
+        <GeolocateControl />
+        <NavigationControl />
+        <FullscreenControl />
+
         <Source id="amtrak" type="geojson" data={amtrakGeoJSON!}>
           <Layer {...amtrakLayerStyle} />
           <Layer {...amtrakNumbersLayerStyle} />

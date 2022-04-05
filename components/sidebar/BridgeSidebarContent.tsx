@@ -34,7 +34,6 @@ function titleCase(string: string) {
 // NAICSDESCR: 'BRIDGE, TUNNEL, AND HIGHWAY OPERATIONS' // NAICS Description
 
 function isEmptyOrSpaces(str: any) {
-  console.log(typeof str)
   return typeof str == 'number' || str == null || str.match(/^ *$/) !== null
 }
 

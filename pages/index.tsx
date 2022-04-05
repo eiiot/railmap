@@ -21,7 +21,6 @@ const Home: NextPage = () => {
         ...clickedFeature,
         mapboxLayerId: e.features[0].layer.id,
       }
-      console.log('Set feature data:', featureDataObject)
       setFeatureData(featureDataObject)
     }
   }, [])

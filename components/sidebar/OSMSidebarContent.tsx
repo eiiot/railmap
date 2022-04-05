@@ -6,7 +6,6 @@ interface OSMSidebarContentProps {
 }
 
 function isEmptyOrSpaces(input: any) {
-  console.log(typeof input)
   if (typeof input !== 'string') {
     if (input === undefined || input === null) {
       return true

@@ -5,7 +5,6 @@ interface CNCrossingSidebarContentProps {
 }
 
 function isEmptyOrSpaces(input: any) {
-  console.log(typeof input)
   if (typeof input !== 'string') {
     return false
   }

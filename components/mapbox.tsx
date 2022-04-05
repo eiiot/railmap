@@ -111,11 +111,9 @@ export default function MapboxMap(props: CustomMapProps) {
   const [cursorSate, setCursorState] = useState('unset')
 
   const onMouseEnter = useCallback((e: any) => {
-    console.log('mouse enter')
     setCursorState('pointer')
   }, [])
   const onMouseLeave = useCallback((e: any) => {
-    console.log('mouse leave')
     setCursorState('unset')
   }, [])
 
