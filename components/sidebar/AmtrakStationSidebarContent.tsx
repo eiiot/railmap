@@ -90,10 +90,8 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
                   key={train.train.trainNum}
                   className="hover:bg-coolGray-100 relative cursor-pointer rounded-md p-3"
                   onClick={() => {
-                    if (props.onTrainClick) {
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      props.onTrainClick(train.train, railmap!)
-                    }
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    props.onTrainClick(train.train, railmap!)
                   }}
                 >
                   <h3 className="text-sm font-medium leading-5">

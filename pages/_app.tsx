@@ -38,6 +38,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta content="#ffeb60" name="msapplication-TileColor" />
         <meta content="#ffeb60" name="theme-color" />
         <meta content="#ffeb60" name="og:theme-color" />
+
+        {/* Analytics */}
+        <script
+          defer
+          data-domain="therailmap.com"
+          src="https://analytics.eliothertenstein.com/js/plausible.js"
+        ></script>
       </Head>
       <MapProvider>
         <Component {...pageProps}></Component>
