@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
+import { fetchAllTrains } from 'amtrak'
 
 import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
@@ -103,10 +104,7 @@ const Home: NextPage = () => {
   async function getAmtrak() {
     // Make a GET request to the API and return the location of the trains.
     try {
-      const response = await fetch('https://api.amtraker.com/v1/trains', {
-        method: 'GET',
-      })
-      const trainNums = await response.json()
+      const trainNums = await fetchAllTrains()
       // returns object of trains with the object num as the train number
 
       // create a geoJSON object
@@ -116,12 +114,11 @@ const Home: NextPage = () => {
       } as FeatureCollection
 
       // iterate through the train numbers
-      Object.keys(trainNums).forEach((num) => {
-        const trains = trainNums[num]
+      for (const key in trainNums) {
+        const trains = trainNums[key]
 
         // iterate through trains
-        Object.keys(trains).forEach((key) => {
-          const train = trains[key] // type of train is object
+        trains.forEach((train) => {
           const trainObject = {
             type: 'Feature',
             geometry: {
@@ -133,7 +130,7 @@ const Home: NextPage = () => {
           // push train to geoJSON
           geoJSON.features.push(trainObject)
         })
-      })
+      }
 
       return geoJSON
     } catch (error) {

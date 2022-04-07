@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
 import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
-import { trainData } from '../components/amtrakTypes'
+import { trainData } from 'amtrak'
 import { Feature, FeatureCollection } from 'geojson'
 import LocationControl from '../components/map/LocationControl'
 
@@ -32,9 +32,6 @@ const Home: NextPage = () => {
 
   const trainButtonClickHandler = useCallback((train: trainData, railmap) => {
     const { lon, lat } = train
-    console.log(lon, lat)
-    console.log(train)
-    console.log(railmap)
     railmap.flyTo({ center: [lon, lat], zoom: 13, duration: 2000 })
     const featureDataObject = {
       ...train,

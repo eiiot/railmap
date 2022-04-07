@@ -1,6 +1,6 @@
 import { Tab } from '@headlessui/react'
 import moment from 'moment'
-import { station, trainData } from '../amtrakTypes'
+import { station, trainData } from 'amtrak'
 
 interface TrainSidebarContentProps {
   /** Array of style options */

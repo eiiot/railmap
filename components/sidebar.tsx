@@ -6,7 +6,7 @@ import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
 import OSMSidebarContent from './sidebar/OSMSidebarContent'
 import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
 import { MapRef } from 'react-map-gl'
-import { trainData } from './amtrakTypes'
+import { trainData } from 'amtrak'
 import { CNCrossingData, USBridgeData, USCrossingData } from './MapDataTypes'
 
 function classNames(...classes: string[]) {
