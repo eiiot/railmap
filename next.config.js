@@ -11,6 +11,7 @@ module.exports = withPWA({
     ignoreBuildErrors: true,
   },
   pwa: {
+    disable: process.env.NODE_ENV !== 'production',
     dest: 'public',
   },
   async redirects() {

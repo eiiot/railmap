@@ -1929,10 +1929,10 @@
     "require-from-string" "^2.0.2"
     "uri-js" "^4.2.2"
 
-"amtrak@^2.8.4", "amtrak@^2.8.5":
-  "integrity" "sha512-2gd16w0wRtFKSP4cci3cyXidz5JRT54qhNv9JppqEDjRZy15pJdV7s6RTfnycbQ3se1HmNUipN9qInGfqzFRCw=="
-  "resolved" "https://registry.npmjs.org/amtrak/-/amtrak-2.8.5.tgz"
-  "version" "2.8.5"
+"amtrak@^2.8.4", "amtrak@^2.8.7":
+  "integrity" "sha512-3lQDBu2bcAQma50Q06ZeR9Wnv76aQ/FnMy/tQuUJ5kRi4aJ6aN/+I/gZrocMlMjLykWqsA1kvR0iNwZLnkLyBA=="
+  "resolved" "https://registry.npmjs.org/amtrak/-/amtrak-2.8.7.tgz"
+  "version" "2.8.7"
   dependencies:
     "@types/crypto-js" "^4.0.2"
     "@types/node" "^16.7.13"
@@ -4302,7 +4302,7 @@
   "resolved" "https://registry.npmjs.org/node-domexception/-/node-domexception-1.0.0.tgz"
   "version" "1.0.0"
 
-"node-fetch@^3.0.0":
+"node-fetch@^3.0.0", "node-fetch@^3.2.3":
   "integrity" "sha512-AXP18u4pidSZ1xYXRDPY/8jdv3RAozIt/WLNR/MBGZAz+xjtlr90RvCnsvHQRiXyWliZF/CpytExp32UU67/SA=="
   "resolved" "https://registry.npmjs.org/node-fetch/-/node-fetch-3.2.3.tgz"
   "version" "3.2.3"

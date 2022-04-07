@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import { fetchAllTrains } from 'amtrak'
@@ -25,10 +25,10 @@ async function getAmtrak() {
     // returns object of trains with the object num as the train number
 
     // create a geoJSON object
-    const geoJSON = {
+    const geoJSON: FeatureCollection = {
       type: 'FeatureCollection',
       features: [],
-    } as FeatureCollection
+    }
 
     // iterate through the train numbers
     for (const key in trainNums) {
@@ -42,7 +42,7 @@ async function getAmtrak() {
             type: 'Point',
             coordinates: [train.lon, train.lat],
           },
-          properties: { ...train },
+          properties: train,
         } as Feature
         // push train to geoJSON
         geoJSON.features.push(trainObject)
@@ -55,6 +55,51 @@ async function getAmtrak() {
   }
 }
 
+async function getCaltrain() {
+  // Make a GET request to the API and return the location of the trains.
+  try {
+    const response = await fetch(`https://api.therailmap.com/v1/caltrain`, { method: 'GET' })
+    const responseJSON = await response.json()
+
+    const trains = responseJSON.Siri.ServiceDelivery.VehicleMonitoringDelivery.VehicleActivity
+
+    if (trains === undefined) {
+      throw new Error('No trains found')
+    }
+
+    // Fly the map to the location.
+
+    const geoJson: FeatureCollection = {
+      type: 'FeatureCollection',
+      features: [],
+    }
+
+    trains.forEach((train: { [key: string]: any }) => {
+      const trainObject: Feature = {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [
+            train.MonitoredVehicleJourney.VehicleLocation.Longitude,
+            train.MonitoredVehicleJourney.VehicleLocation.Latitude,
+          ],
+        },
+        properties: {
+          name: train.MonitoredVehicleJourney.VehicleRef,
+          ...train,
+        },
+      }
+      geoJson.features.push(trainObject)
+    })
+
+    return geoJson
+
+    // Return the location of the trains as GeoJSON.
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState<{
     [key: string]: unknown
@@ -62,6 +107,7 @@ const Home: NextPage = () => {
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
     if (e.features) {
+      console.log(e.features)
       const clickedFeature = e.features[0].properties
       const featureDataObject = {
         ...clickedFeature,
@@ -103,6 +149,7 @@ const Home: NextPage = () => {
     'Railroad-Bridges',
     'CN-Railroad-Crossings',
     'CN-Railroad-Bridges',
+    'caltrain',
   ]
 
   //  * Live Amtrak Trains * //
@@ -137,7 +184,38 @@ const Home: NextPage = () => {
     },
   }
 
+  const caltrainLayerStyle: LayerProps = {
+    id: 'caltrain',
+    type: 'circle',
+    source: 'caltrain',
+    paint: {
+      'circle-color': '#db3241',
+      'circle-radius': 11,
+      'circle-opacity': 1,
+    },
+    layout: {
+      // Make the layer visible by default.
+      visibility: 'visible',
+    },
+  }
+
+  const caltrainLabelsLayerStyle: LayerProps = {
+    id: 'caltrain-labels',
+    type: 'symbol',
+    source: 'amtrak',
+    layout: {
+      'text-field': ['to-string', ['get', 'name']],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': 12,
+      visibility: 'visible',
+    },
+    paint: {
+      'text-color': '#fff',
+    },
+  }
+
   const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
+  const [caltrainGeoJSON, setCaltrainGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
   const onLoadHandler = useCallback(() => {
     // integrate the useEffect hook from above but instead run it on load
@@ -149,10 +227,26 @@ const Home: NextPage = () => {
         console.error(error)
       })
 
+    getCaltrain()
+      .then((geoJSON) => {
+        setCaltrainGeoJSON(geoJSON)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
     setInterval(async () => {
       getAmtrak()
         .then((geoJSON) => {
           setAmtrakGeoJSON(geoJSON)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+
+      getCaltrain()
+        .then((geoJSON) => {
+          setCaltrainGeoJSON(geoJSON)
         })
         .catch((error) => {
           console.error(error)
@@ -175,22 +269,24 @@ const Home: NextPage = () => {
 
   const [warningOpen, setWarningOpen] = useState<boolean>(false)
 
-  useCallback(async () => {
-    const isStale = await getFeedStale()
-    if (isStale) {
-      setWarningOpen(true)
-    }
+  // * Check if the data feed is stale * //
+  useEffect(() => {
+    getFeedStale().then((isStale) => {
+      if (isStale) {
+        setWarningOpen(true)
+      }
+    })
   }, [])
 
   setTimeout(() => {
     setWarningOpen(false)
-  }, 5000)
+  }, 10000)
 
   return (
     <>
       <Sidebar featureData={featureData}></Sidebar>
       <Alert
-        className="fixed bottom-0 right-0 z-20 m-3"
+        className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
         direction="left"
         open={warningOpen}
         severity="error"
@@ -221,6 +317,11 @@ const Home: NextPage = () => {
         <Source data={amtrakGeoJSON} id="amtrak" type="geojson">
           <Layer {...amtrakLayerStyle} />
           <Layer {...amtrakNumbersLayerStyle} />
+        </Source>
+
+        <Source data={caltrainGeoJSON} id="caltrain" type="geojson">
+          <Layer {...caltrainLayerStyle} />
+          <Layer {...caltrainLabelsLayerStyle} />
         </Source>
 
         <Source
