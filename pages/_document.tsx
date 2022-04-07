@@ -42,7 +42,7 @@ export default class MyDocument extends Document {
           <meta content="View Railroad Crossings, Live Amtrak, & More" property="og:description" />
           <meta content="The Rail Map" property="og:site_name" />
           <meta content="https://www.therailmap.com" property="og:url" />
-          <meta content="/meta.png" property="og:image" />
+          <meta content="/icon-512x512.png" property="og:image" />
         </Head>
         <body className="overflow-hidden" id="body">
           <Main />
