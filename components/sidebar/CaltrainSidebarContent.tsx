@@ -1,10 +1,10 @@
 import { Tab } from '@headlessui/react'
 import moment from 'moment'
-import { CaltrainApiResponse, CaltrainOnwardCall } from '../MapDataTypes'
+import { CaltrainOnwardCall, CaltrainVehicleActivity } from '../MapDataTypes'
 
 interface TrainSidebarContentProps {
   /** Array of style options */
-  trainData: CaltrainApiResponse
+  trainData: CaltrainVehicleActivity
   className: string
 }
 

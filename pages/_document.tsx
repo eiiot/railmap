@@ -26,7 +26,7 @@ export default class MyDocument extends Document {
           <link color="#5bbad5" href="/safari-pinned-tab.svg" rel="mask-icon" />
           <link href="/favicon.ico" rel="shortcut icon" />
           <link
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=optional"
             rel="stylesheet"
           />
 

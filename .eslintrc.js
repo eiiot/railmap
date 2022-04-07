@@ -7,6 +7,8 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
+    'next',
+    'prettier',
   ],
   rules: {
     'react/jsx-sort-props': [

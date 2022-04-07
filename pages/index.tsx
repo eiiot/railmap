@@ -2,9 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import { fetchAllTrains } from 'amtrak'
-
-import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
+import Sidebar from '../components/sidebar'
 import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
 import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 import LayerControl from '../components/map/LayerControl'
@@ -12,6 +11,7 @@ import StylesControl from '../components/map/StylesControl'
 import { Feature, FeatureCollection } from 'geojson'
 import LocationControl from '../components/map/LocationControl'
 import Alert from '../components/trainsitionAlert'
+import { CaltrainVehicleActivity } from '../components/MapDataTypes'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
@@ -74,14 +74,15 @@ async function getCaltrain() {
       features: [],
     }
 
-    trains.forEach((train: { [key: string]: any }) => {
+    trains.forEach((train: CaltrainVehicleActivity) => {
+      console.log(train)
       const trainObject: Feature = {
         type: 'Feature',
         geometry: {
           type: 'Point',
           coordinates: [
-            train.MonitoredVehicleJourney.VehicleLocation.Longitude,
-            train.MonitoredVehicleJourney.VehicleLocation.Latitude,
+            +train.MonitoredVehicleJourney.VehicleLocation.Longitude,
+            +train.MonitoredVehicleJourney.VehicleLocation.Latitude,
           ],
         },
         properties: {

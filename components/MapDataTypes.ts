@@ -246,7 +246,7 @@ export interface CaltrainOnwardCall {
   ExpectedDepartureTime: string
 }
 
-export interface CaltrainApiResponse {
+export interface CaltrainVehicleActivity {
   RecordedAtTime: string
   ValidUntilTime: string
   MonitoredVehicleJourney: {
