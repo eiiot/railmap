@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import moment from 'moment'
-import { station, trainData } from '../amtrakTypes'
+import { station, trainData } from 'amtrak'
 import { MapRef, useMap } from 'react-map-gl'
 
 interface StationData {

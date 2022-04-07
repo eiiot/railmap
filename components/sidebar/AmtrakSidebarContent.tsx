@@ -1,6 +1,6 @@
 import { Tab } from '@headlessui/react'
 import moment from 'moment'
-import { station, trainData } from '../amtrakTypes'
+import { station, trainData } from 'amtrak'
 
 interface TrainSidebarContentProps {
   /** Array of style options */
@@ -86,7 +86,7 @@ function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-const TrainSidebarContent = (props: TrainSidebarContentProps) => {
+const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
   const stations =
     typeof props.trainData.stations === 'string'
       ? JSON.parse(props.trainData.stations)
@@ -263,7 +263,6 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
                           moment.utc(station.schDep).toISOString(),
                         )} ring-2`,
                       )}
-                      href="#"
                     />
                   </li>
                 ))}
@@ -276,4 +275,4 @@ const TrainSidebarContent = (props: TrainSidebarContentProps) => {
   )
 }
 
-export default TrainSidebarContent
+export default AmtrakSidebarContent

@@ -6,8 +6,9 @@ import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
 import OSMSidebarContent from './sidebar/OSMSidebarContent'
 import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
 import { MapRef } from 'react-map-gl'
-import { trainData } from './amtrakTypes'
-import { CNCrossingData, USBridgeData, USCrossingData } from './MapDataTypes'
+import { trainData } from 'amtrak'
+import { CNCrossingData, CaltrainApiResponse, USBridgeData, USCrossingData } from './MapDataTypes'
+import CaltrainSidebarContent from './sidebar/CaltrainSidebarContent'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -55,6 +56,11 @@ export default function Sidebar(props: SidebarProps) {
           <AmtrakSidebarContent
             className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
             trainData={props.featureData as unknown as trainData}
+          />
+        ) : props.featureData.mapboxLayerId === 'caltrain' ? (
+          <CaltrainSidebarContent
+            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
+            trainData={props.featureData as unknown as CaltrainApiResponse}
           />
         ) : props.featureData.mapboxLayerId === 'Railroad-Crossings' ? (
           <CrossingSidebarContent

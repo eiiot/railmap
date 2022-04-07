@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
 import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
-import { trainData } from '../components/amtrakTypes'
+import { trainData } from 'amtrak'
 import { Feature, FeatureCollection } from 'geojson'
 import LocationControl from '../components/map/LocationControl'
 
@@ -13,6 +13,47 @@ const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
   ssr: false,
 })
+
+async function getAmtrak() {
+  // Make a GET request to the API and return the location of the trains.
+  try {
+    const response = await fetch('https://api.amtraker.com/v1/trains', {
+      method: 'GET',
+    })
+    const trainNums = await response.json()
+    // returns object of trains with the object num as the train number
+
+    // create a geoJSON object
+    const geoJSON = {
+      type: 'FeatureCollection',
+      features: [],
+    } as FeatureCollection
+
+    // iterate through the train numbers
+    Object.keys(trainNums).forEach((num) => {
+      const trains = trainNums[num]
+
+      // iterate through trains
+      Object.keys(trains).forEach((key) => {
+        const train = trains[key] // type of train is object
+        const trainObject = {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [train.lon, train.lat],
+          },
+          properties: { ...train },
+        } as Feature
+        // push train to geoJSON
+        geoJSON.features.push(trainObject)
+      })
+    })
+
+    return geoJSON
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState<{
@@ -32,9 +73,6 @@ const Home: NextPage = () => {
 
   const trainButtonClickHandler = useCallback((train: trainData, railmap) => {
     const { lon, lat } = train
-    console.log(lon, lat)
-    console.log(train)
-    console.log(railmap)
     railmap.flyTo({ center: [lon, lat], zoom: 13, duration: 2000 })
     const featureDataObject = {
       ...train,
@@ -89,47 +127,6 @@ const Home: NextPage = () => {
   }
 
   const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
-
-  async function getAmtrak() {
-    // Make a GET request to the API and return the location of the trains.
-    try {
-      const response = await fetch('https://api.amtraker.com/v1/trains', {
-        method: 'GET',
-      })
-      const trainNums = await response.json()
-      // returns object of trains with the object num as the train number
-
-      // create a geoJSON object
-      const geoJSON = {
-        type: 'FeatureCollection',
-        features: [],
-      } as FeatureCollection
-
-      // iterate through the train numbers
-      Object.keys(trainNums).forEach((num) => {
-        const trains = trainNums[num]
-
-        // iterate through trains
-        Object.keys(trains).forEach((key) => {
-          const train = trains[key] // type of train is object
-          const trainObject = {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [train.lon, train.lat],
-            },
-            properties: { ...train },
-          } as Feature
-          // push train to geoJSON
-          geoJSON.features.push(trainObject)
-        })
-      })
-
-      return geoJSON
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   const onLoadHandler = useCallback(() => {
     // integrate the useEffect hook from above but instead run it on load
