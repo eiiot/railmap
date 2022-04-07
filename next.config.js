@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const withPWA = require('next-pwa')
+
+module.exports = withPWA({
   reactStrictMode: true,
   typescript: {
     // !! WARN !!
@@ -7,6 +9,9 @@ module.exports = {
     // your project has type errors.
     // !! WARN !!
     ignoreBuildErrors: true,
+  },
+  pwa: {
+    dest: 'public',
   },
   async redirects() {
     return [
@@ -17,4 +22,4 @@ module.exports = {
       },
     ]
   },
-}
+})

@@ -14,6 +14,47 @@ const Map = dynamic(() => import('../components/mapbox'), {
   ssr: false,
 })
 
+async function getAmtrak() {
+  // Make a GET request to the API and return the location of the trains.
+  try {
+    const response = await fetch('https://api.amtraker.com/v1/trains', {
+      method: 'GET',
+    })
+    const trainNums = await response.json()
+    // returns object of trains with the object num as the train number
+
+    // create a geoJSON object
+    const geoJSON = {
+      type: 'FeatureCollection',
+      features: [],
+    } as FeatureCollection
+
+    // iterate through the train numbers
+    Object.keys(trainNums).forEach((num) => {
+      const trains = trainNums[num]
+
+      // iterate through trains
+      Object.keys(trains).forEach((key) => {
+        const train = trains[key] // type of train is object
+        const trainObject = {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [train.lon, train.lat],
+          },
+          properties: { ...train },
+        } as Feature
+        // push train to geoJSON
+        geoJSON.features.push(trainObject)
+      })
+    })
+
+    return geoJSON
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState<{
     [key: string]: unknown
@@ -86,47 +127,6 @@ const Home: NextPage = () => {
   }
 
   const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
-
-  async function getAmtrak() {
-    // Make a GET request to the API and return the location of the trains.
-    try {
-      const response = await fetch('https://api.amtraker.com/v1/trains', {
-        method: 'GET',
-      })
-      const trainNums = await response.json()
-      // returns object of trains with the object num as the train number
-
-      // create a geoJSON object
-      const geoJSON = {
-        type: 'FeatureCollection',
-        features: [],
-      } as FeatureCollection
-
-      // iterate through the train numbers
-      Object.keys(trainNums).forEach((num) => {
-        const trains = trainNums[num]
-
-        // iterate through trains
-        Object.keys(trains).forEach((key) => {
-          const train = trains[key] // type of train is object
-          const trainObject = {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [train.lon, train.lat],
-            },
-            properties: { ...train },
-          } as Feature
-          // push train to geoJSON
-          geoJSON.features.push(trainObject)
-        })
-      })
-
-      return geoJSON
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   const onLoadHandler = useCallback(() => {
     // integrate the useEffect hook from above but instead run it on load

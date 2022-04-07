@@ -11,11 +11,49 @@ import LayerControl from '../components/map/LayerControl'
 import StylesControl from '../components/map/StylesControl'
 import { Feature, FeatureCollection } from 'geojson'
 import LocationControl from '../components/map/LocationControl'
+import Alert from '../components/trainsitionAlert'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
   ssr: false,
 })
+
+async function getAmtrak() {
+  // Make a GET request to the API and return the location of the trains.
+  try {
+    const trainNums = await fetchAllTrains()
+    // returns object of trains with the object num as the train number
+
+    // create a geoJSON object
+    const geoJSON = {
+      type: 'FeatureCollection',
+      features: [],
+    } as FeatureCollection
+
+    // iterate through the train numbers
+    for (const key in trainNums) {
+      const trains = trainNums[key]
+
+      // iterate through trains
+      trains.forEach((train) => {
+        const trainObject = {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [train.lon, train.lat],
+          },
+          properties: { ...train },
+        } as Feature
+        // push train to geoJSON
+        geoJSON.features.push(trainObject)
+      })
+    }
+
+    return geoJSON
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState<{
@@ -101,43 +139,6 @@ const Home: NextPage = () => {
 
   const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
-  async function getAmtrak() {
-    // Make a GET request to the API and return the location of the trains.
-    try {
-      const trainNums = await fetchAllTrains()
-      // returns object of trains with the object num as the train number
-
-      // create a geoJSON object
-      const geoJSON = {
-        type: 'FeatureCollection',
-        features: [],
-      } as FeatureCollection
-
-      // iterate through the train numbers
-      for (const key in trainNums) {
-        const trains = trainNums[key]
-
-        // iterate through trains
-        trains.forEach((train) => {
-          const trainObject = {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [train.lon, train.lat],
-            },
-            properties: { ...train },
-          } as Feature
-          // push train to geoJSON
-          geoJSON.features.push(trainObject)
-        })
-      }
-
-      return geoJSON
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   const onLoadHandler = useCallback(() => {
     // integrate the useEffect hook from above but instead run it on load
     getAmtrak()
@@ -161,9 +162,42 @@ const Home: NextPage = () => {
 
   // * End Live Amtrak Trains * //
 
+  async function getFeedStale() {
+    try {
+      const response = await fetch('https://api.amtraker.com/v2/dataFeedState')
+      const data = await response.json()
+      return data.isStale
+    } catch (error) {
+      console.error(error)
+      return false
+    }
+  }
+
+  const [warningOpen, setWarningOpen] = useState<boolean>(false)
+
+  useCallback(async () => {
+    const isStale = await getFeedStale()
+    if (isStale) {
+      setWarningOpen(true)
+    }
+  }, [])
+
+  setTimeout(() => {
+    setWarningOpen(false)
+  }, 5000)
+
   return (
     <>
       <Sidebar featureData={featureData}></Sidebar>
+      <Alert
+        className="fixed bottom-0 right-0 z-20 m-3"
+        direction="left"
+        open={warningOpen}
+        severity="error"
+        onClose={() => setWarningOpen(false)}
+      >
+        The Amtrak API is currently stale
+      </Alert>
       <Map
         initialViewState={mapViewState}
         interactiveLayerIds={mapInteractiveLayerIds}
