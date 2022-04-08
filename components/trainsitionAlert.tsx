@@ -1,44 +1,47 @@
-import * as React from 'react'
-import Box from '@mui/material/Box'
+import CloseIcon from '@mui/icons-material/Close'
 import Alert from '@mui/material/Alert'
+import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Slide from '@mui/material/Slide'
-import CloseIcon from '@mui/icons-material/Close'
+import * as React from 'react'
 
 interface props {
   className: string
   children: React.ReactNode
   severity: 'error' | 'warning' | 'info' | 'success'
-  direction?: 'up' | 'right' | 'down' | 'left'
+  direction: 'up' | 'right' | 'down' | 'left'
   open: boolean
   onClose: () => void
 }
 
-export default function TransitionAlerts(props: props) {
+const TransitionAlerts = (props: props) => {
+  const { className, children, severity, direction, open, onClose } = props
   return (
-    <div className={props.className}>
+    <div className={className}>
       <Box sx={{ width: '100%' }}>
-        <Slide direction={props.direction} in={props.open}>
+        <Slide direction={direction} in={open}>
           <Alert
             action={
               <IconButton
                 aria-label="close"
                 color="inherit"
-                size="small"
                 onClick={() => {
-                  props.onClose()
+                  onClose()
                 }}
+                size="small"
               >
                 <CloseIcon fontSize="inherit" />
               </IconButton>
             }
-            severity={props.severity}
+            severity={severity}
             sx={{ mb: 2 }}
           >
-            {props.children}
+            {children}
           </Alert>
         </Slide>
       </Box>
     </div>
   )
 }
+
+export default TransitionAlerts

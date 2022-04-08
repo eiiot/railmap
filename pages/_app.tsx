@@ -3,11 +3,11 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 import 'mapbox-gl-style-switcher/styles.css'
 import '@fontsource/inter'
-import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { MapProvider } from 'react-map-gl'
+import type { AppProps } from 'next/app'
 
-function MyApp({ Component, pageProps }: AppProps) {
+var MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
@@ -16,13 +16,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta content="width=device-width" name="viewport" />
         {/* Analytics */}
         <script
-          defer
           data-domain="therailmap.com"
+          defer
           src="https://analytics.eliothertenstein.com/js/plausible.js"
-        ></script>
+         />
       </Head>
       <MapProvider>
-        <Component {...pageProps}></Component>
+        <Component {...pageProps} />
       </MapProvider>
     </>
   )

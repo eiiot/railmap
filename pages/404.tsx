@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default function Custom404() {
+const Custom404 = () => {
   return (
     <>
       <Head>
@@ -533,3 +533,5 @@ export default function Custom404() {
     </>
   )
 }
+
+export default Custom404

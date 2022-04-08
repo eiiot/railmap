@@ -1,9 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck: Waiting for react-map-gl to be update
 
+import MapboxGeocoder, { GeocoderOptions } from '@mapbox/mapbox-gl-geocoder'
 import { ReactElement, useState } from 'react'
 import { ControlPosition, Marker, useControl } from 'react-map-gl'
-import MapboxGeocoder, { GeocoderOptions } from '@mapbox/mapbox-gl-geocoder'
 // type GeocoderControlProps = {
 //   mapboxAccessToken: string
 //   origin?: string
@@ -61,21 +60,15 @@ const noop = () => {
   return null
 }
 
-GeocoderControl.defaultProps = {
-  onLoading: noop,
-  onResults: noop,
-  onResult: noop,
-  onError: noop,
-}
-
-export default function GeocoderControl(props: GeocoderControlProps) {
+const GeocoderControl = (props: GeocoderControlProps) => {
+  const { position, accessToken, ...otherProps } = props
   const [marker, setMarker] = useState<ReactElement<any, any> | null>(null)
 
   const geocoder = useControl<MapboxGeocoder>(
     () => {
       const ctrl = new MapboxGeocoder({
-        ...props,
-        accessToken: props.accessToken,
+        ...otherProps,
+        accessToken: accessToken,
       })
       ctrl.on('loading', props.onLoading ?? noop)
       ctrl.on('results', props.onResults ?? noop)
@@ -157,3 +150,12 @@ export default function GeocoderControl(props: GeocoderControlProps) {
 
   return marker
 }
+
+GeocoderControl.defaultProps = {
+  onError: noop,
+  onLoading: noop,
+  onResult: noop,
+  onResults: noop,
+}
+
+export default GeocoderControl

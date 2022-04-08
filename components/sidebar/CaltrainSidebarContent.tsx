@@ -1,11 +1,10 @@
+import { CaltrainOnwardCall, CaltrainVehicleActivity } from '../MapDataTypes'
 import { Tab } from '@headlessui/react'
 import moment from 'moment'
-import { CaltrainOnwardCall, CaltrainVehicleActivity } from '../MapDataTypes'
 
 interface TrainSidebarContentProps {
   /** Array of style options */
   trainData: CaltrainVehicleActivity
-  className: string
 }
 
 function classNames(...classes: string[]) {
@@ -75,17 +74,23 @@ function timeDifferenceRing(start: string, end: string) {
 const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
   console.log('Hello, world')
 
+  const { trainData } = props
+
   const train =
-    typeof props.trainData.MonitoredVehicleJourney === 'string'
-      ? JSON.parse(props.trainData.MonitoredVehicleJourney)
-      : props.trainData.MonitoredVehicleJourney
+    typeof trainData.MonitoredVehicleJourney === 'string'
+      ? JSON.parse(trainData.MonitoredVehicleJourney)
+      : trainData.MonitoredVehicleJourney
   return (
-    <div className={props.className}>
+    <div className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md">
       <div className="w-full px-2 py-4 text-center text-2xl">
-        {train.VehicleRef} - {train.LineRef}
+        {train.VehicleRef}
+        {' - '}
+        {train.LineRef}
       </div>
       <div className="text-md w-full px-2 pb-2 text-center">
-        {train.OriginName} -&gt; {train.DestinationName}
+        {train.OriginName}
+        {' -&gt; '}
+        {train.DestinationName}
       </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-hidden px-2">
         <Tab.Group>
@@ -156,7 +161,7 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
                       {moment
-                        .duration(-moment().diff(moment.utc(props.trainData.RecordedAtTime)))
+                        .duration(-moment().diff(moment.utc(trainData.RecordedAtTime)))
                         .humanize(true) ?? 'Unknown'}
                     </li>
                   </ul>
@@ -166,7 +171,7 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
                       ' ' +
                       timeDifferenceRing(
                         moment().toISOString(),
-                        moment.utc(props.trainData.RecordedAtTime).toISOString(),
+                        moment.utc(trainData.RecordedAtTime).toISOString(),
                       )
                     }
                   />
@@ -177,8 +182,8 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
               <ul className="children:mb-4">
                 {train.MonitoredCall ? (
                   <li
-                    key={train.MonitoredCall.StopPointRef}
                     className="hover:bg-coolGray-100 relative rounded-md p-3"
+                    key={train.MonitoredCall.StopPointRef}
                   >
                     <h3 className="text-sm font-medium leading-5">
                       {train.MonitoredCall.StopPointName}
@@ -208,8 +213,8 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
                 ) : null}
                 {train.OnwardCalls.OnwardCall.map((station: CaltrainOnwardCall) => (
                   <li
-                    key={station.StopPointRef}
                     className="hover:bg-coolGray-100 relative rounded-md p-3"
+                    key={station.StopPointRef}
                   >
                     <h3 className="text-sm font-medium leading-5">{station.StopPointName}</h3>
 

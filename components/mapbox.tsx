@@ -1,6 +1,8 @@
-import { CSSProperties, ReactNode, useCallback, useState } from 'react'
-import Map, { FullscreenControl, GeolocateControl, NavigationControl } from 'react-map-gl'
+/* eslint-disable react/require-default-props */
 import GeocoderControl from './map/GeocoderControl'
+import { CSSProperties, ReactNode, useCallback, useState } from 'react'
+// eslint-disable-next-line import/no-named-as-default
+import Map, { FullscreenControl, GeolocateControl, NavigationControl } from 'react-map-gl'
 
 // This is a terrible solution to this problem, but I just can't figure out how to get the type definitions for the Map component
 
@@ -8,7 +10,7 @@ interface MapTypes {
   mapboxAccessToken?: string
   initialViewState?: Partial<import('react-map-gl/dist/esm/index').ViewState> & {
     bounds?: import('mapbox-gl').LngLatBoundsLike
-    fitBoundsOptions?: import('mapbox-gl').FitBoundsOptions
+    fitBoundsOptioss?: import('mapbox-gl').FitBoundsOptions
   }
   gl?: WebGLRenderingContext
   antialias?: boolean
@@ -113,7 +115,6 @@ interface MapTypes {
 }
 
 interface OtherMapTypes {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mapLib?: any
   reuseMaps?: boolean
   /** Map container id */
@@ -135,7 +136,9 @@ interface CustomMapProps extends MapTypes, OtherMapTypes {
 // End bad code (maybe)
 
 const MapboxGlMap = (props: CustomMapProps) => {
-  const [cursorSate, setCursorState] = useState('unset')
+  const { children, ...otherProps } = props
+
+  const [cursorState, setCursorState] = useState('unset')
 
   const onMouseEnter = useCallback(() => {
     setCursorState('pointer')
@@ -146,23 +149,24 @@ const MapboxGlMap = (props: CustomMapProps) => {
 
   return (
     <Map
-      cursor={cursorSate}
+      cursor={cursorState}
       id="railmap"
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-      style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      {...props}
+      style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...otherProps}
     >
       <GeocoderControl
-        collapsed
         accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string}
+        collapsed
       />
       <GeolocateControl />
       <NavigationControl />
       <FullscreenControl containerId="body" />
 
-      {props.children}
+      {children}
     </Map>
   )
 }

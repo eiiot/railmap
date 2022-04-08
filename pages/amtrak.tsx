@@ -1,13 +1,13 @@
-import { useCallback, useState } from 'react'
-import type { NextPage } from 'next'
-import dynamic from 'next/dynamic'
-
-import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
-import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
+import LocationControl from '../components/map/LocationControl'
+import Sidebar from '../components/sidebar'
+
 import { trainData } from 'amtrak'
 import { Feature, FeatureCollection } from 'geojson'
-import LocationControl from '../components/map/LocationControl'
+import dynamic from 'next/dynamic'
+import { useCallback, useState } from 'react'
+import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
+import type { NextPage } from 'next'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
@@ -153,16 +153,16 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Sidebar featureData={featureData} onTrainClick={trainButtonClickHandler}></Sidebar>
+      <Sidebar featureData={featureData} onTrainClick={trainButtonClickHandler} />
       <div className="h-screen w-screen">
         <Map
           initialViewState={mapViewState}
           interactiveLayerIds={mapInteractiveLayerIds}
           mapStyle="mapbox://styles/dotly/ckqim4kef1ubg18pjg02v9zxp"
           maxBounds={mapMaxBounds}
-          terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
           onClick={featureClickHandler}
           onLoad={onLoadHandler}
+          terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
         >
           <LocationControl
             location="/"

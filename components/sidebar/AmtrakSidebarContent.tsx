@@ -1,11 +1,10 @@
 import { Tab } from '@headlessui/react'
-import moment from 'moment'
 import { station, trainData } from 'amtrak'
+import moment from 'moment'
 
 interface TrainSidebarContentProps {
   /** Array of style options */
   trainData: trainData
-  className: string
 }
 
 function classNames(...classes: string[]) {
@@ -87,14 +86,13 @@ function capitalize(string: string) {
 }
 
 const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
+  const { trainData } = props
   const stations =
-    typeof props.trainData.stations === 'string'
-      ? JSON.parse(props.trainData.stations)
-      : props.trainData.stations
+    typeof trainData.stations === 'string' ? JSON.parse(trainData.stations) : trainData.stations
   return (
-    <div className={props.className}>
+    <div className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md">
       <div className="w-full px-2 py-4 text-center text-2xl">
-        {props.trainData.routeName} {props.trainData.trainNum}
+        {trainData.routeName} {trainData.trainNum}
       </div>
       <div className="text-md w-full px-2 pb-2 text-center">
         {stations[0].stationName} -&gt; {stations[stations.length - 1].stationName}
@@ -136,7 +134,7 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                   <h3 className="text-sm font-medium leading-5">Speed</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{(props.trainData.velocity ?? 0).toFixed(1)} mph</li>
+                    <li>{(trainData.velocity ?? 0).toFixed(1)} mph</li>
                   </ul>
                   <a
                     className={classNames('absolute inset-0 rounded-md', 'ring-2 ring-blue-400')}
@@ -149,13 +147,12 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
-                      {props.trainData.eventName ?? 'Unknown'} [{props.trainData.eventCode ?? 'UNK'}
-                      ] |{' '}
+                      {trainData.eventName ?? 'Unknown'} [{trainData.eventCode ?? 'UNK'}] |{' '}
                       {capitalize(
                         (
-                          findStation(stations, props.trainData.eventCode).postCmnt ??
-                          findStation(stations, props.trainData.eventCode).estArrCmnt ??
-                          findStation(stations, props.trainData.eventCode).estDepCmnt ??
+                          findStation(stations, trainData.eventCode).postCmnt ??
+                          findStation(stations, trainData.eventCode).estArrCmnt ??
+                          findStation(stations, trainData.eventCode).estDepCmnt ??
                           'unknown'
                         )
                           .toLowerCase()
@@ -169,9 +166,9 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                     className={classNames(
                       'absolute inset-0 rounded-md',
                       `ring-2 ${timeDifferenceRing(
-                        findStation(stations, props.trainData.eventCode).postDep ??
-                          findStation(stations, props.trainData.eventCode).estDep,
-                        findStation(stations, props.trainData.eventCode).schDep,
+                        findStation(stations, trainData.eventCode).postDep ??
+                          findStation(stations, trainData.eventCode).estDep,
+                        findStation(stations, trainData.eventCode).schDep,
                       )}`,
                     )}
                     href="#"
@@ -181,14 +178,12 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                   <h3 className="text-sm font-medium leading-5">Heading</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{props.trainData.heading ?? 'Unknown'}</li>
+                    <li>{trainData.heading ?? 'Unknown'}</li>
                   </ul>
                   <a
                     className={classNames(
                       'absolute inset-0 rounded-md',
-                      `ring-2 ring-blue-400 ${generateBorder(
-                        props.trainData.heading,
-                      )} border-blue-400`,
+                      `ring-2 ring-blue-400 ${generateBorder(trainData.heading)} border-blue-400`,
                     )}
                     href="#"
                   />
@@ -197,7 +192,7 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                   <h3 className="text-sm font-medium leading-5">Time Zone</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{props.trainData.trainTimeZone ?? 'Unknown'}</li>
+                    <li>{trainData.trainTimeZone ?? 'Unknown'}</li>
                   </ul>
                   <a
                     className={classNames('absolute inset-0 rounded-md', 'ring-2 ring-blue-400')}
@@ -210,7 +205,7 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
                       {moment
-                        .duration(-moment().diff(moment.utc(props.trainData.lastValTS)))
+                        .duration(-moment().diff(moment.utc(trainData.lastValTS)))
                         .humanize(true) ?? 'Unknown'}
                     </li>
                   </ul>
@@ -220,7 +215,7 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                       ' ' +
                       timeDifferenceRing(
                         moment().toISOString(),
-                        moment.utc(props.trainData.lastValTS).toISOString(),
+                        moment.utc(trainData.lastValTS).toISOString(),
                       )
                     }
                     href="#"
@@ -231,7 +226,7 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
             <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
                 {stations.map((station: station) => (
-                  <li key={station.code} className="hover:bg-coolGray-100 relative rounded-md p-3">
+                  <li className="hover:bg-coolGray-100 relative rounded-md p-3" key={station.code}>
                     <h3 className="text-sm font-medium leading-5">
                       {station.stationName ?? station.code ?? 'Unknown Station'}
                     </h3>

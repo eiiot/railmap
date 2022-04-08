@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
-import type { NextPage } from 'next'
-import dynamic from 'next/dynamic'
-import { fetchAllTrains } from 'amtrak'
 import Loader from '../components/loader'
-import Sidebar from '../components/sidebar'
-import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
-import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 import LayerControl from '../components/map/LayerControl'
-import StylesControl from '../components/map/StylesControl'
-import { Feature, FeatureCollection } from 'geojson'
 import LocationControl from '../components/map/LocationControl'
-import Alert from '../components/trainsitionAlert'
+import StylesControl from '../components/map/StylesControl'
 import { CaltrainVehicleActivity } from '../components/MapDataTypes'
+import Sidebar from '../components/sidebar'
+import Alert from '../components/trainsitionAlert'
+import { fetchAllTrains } from 'amtrak'
+import { Feature, FeatureCollection } from 'geojson'
+import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
+import dynamic from 'next/dynamic'
+import { useCallback, useEffect, useState } from 'react'
+import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
+import type { NextPage } from 'next'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
@@ -285,13 +285,13 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Sidebar featureData={featureData}></Sidebar>
+      <Sidebar featureData={featureData} />
       <Alert
         className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
         direction="left"
+        onClose={() => setWarningOpen(false)}
         open={warningOpen}
         severity="error"
-        onClose={() => setWarningOpen(false)}
       >
         The Amtrak API is currently stale
       </Alert>
@@ -300,9 +300,9 @@ const Home: NextPage = () => {
         interactiveLayerIds={mapInteractiveLayerIds}
         mapStyle={stylesSwitcherStyles[0].uri}
         maxBounds={mapMaxBounds}
-        terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
         onClick={featureClickHandler}
         onLoad={onLoadHandler}
+        terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
       >
         <StylesControl styles={stylesSwitcherStyles} />
         <LayerControl layerIds={['amtrak', 'amtrak-numbers']} />

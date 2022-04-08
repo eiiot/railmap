@@ -1,31 +1,34 @@
 module.exports = {
-  root: true,
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  // parser: '@typescript-eslint/parser',
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
+    'next/core-web-vitals',
+    'plugin:react/all',
     'plugin:react/jsx-runtime',
-    'next',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+    // 'plugin:@typescript-eslint',
     'prettier',
   ],
   rules: {
-    'react/jsx-sort-props': [
-      'warn',
-      {
-        callbacksLast: true,
-        shorthandFirst: true,
-        reservedFirst: true,
-      },
-    ],
-    'sort-imports': [
+    'react/jsx-sort-props': 'error',
+    'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'react/jsx-max-depth': 'off',
+    'react/jsx-no-literals': 'off',
+    'react/jsx-no-bind': 'off',
+    'react/forbid-component-props': 'off',
+    'react/no-multi-comp': ['error', { ignoreStateless: true }],
+    'react/function-component-definition': [
       'error',
       {
-        ignoreCase: false,
-        ignoreDeclarationSort: true,
-        ignoreMemberSort: false,
-        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+        namedComponents: 'arrow-function',
+      },
+    ],
+    'react/jsx-props-no-spreading': 'off',
+    'import/order': [
+      'error',
+      {
+        groups: ['index', 'sibling', 'parent', 'internal', 'external', 'builtin', 'object', 'type'],
+        alphabetize: { order: 'asc', caseInsensitive: true },
       },
     ],
   },
