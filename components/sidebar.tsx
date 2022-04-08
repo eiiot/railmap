@@ -5,8 +5,8 @@ import CNCrossingSidebarContent from './sidebar/CNCrossingSidebarContent'
 import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
 import OSMSidebarContent from './sidebar/OSMSidebarContent'
 import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
-import { MapRef } from 'react-map-gl'
 import { trainData } from 'amtrak'
+import { MapRef } from 'react-map-gl'
 import {
   CNCrossingData,
   CaltrainVehicleActivity,

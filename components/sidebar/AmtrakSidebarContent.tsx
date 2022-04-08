@@ -232,7 +232,9 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
               <ul className="children:mb-4">
                 {stations.map((station: station) => (
                   <li key={station.code} className="hover:bg-coolGray-100 relative rounded-md p-3">
-                    <h3 className="text-sm font-medium leading-5">{station.stationName}</h3>
+                    <h3 className="text-sm font-medium leading-5">
+                      {station.stationName ?? station.code ?? 'Unknown Station'}
+                    </h3>
 
                     <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                       <li>
