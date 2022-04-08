@@ -218,6 +218,8 @@ const Home: NextPage = () => {
   const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
   const [caltrainGeoJSON, setCaltrainGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
+  const [loadingInfo, setLoadingInfo] = useState<boolean>(true)
+
   const onLoadHandler = useCallback(() => {
     // integrate the useEffect hook from above but instead run it on load
     getAmtrak()
@@ -235,6 +237,8 @@ const Home: NextPage = () => {
       .catch((error) => {
         console.error(error)
       })
+
+    setLoadingInfo(false)
 
     setInterval(async () => {
       getAmtrak()
@@ -268,19 +272,19 @@ const Home: NextPage = () => {
     }
   }
 
-  const [warningOpen, setWarningOpen] = useState<boolean>(false)
+  const [amtrakDataStaleWarning, setAmtrakDataStaleWarning] = useState<boolean>(false)
 
   // * Check if the data feed is stale * //
   useEffect(() => {
     getFeedStale().then((isStale) => {
       if (isStale) {
-        setWarningOpen(true)
+        setAmtrakDataStaleWarning(true)
       }
     })
   }, [])
 
   setTimeout(() => {
-    setWarningOpen(false)
+    setAmtrakDataStaleWarning(false)
   }, 10000)
 
   return (
@@ -289,12 +293,23 @@ const Home: NextPage = () => {
       <Alert
         className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
         direction="left"
-        onClose={() => setWarningOpen(false)}
-        open={warningOpen}
+        onClose={() => setAmtrakDataStaleWarning(false)}
+        open={amtrakDataStaleWarning}
         severity="error"
       >
         The Amtrak API is currently stale
       </Alert>
+
+      <Alert
+        className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
+        direction="left"
+        onClose={() => setLoadingInfo(false)}
+        open={loadingInfo}
+        severity="info"
+      >
+        Loading Trains
+      </Alert>
+
       <Map
         initialViewState={mapViewState}
         interactiveLayerIds={mapInteractiveLayerIds}
