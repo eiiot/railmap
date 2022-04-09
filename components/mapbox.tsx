@@ -162,7 +162,11 @@ const MapboxGlMap = (props: CustomMapProps) => {
         accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string}
         collapsed
       />
-      <GeolocateControl trackUserLocation />
+      <GeolocateControl
+        positionOptions={{ enableHighAccuracy: true, timeout: 6000 }}
+        showUserHeading
+        trackUserLocation
+      />
       <NavigationControl />
       <FullscreenControl containerId="body" />
 
