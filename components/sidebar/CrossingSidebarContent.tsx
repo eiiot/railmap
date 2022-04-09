@@ -5,7 +5,6 @@ import { USCrossingData } from '../MapDataTypes'
 interface CrossingSidebarContentProps {
   /** Array of style options */
   crossingData: USCrossingData
-  className: string
 }
 
 const reasonIdData = {
@@ -100,80 +99,81 @@ function titleCase(input: unknown) {
 }
 
 const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
+  const { crossingData } = props
   return (
-    <div className={props.className}>
+    <div className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md">
       <div className="w-full px-2 py-4 text-center text-2xl">
-        {titleCase(props.crossingData['STREET'] ?? 'Unknown Street')}
+        {titleCase(crossingData['STREET'] ?? 'Unknown Street')}
       </div>
       {/* <div className="text-md w-full px-2 pb-2 text-center">
-        {props.crossingData.stations[0].stationName} -&gt;{' '}
+        {crossingData.stations[0].stationName} -&gt;{' '}
         {
-          props.crossingData.stations[props.crossingData.stations.length - 1]
+          crossingData.stations[crossingData.stations.length - 1]
             .stationName
         }
       </div> */}
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-y-scroll px-2">
         <div className="bg-white p-3">
           <ul className="w-full children:mb-4">
-            {!isEmptyOrSpaces(props.crossingData['RAILROAD']) ? (
+            {!isEmptyOrSpaces(crossingData['RAILROAD']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Railroad</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['RAILROAD']}</li>
+                  <li>{crossingData['RAILROAD']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['RRSUBDIV']) ? (
+            {!isEmptyOrSpaces(crossingData['RRSUBDIV']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Subdivision</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['RRSUBDIV']}</li>
+                  <li>{crossingData['RRSUBDIV']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['RRDIV']) ? (
+            {!isEmptyOrSpaces(crossingData['RRDIV']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Division</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['RRDIV']}</li>
+                  <li>{crossingData['RRDIV']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['MILEPOST']) ? (
+            {!isEmptyOrSpaces(crossingData['MILEPOST']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Milepost</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['MILEPOST']}</li>
+                  <li>{crossingData['MILEPOST']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['CROSSING']) ? (
+            {!isEmptyOrSpaces(crossingData['CROSSING']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Crossing ID</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['CROSSING']}</li>
+                  <li>{crossingData['CROSSING']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['TYPEXING']) ? (
+            {!isEmptyOrSpaces(crossingData['TYPEXING']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Crossing Type</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    {props.crossingData['TYPEXING'] === '2'
+                    {crossingData['TYPEXING'] === '2'
                       ? 'Public'
-                      : props.crossingData['TYPEXING'] === '3'
+                      : crossingData['TYPEXING'] === '3'
                       ? 'Private'
                       : 'Other'}
                   </li>
@@ -181,19 +181,19 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['WHISTBAN']) ? (
+            {!isEmptyOrSpaces(crossingData['WHISTBAN']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Quiet Zone</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    {props.crossingData['WHISTBAN'] === '0'
+                    {crossingData['WHISTBAN'] === '0'
                       ? 'No'
-                      : props.crossingData['WHISTBAN'] === '1'
+                      : crossingData['WHISTBAN'] === '1'
                       ? '24 hr'
-                      : props.crossingData['WHISTBAN'] === '2'
+                      : crossingData['WHISTBAN'] === '2'
                       ? 'Partial'
-                      : props.crossingData['WHISTBAN'] === '3'
+                      : crossingData['WHISTBAN'] === '3'
                       ? 'Chicago Excused'
                       : 'Unknown Zone Type'}
                   </li>
@@ -201,132 +201,131 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['HIGHWAY']) ? (
+            {!isEmptyOrSpaces(crossingData['HIGHWAY']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Highway</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['HIGHWAY']}</li>
+                  <li>{crossingData['HIGHWAY']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['CountyCode']) ? (
+            {!isEmptyOrSpaces(crossingData['CountyCode']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">County Code</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['CountyCode']}</li>
+                  <li>{crossingData['CountyCode']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['StateCode']) ? (
+            {!isEmptyOrSpaces(crossingData['StateCode']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">State</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-                  <li>{stateCodes[props.crossingData['StateCode']!] ?? 'Unknown State'}</li>
+                  <li>{stateCodes[crossingData['StateCode']!] ?? 'Unknown State'}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['POLCONT']) ? (
+            {!isEmptyOrSpaces(crossingData['POLCONT']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Emergency Telephone</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    <a className="text-blue-400" href={'tel:' + props.crossingData['POLCONT']}>
-                      {props.crossingData['POLCONT']}
+                    <a className="text-blue-400" href={'tel:' + crossingData['POLCONT']}>
+                      {crossingData['POLCONT']}
                     </a>
                   </li>
                 </ul>
                 <a
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
-                  href={'tel:' + props.crossingData['POLCONT']}
+                  href={'tel:' + crossingData['POLCONT']}
                 />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['RRCONT']) ? (
+            {!isEmptyOrSpaces(crossingData['RRCONT']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Railroad Contact</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    <a className="text-blue-400" href={'tel:' + props.crossingData['RRCONT']}>
-                      {props.crossingData['RRCONT']}
+                    <a className="text-blue-400" href={'tel:' + crossingData['RRCONT']}>
+                      {crossingData['RRCONT']}
                     </a>
                   </li>
                 </ul>
                 <a
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
-                  href={'tel:' + props.crossingData['RRCONT']}
+                  href={'tel:' + crossingData['RRCONT']}
                 />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['EFFDATE']) ? (
+            {!isEmptyOrSpaces(crossingData['EFFDATE']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Effective Date</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['EFFDATE']}</li>
+                  <li>{crossingData['EFFDATE']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['EDATE']) ? (
+            {!isEmptyOrSpaces(crossingData['EDATE']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Last Edited</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{props.crossingData['EDATE']}</li>
+                  <li>{crossingData['EDATE']}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['REASON']) ? (
+            {!isEmptyOrSpaces(crossingData['REASON']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Reason for Edit</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{reasonIdData[props.crossingData['REASON'] ?? 0]}</li>
+                  <li>{reasonIdData[crossingData['REASON'] ?? 0]}</li>
                 </ul>
                 <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['ACC_LINK']) ? (
+            {!isEmptyOrSpaces(crossingData['ACC_LINK']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">ACC Link</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    <a className="text-blue-400" href={props.crossingData['ACC_LINK']}>
+                    <a className="text-blue-400" href={crossingData['ACC_LINK']}>
                       Click Here
                     </a>
                   </li>
                 </ul>
                 <a
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
-                  href={props.crossingData['ACC_LINK']}
+                  href={crossingData['ACC_LINK']}
                 />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(props.crossingData['INV_LINK']) ? (
+            {!isEmptyOrSpaces(crossingData['INV_LINK']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">INV Link</h3>
 
                 <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                   <li>
-                    <a className="text-blue-400" href={props.crossingData['INV_LINK']}>
+                    <a className="text-blue-400" href={crossingData['INV_LINK']}>
                       Click Here
                     </a>
                   </li>
                 </ul>
                 <a
                   className="absolute inset-0 rounded-md ring-2 ring-red-400"
-                  href={props.crossingData['INV_LINK']}
+                  href={crossingData['INV_LINK']}
                 />
               </li>
             ) : null}

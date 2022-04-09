@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default function CustomOffline() {
+const CustomOffline = () => {
   return (
     <>
       <Head>
@@ -530,3 +530,5 @@ export default function CustomOffline() {
     </>
   )
 }
+
+export default CustomOffline

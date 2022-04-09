@@ -1,7 +1,6 @@
 interface OSMSidebarContentProps {
   /** Array of style options */
   osmData: { name?: string; operator?: string; usage?: string; electrified?: string }
-  className: string
   ringColor: string
 }
 
@@ -10,48 +9,45 @@ function isEmptyOrSpaces(str: string | number | undefined) {
 }
 
 const OSMSidebarContent = (props: OSMSidebarContentProps) => {
-  if (
-    props.osmData['name'] ||
-    props.osmData['operator'] ||
-    props.osmData['usage'] ||
-    props.osmData['electrified']
-  ) {
+  const { osmData, ringColor } = props
+
+  if (osmData['name'] || osmData['operator'] || osmData['usage'] || osmData['electrified']) {
     return (
-      <div className={props.className}>
+      <div className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md">
         <div className="w-full px-2 py-4 text-center text-2xl">
-          {props.osmData['name'] ?? 'Unknown Name'}
+          {osmData['name'] ?? 'Unknown Name'}
         </div>
         <div className="flex w-full max-w-md flex-[1] flex-col overflow-y-scroll px-2">
           <div className="bg-white p-3">
             <ul className="w-full children:mb-4">
-              {!isEmptyOrSpaces(props.osmData['operator']) ? (
+              {!isEmptyOrSpaces(osmData['operator']) ? (
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">Operator</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{props.osmData['operator']}</li>
+                    <li>{osmData['operator']}</li>
                   </ul>
-                  <a className={'absolute inset-0 rounded-md ring-2 ' + props.ringColor} />
+                  <a className={'absolute inset-0 rounded-md ring-2 ' + ringColor} />
                 </li>
               ) : null}
-              {!isEmptyOrSpaces(props.osmData['usage']) ? (
+              {!isEmptyOrSpaces(osmData['usage']) ? (
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">Usage</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{props.osmData['usage']}</li>
+                    <li>{osmData['usage']}</li>
                   </ul>
-                  <a className={'absolute inset-0 rounded-md ring-2 ' + props.ringColor} />
+                  <a className={'absolute inset-0 rounded-md ring-2 ' + ringColor} />
                 </li>
               ) : null}
-              {!isEmptyOrSpaces(props.osmData['electrified']) ? (
+              {!isEmptyOrSpaces(osmData['electrified']) ? (
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">Usage</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{props.osmData['electrified']}</li>
+                    <li>{osmData['electrified']}</li>
                   </ul>
-                  <a className={'absolute inset-0 rounded-md ring-2 ' + props.ringColor} />
+                  <a className={'absolute inset-0 rounded-md ring-2 ' + ringColor} />
                 </li>
               ) : null}
             </ul>

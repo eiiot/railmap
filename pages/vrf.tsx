@@ -1,11 +1,18 @@
-import { useCallback, useState } from 'react'
-import type { NextPage } from 'next'
-import dynamic from 'next/dynamic'
-import { FullscreenControl, Layer, LayerProps, LngLatBoundsLike, Source } from 'react-map-gl'
 import Loader from '../components/loader'
 import GeocoderControl from '../components/map/GeocoderControl'
 import { Feature, FeatureCollection } from 'geojson'
-import { GeolocateControl, NavigationControl } from 'react-map-gl'
+import dynamic from 'next/dynamic'
+import { useCallback, useState } from 'react'
+import {
+  FullscreenControl,
+  Layer,
+  LayerProps,
+  LngLatBoundsLike,
+  Source,
+  GeolocateControl,
+  NavigationControl,
+} from 'react-map-gl'
+import type { NextPage } from 'next'
 
 const Map = dynamic(() => import('react-map-gl'), {
   loading: () => <Loader />,
@@ -243,14 +250,10 @@ const Home: NextPage = () => {
         mapStyle="mapbox://styles/dotly/ckqo4p5i80jyj19oie9icbu52"
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
         maxBounds={mapMaxBounds}
-        style={{ position: 'absolute', width: '100vw', height: '100vh' }}
         onLoad={onLoadHandler}
+        style={{ position: 'absolute', width: '100vw', height: '100vh' }}
       >
-        <GeocoderControl
-          collapsed
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!}
-        />
+        <GeocoderControl accessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!} collapsed />
         <GeolocateControl />
         <NavigationControl />
         <FullscreenControl />

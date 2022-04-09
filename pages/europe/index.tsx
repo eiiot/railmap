@@ -1,13 +1,13 @@
-import { useCallback, useState } from 'react'
-import type { NextPage } from 'next'
+import LocationControl from '../../components/map/LocationControl'
+import StylesControl from '../../components/map/StylesControl'
+import Sidebar from '../../components/sidebar'
+import { MapLayerMouseEvent } from 'mapbox-gl'
+import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 import dynamic from 'next/dynamic'
 
-import Sidebar from '../../components/sidebar'
+import { useCallback, useState } from 'react'
 import { LngLatBoundsLike, Source } from 'react-map-gl'
-import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
-import StylesControl from '../../components/map/StylesControl'
-import { MapLayerMouseEvent } from 'mapbox-gl'
-import LocationControl from '../../components/map/LocationControl'
+import type { NextPage } from 'next'
 
 const Map = dynamic(() => import('../../components/mapbox'), {
   loading: () => <p>Loading Map</p>,
@@ -60,15 +60,15 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Sidebar featureData={featureData}></Sidebar>
+      <Sidebar featureData={featureData} />
       <div className="h-screen w-screen">
         <Map
           initialViewState={mapViewState}
           interactiveLayerIds={mapInteractiveLayerIds}
           mapStyle={stylesSwitcherStyles[0].uri}
           maxBounds={mapMaxBounds}
-          terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
           onClick={featureClickHandler}
+          terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
         >
           <StylesControl styles={stylesSwitcherStyles} />
           <LocationControl

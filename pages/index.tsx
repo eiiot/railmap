@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
-import type { NextPage } from 'next'
-import dynamic from 'next/dynamic'
-import { fetchAllTrains } from 'amtrak'
-
-import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
-import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
-import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 import LayerControl from '../components/map/LayerControl'
-import StylesControl from '../components/map/StylesControl'
-import { Feature, FeatureCollection } from 'geojson'
 import LocationControl from '../components/map/LocationControl'
+import StylesControl from '../components/map/StylesControl'
+import { CaltrainVehicleActivity } from '../components/MapDataTypes'
+import Sidebar from '../components/sidebar'
 import Alert from '../components/trainsitionAlert'
+import { fetchAllTrains } from 'amtrak'
+import { Feature, FeatureCollection } from 'geojson'
+import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
+import dynamic from 'next/dynamic'
+import { useCallback, useEffect, useState } from 'react'
+import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
+import type { NextPage } from 'next'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
@@ -74,14 +74,15 @@ async function getCaltrain() {
       features: [],
     }
 
-    trains.forEach((train: { [key: string]: any }) => {
+    trains.forEach((train: CaltrainVehicleActivity) => {
+      console.log(train)
       const trainObject: Feature = {
         type: 'Feature',
         geometry: {
           type: 'Point',
           coordinates: [
-            train.MonitoredVehicleJourney.VehicleLocation.Longitude,
-            train.MonitoredVehicleJourney.VehicleLocation.Latitude,
+            +train.MonitoredVehicleJourney.VehicleLocation.Longitude,
+            +train.MonitoredVehicleJourney.VehicleLocation.Latitude,
           ],
         },
         properties: {
@@ -217,6 +218,8 @@ const Home: NextPage = () => {
   const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
   const [caltrainGeoJSON, setCaltrainGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
+  const [loadingInfo, setLoadingInfo] = useState<boolean>(true)
+
   const onLoadHandler = useCallback(() => {
     // integrate the useEffect hook from above but instead run it on load
     getAmtrak()
@@ -234,6 +237,8 @@ const Home: NextPage = () => {
       .catch((error) => {
         console.error(error)
       })
+
+    setLoadingInfo(false)
 
     setInterval(async () => {
       getAmtrak()
@@ -267,41 +272,52 @@ const Home: NextPage = () => {
     }
   }
 
-  const [warningOpen, setWarningOpen] = useState<boolean>(false)
+  const [amtrakDataStaleWarning, setAmtrakDataStaleWarning] = useState<boolean>(false)
 
   // * Check if the data feed is stale * //
   useEffect(() => {
     getFeedStale().then((isStale) => {
       if (isStale) {
-        setWarningOpen(true)
+        setAmtrakDataStaleWarning(true)
       }
     })
   }, [])
 
   setTimeout(() => {
-    setWarningOpen(false)
+    setAmtrakDataStaleWarning(false)
   }, 10000)
 
   return (
     <>
-      <Sidebar featureData={featureData}></Sidebar>
+      <Sidebar featureData={featureData} />
       <Alert
         className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
         direction="left"
-        open={warningOpen}
+        onClose={() => setAmtrakDataStaleWarning(false)}
+        open={amtrakDataStaleWarning}
         severity="error"
-        onClose={() => setWarningOpen(false)}
       >
         The Amtrak API is currently stale
       </Alert>
+
+      <Alert
+        className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
+        direction="left"
+        onClose={() => setLoadingInfo(false)}
+        open={loadingInfo}
+        severity="info"
+      >
+        Loading Trains
+      </Alert>
+
       <Map
         initialViewState={mapViewState}
         interactiveLayerIds={mapInteractiveLayerIds}
         mapStyle={stylesSwitcherStyles[0].uri}
         maxBounds={mapMaxBounds}
-        terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
         onClick={featureClickHandler}
         onLoad={onLoadHandler}
+        terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
       >
         <StylesControl styles={stylesSwitcherStyles} />
         <LayerControl layerIds={['amtrak', 'amtrak-numbers']} />

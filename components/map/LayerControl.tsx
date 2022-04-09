@@ -61,18 +61,25 @@ class LayerControl {
 // set onClick using props.onClick
 
 /* eslint-disable complexity,max-statements */
-export default function MapboxLayerControl(props: LayerControlProps) {
+const MapboxLayerControl = (props: LayerControlProps) => {
+  const { position, ...otherProps } = props
   useControl(
     () => {
       const ctrl = new LayerControl({
-        ...props,
+        ...otherProps,
       })
       return ctrl
     },
     {
-      position: props.position,
+      position: position,
     },
   )
 
   return null
 }
+
+MapboxLayerControl.defaultProps = {
+  position: 'top-right',
+}
+
+export default MapboxLayerControl
