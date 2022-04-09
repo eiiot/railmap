@@ -89,7 +89,7 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
       </div>
       <div className="text-md w-full px-2 pb-2 text-center">
         {train.OriginName}
-        {' -&gt; '}
+        -&gt;
         {train.DestinationName}
       </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-hidden px-2">
