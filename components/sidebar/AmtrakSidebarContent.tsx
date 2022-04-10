@@ -56,6 +56,21 @@ function timeDifferenceRing(start: string | null | undefined, end: string | null
   return 'ring-red-500'
 }
 
+function generateHeading(dir: string) {
+  return (
+    {
+      N: 'Northbound',
+      S: 'Southbound',
+      E: 'Eastbound',
+      W: 'Westbound',
+      NE: 'North-Eastbound',
+      NW: 'North-Westbound',
+      SE: 'South-Eastbound',
+      SW: 'South-Westbound',
+    }[dir] ?? null
+  )
+}
+
 function findStation(stations: station[], code: string) {
   return (
     stations.find((station?) => station.code == code) ?? {
@@ -178,7 +193,7 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                   <h3 className="text-sm font-medium leading-5">Heading</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{trainData.heading ?? 'Unknown'}</li>
+                    <li>{generateHeading(trainData.heading) ?? 'Unknown'}</li>
                   </ul>
                   <a
                     className={classNames(

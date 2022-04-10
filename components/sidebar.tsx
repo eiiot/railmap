@@ -1,9 +1,10 @@
 import {
   CNCrossingData,
-  CaltrainVehicleActivity,
+  FiveOneOneVehicleActivity,
   USBridgeData,
   USCrossingData,
 } from './MapDataTypes'
+import ACTSidebarContent from './sidebar/ACTSidebarContent'
 import AmtrakSidebarContent from './sidebar/AmtrakSidebarContent'
 import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
 import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
@@ -61,7 +62,9 @@ const Sidebar = (props: SidebarProps) => {
         featureData.mapboxLayerId === 'amtrak' ? (
           <AmtrakSidebarContent trainData={featureData as unknown as trainData} />
         ) : featureData.mapboxLayerId === 'caltrain' ? (
-          <CaltrainSidebarContent trainData={featureData as unknown as CaltrainVehicleActivity} />
+          <CaltrainSidebarContent trainData={featureData as unknown as FiveOneOneVehicleActivity} />
+        ) : featureData.mapboxLayerId === 'act' ? (
+          <ACTSidebarContent busData={featureData as unknown as FiveOneOneVehicleActivity} />
         ) : featureData.mapboxLayerId === 'Railroad-Crossings' ? (
           <CrossingSidebarContent crossingData={featureData as unknown as USCrossingData} />
         ) : featureData.mapboxLayerId === 'Railroad-Bridges' ? (
