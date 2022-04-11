@@ -43,9 +43,7 @@ function generateTimelyStrings(start: string, end: string) {
   if (!(start && end)) {
     return '-'
   }
-  console.log(start, end)
   const diff = moment(end).diff(moment(start), 'minutes')
-  console.log(diff)
   if (-3 < diff && diff < 3) {
     return 'on time'
   }
@@ -87,8 +85,6 @@ function timeDifferenceRing(start: string, end: string) {
 }
 
 const ACTSidebarContent = (props: TrainSidebarContentProps) => {
-  console.log('Hello, world')
-
   const { busData } = props
 
   const bus =

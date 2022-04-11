@@ -75,7 +75,6 @@ async function getCaltrain() {
     }
 
     trains.forEach((train: FiveOneOneVehicleActivity) => {
-      console.log(train)
       const trainObject: Feature = {
         type: 'Feature',
         geometry: {
@@ -108,7 +107,6 @@ const Home: NextPage = () => {
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
     if (e.features) {
-      console.log(e.features)
       const clickedFeature = e.features[0].properties
       const featureDataObject = {
         ...clickedFeature,

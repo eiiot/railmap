@@ -22,6 +22,9 @@ async function getACTransit() {
   // Make a GET request to the API and return the location of the trains.
   try {
     const response = await fetch(`https://api.therailmap.com/v1/act`, { method: 'GET' })
+    if (!response.ok) {
+      throw new Error(`${response.status} ${response.statusText}`)
+    }
     const responseJSON = await response.json()
 
     const trains = responseJSON.Siri.ServiceDelivery.VehicleMonitoringDelivery.VehicleActivity
@@ -38,7 +41,6 @@ async function getACTransit() {
     }
 
     trains.forEach((bus: FiveOneOneVehicleActivity) => {
-      console.log(bus)
       const trainObject: Feature = {
         type: 'Feature',
         geometry: {
@@ -71,7 +73,6 @@ const Home: NextPage = () => {
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
     if (e.features) {
-      console.log(e.features)
       const clickedFeature = e.features[0].properties
       const featureDataObject = {
         ...clickedFeature,
@@ -150,13 +151,12 @@ const Home: NextPage = () => {
 
     getACTransit()
       .then((geoJSON) => {
+        setLoadingInfo(false)
         setACTGeoJSON(geoJSON)
       })
       .catch((error) => {
         console.error(error)
       })
-
-    setLoadingInfo(false)
 
     setInterval(async () => {
       getACTransit()
