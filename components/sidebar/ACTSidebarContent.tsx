@@ -4,7 +4,7 @@ import moment from 'moment'
 
 interface TrainSidebarContentProps {
   /** Array of style options */
-  trainData: FiveOneOneVehicleActivity
+  busData: FiveOneOneVehicleActivity
 }
 
 function classNames(...classes: string[]) {
@@ -84,22 +84,18 @@ function timeDifferenceRing(start: string, end: string) {
   return 'ring-red-500'
 }
 
-const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
-  const { trainData } = props
+const ACTSidebarContent = (props: TrainSidebarContentProps) => {
+  const { busData } = props
 
-  const train =
-    typeof trainData.MonitoredVehicleJourney === 'string'
-      ? JSON.parse(trainData.MonitoredVehicleJourney)
-      : trainData.MonitoredVehicleJourney
+  const bus =
+    typeof busData.MonitoredVehicleJourney === 'string'
+      ? JSON.parse(busData.MonitoredVehicleJourney)
+      : busData.MonitoredVehicleJourney
   return (
     <div className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md">
-      <div className="w-full px-2 py-4 text-center text-2xl">
-        {train.VehicleRef}
-        {' - '}
-        {train.LineRef}
-      </div>
+      <div className="w-full px-2 py-4 text-center text-2xl">{bus.LineRef}</div>
       <div className="text-md w-full px-2 pb-2 text-center">
-        {train.OriginName} -&gt; {train.DestinationName}
+        {bus.OriginName} -&gt; {bus.DestinationName}
       </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-hidden px-2">
         <Tab.Group>
@@ -128,39 +124,41 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
                 )
               }
             >
-              Stations
+              Stops
             </Tab>
           </Tab.List>
           <Tab.Panels className="mt-2 flex-[1] overflow-auto">
             <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
                 {/* Red if late, green otherwise */}
-                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                  <h3 className="text-sm font-medium leading-5">Next Station</h3>
+                {bus.MonitoredCall ? (
+                  <li className="hover:bg-coolGray-100 relative rounded-md p-3">
+                    <h3 className="text-sm font-medium leading-5">Next Stop</h3>
 
-                  <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{train.MonitoredCall.StopPointName ?? 'Unknown'}</li>
-                  </ul>
-                  <a
-                    className={classNames(
-                      'absolute inset-0 rounded-md',
-                      `ring-2 ${timeDifferenceRing(
-                        train.MonitoredCall.ExpectedArrivalTime,
-                        train.MonitoredCall.AimedArrivalTime,
-                      )}`,
-                    )}
-                  />
-                </li>
+                    <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
+                      <li>{bus.MonitoredCall.StopPointName ?? 'Unknown'}</li>
+                    </ul>
+                    <a
+                      className={classNames(
+                        'absolute inset-0 rounded-md',
+                        `ring-2 ${timeDifferenceRing(
+                          bus.MonitoredCall.ExpectedArrivalTime,
+                          bus.MonitoredCall.AimedArrivalTime,
+                        )}`,
+                      )}
+                    />
+                  </li>
+                ) : null}
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">Heading</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{generateHeading(train.DirectionRef) ?? 'Unknown'}</li>
+                    <li>{generateHeading(bus.DirectionRef) ?? 'Unknown'}</li>
                   </ul>
                   <a
                     className={classNames(
                       'absolute inset-0 rounded-md',
-                      `ring-2 ring-blue-400 ${generateBorder(train.DirectionRef)} border-blue-400`,
+                      `ring-2 ring-blue-400 ${generateBorder(bus.DirectionRef)} border-blue-400`,
                     )}
                   />
                 </li>
@@ -170,7 +168,7 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
                       {moment
-                        .duration(-moment().diff(moment.utc(trainData.RecordedAtTime)))
+                        .duration(-moment().diff(moment.utc(busData.RecordedAtTime)))
                         .humanize(true) ?? 'Unknown'}
                     </li>
                   </ul>
@@ -180,7 +178,7 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
                       ' ' +
                       timeDifferenceRing(
                         moment().toISOString(),
-                        moment.utc(trainData.RecordedAtTime).toISOString(),
+                        moment.utc(busData.RecordedAtTime).toISOString(),
                       )
                     }
                   />
@@ -189,23 +187,23 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
             </Tab.Panel>
             <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
-                {train.MonitoredCall ? (
+                {bus.MonitoredCall ? (
                   <li
                     className="hover:bg-coolGray-100 relative rounded-md p-3"
-                    key={train.MonitoredCall.StopPointRef}
+                    key={bus.MonitoredCall.StopPointRef}
                   >
                     <h3 className="text-sm font-medium leading-5">
-                      {train.MonitoredCall.StopPointName}
+                      {bus.MonitoredCall.StopPointName}
                     </h3>
 
                     <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                       <li>
                         Arriving{' '}
                         {generateTimelyStrings(
-                          train.MonitoredCall.ExpectedArrivalTime,
-                          train.MonitoredCall.AimedArrivalTime,
+                          bus.MonitoredCall.ExpectedArrivalTime,
+                          bus.MonitoredCall.AimedArrivalTime,
                         )}{' '}
-                        at {moment(train.MonitoredCall.ExpectedArrivalTime).format('h:mm a')}
+                        at {moment(bus.MonitoredCall.ExpectedArrivalTime).format('h:mm a')}
                       </li>
                     </ul>
 
@@ -213,42 +211,52 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
                       className={classNames(
                         'absolute inset-0 rounded-md',
                         `${timeDifferenceRing(
-                          train.MonitoredCall.ExpectedArrivalTime,
-                          train.MonitoredCall.AimedArrivalTime,
+                          bus.MonitoredCall.ExpectedArrivalTime,
+                          bus.MonitoredCall.AimedArrivalTime,
                         )} ring-2`,
                       )}
                     />
                   </li>
                 ) : null}
-                {train.OnwardCalls.OnwardCall.map((station: FiveOneOneOnwardCall) => (
-                  <li
-                    className="hover:bg-coolGray-100 relative rounded-md p-3"
-                    key={station.StopPointRef}
-                  >
-                    <h3 className="text-sm font-medium leading-5">{station.StopPointName}</h3>
+                {bus.OnwardCalls
+                  ? bus.OnwardCalls.OnwardCall.map((station: FiveOneOneOnwardCall) => (
+                      <li
+                        className="hover:bg-coolGray-100 relative rounded-md p-3"
+                        key={station.StopPointRef}
+                      >
+                        <h3 className="text-sm font-medium leading-5">{station.StopPointName}</h3>
 
-                    <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                      <li>
-                        Arriving{' '}
-                        {generateTimelyStrings(
-                          station.ExpectedArrivalTime,
-                          station.AimedArrivalTime,
-                        )}{' '}
-                        at {moment(station.ExpectedArrivalTime).format('h:mm a')}
+                        <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
+                          <li>
+                            Arriving{' '}
+                            {generateTimelyStrings(
+                              station.ExpectedArrivalTime,
+                              station.AimedArrivalTime,
+                            )}{' '}
+                            at {moment(station.ExpectedArrivalTime).format('h:mm a')}
+                          </li>
+                        </ul>
+
+                        <a
+                          className={classNames(
+                            'absolute inset-0 rounded-md',
+                            `${timeDifferenceRing(
+                              station.ExpectedArrivalTime,
+                              station.AimedArrivalTime,
+                            )} ring-2`,
+                          )}
+                        />
                       </li>
-                    </ul>
+                    ))
+                  : null}
 
-                    <a
-                      className={classNames(
-                        'absolute inset-0 rounded-md',
-                        `${timeDifferenceRing(
-                          station.ExpectedArrivalTime,
-                          station.AimedArrivalTime,
-                        )} ring-2`,
-                      )}
-                    />
+                {!bus.OnwardCalls && !bus.MonitoredCall ? (
+                  <li className="hover:bg-coolGray-100 relative rounded-md p-3">
+                    <h3 className="text-sm font-medium leading-5">No Stops Available</h3>
+
+                    <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
                   </li>
-                ))}
+                ) : null}
               </ul>
             </Tab.Panel>
           </Tab.Panels>
@@ -258,4 +266,4 @@ const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
   )
 }
 
-export default CaltrainSidebarContent
+export default ACTSidebarContent

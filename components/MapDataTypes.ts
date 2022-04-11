@@ -196,34 +196,34 @@ export interface USBridgeData {
 }
 
 export interface CNCrossingData {
-  Rank?: number;
-  "TC Number"?: string;
-  "Railway"?: string;
-  Region?: string;
-  Province?: string;
-  Access?: string;
-  Jurisdiction?: string;
-  Mile?: number;
-  Subdivision?: string;
-  "Spur Mile"?: number;
-  "Spur Name"?: string;
-  Location?: string;
-  Latitude?: number;
-  Longitude?: number;
-  "Road Authority"?: string;
-  Protection?: string;
-  Accident?: string;
-  Facility?: string;
-  Injury?: string;
-  "Total Trains Daily"?: number;
-  "Vehicles Daily"?: number;
-  "Train Max Speed (mph)"?: number;
-  "Road Speed (km/h)"?: number;
-  Lanes?: number;
-  Tracks?: number;
-  Regulator?: string;
-  Fatality?: number;
-  "Urban Y/N"?: string;
+  Rank?: number
+  'TC Number'?: string
+  Railway?: string
+  Region?: string
+  Province?: string
+  Access?: string
+  Jurisdiction?: string
+  Mile?: number
+  Subdivision?: string
+  'Spur Mile'?: number
+  'Spur Name'?: string
+  Location?: string
+  Latitude?: number
+  Longitude?: number
+  'Road Authority'?: string
+  Protection?: string
+  Accident?: string
+  Facility?: string
+  Injury?: string
+  'Total Trains Daily'?: number
+  'Vehicles Daily'?: number
+  'Train Max Speed (mph)'?: number
+  'Road Speed (km/h)'?: number
+  Lanes?: number
+  Tracks?: number
+  Regulator?: string
+  Fatality?: number
+  'Urban Y/N'?: string
 }
 
 export interface Station {
@@ -237,7 +237,7 @@ export interface Station {
   urban: string
 }
 
-export interface CaltrainOnwardCall {
+export interface FiveOneOneOnwardCall {
   StopPointRef: string
   StopPointName: string
   AimedArrivalTime: string
@@ -246,7 +246,7 @@ export interface CaltrainOnwardCall {
   ExpectedDepartureTime: string
 }
 
-export interface CaltrainVehicleActivity {
+export interface FiveOneOneVehicleActivity {
   RecordedAtTime: string
   ValidUntilTime: string
   MonitoredVehicleJourney: {
@@ -282,7 +282,7 @@ export interface CaltrainVehicleActivity {
       ExpectedDepartureTime: string
     }
     OnwardCalls?: {
-      OnwardCall: CaltrainOnwardCall[]
+      OnwardCall: FiveOneOneOnwardCall[]
     }
   }
 }

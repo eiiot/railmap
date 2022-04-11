@@ -2,7 +2,7 @@ import Loader from '../components/loader'
 import LayerControl from '../components/map/LayerControl'
 import LocationControl from '../components/map/LocationControl'
 import StylesControl from '../components/map/StylesControl'
-import { CaltrainVehicleActivity } from '../components/MapDataTypes'
+import { FiveOneOneVehicleActivity } from '../components/MapDataTypes'
 import Sidebar from '../components/sidebar'
 import Alert from '../components/trainsitionAlert'
 import { fetchAllTrains } from 'amtrak'
@@ -74,8 +74,7 @@ async function getCaltrain() {
       features: [],
     }
 
-    trains.forEach((train: CaltrainVehicleActivity) => {
-      console.log(train)
+    trains.forEach((train: FiveOneOneVehicleActivity) => {
       const trainObject: Feature = {
         type: 'Feature',
         geometry: {
@@ -108,7 +107,6 @@ const Home: NextPage = () => {
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
     if (e.features) {
-      console.log(e.features)
       const clickedFeature = e.features[0].properties
       const featureDataObject = {
         ...clickedFeature,

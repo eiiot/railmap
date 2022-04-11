@@ -63,7 +63,6 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
         })
       })
     }
-    console.log(trains)
     // order stations by closest estArr
     trains.sort((a, b) => {
       return moment(a.estArr).diff(moment(b.estArr))
