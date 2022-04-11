@@ -1,4 +1,4 @@
-export default function Loader() {
+const Loader = () => {
   return (
     <div className="absolute top-0 bottom-0 flex w-full items-center justify-center">
       <svg
@@ -14,3 +14,5 @@ export default function Loader() {
     </div>
   )
 }
+
+export default Loader

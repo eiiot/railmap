@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { station, trainData } from 'amtrak'
 import moment from 'moment'
-import { station, trainData } from '../amtrakTypes'
+import { useCallback, useEffect, useState } from 'react'
 import { MapRef, useMap } from 'react-map-gl'
 
 interface StationData {
@@ -18,7 +18,6 @@ interface StationData {
 interface AmtrakStationSidebarContentProps {
   /** Array of style options */
   stationData: StationData
-  className: string
   onTrainClick: (train: trainData, railmap: MapRef) => void
 }
 
@@ -43,6 +42,8 @@ function timeDifferenceRing(start: string, end: string) {
 }
 
 const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) => {
+  const { stationData, onTrainClick } = props
+
   const [stationTrains, setStationTrains] = useState([] as stationTrain[])
 
   // set the station trains to an API call
@@ -53,7 +54,7 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
     for (const trainNum in trainNums) {
       trainNums[trainNum].forEach((train: trainData) => {
         train.stations.forEach((station: station) => {
-          if (station.code === props.stationData['stncode'] && station.estArr) {
+          if (station.code === stationData['stncode'] && station.estArr) {
             trains.push({
               ...station,
               train: train,
@@ -62,14 +63,12 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
         })
       })
     }
-    console.log(trains)
     // order stations by closest estArr
     trains.sort((a, b) => {
       return moment(a.estArr).diff(moment(b.estArr))
     })
     setStationTrains(trains)
-  }, [props.stationData['stncode']])
-
+  }, [stationData])
   useEffect(() => {
     getStationTrains()
   }, [getStationTrains])
@@ -77,9 +76,9 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
   const { railmap } = useMap()
 
   return (
-    <div className={props.className}>
+    <div className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md">
       <div className="w-full px-2 py-4 text-center text-2xl">
-        {props.stationData['stnname'] ?? 'Unknown Station'}
+        {stationData['stnname'] ?? 'Unknown Station'}
       </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-y-scroll px-2">
         <div className="bg-white p-3">
@@ -87,11 +86,10 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
             {stationTrains.length > 0 ? (
               stationTrains.map((train) => (
                 <li
-                  key={train.train.trainNum}
                   className="hover:bg-coolGray-100 relative cursor-pointer rounded-md p-3"
+                  key={train.train.trainNum}
                   onClick={() => {
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    props.onTrainClick(train.train, railmap!)
+                    onTrainClick(train.train, railmap!)
                   }}
                 >
                   <h3 className="text-sm font-medium leading-5">

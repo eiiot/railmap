@@ -196,34 +196,34 @@ export interface USBridgeData {
 }
 
 export interface CNCrossingData {
-  Rank?: number;
-  "TC Number"?: string;
-  "Railway"?: string;
-  Region?: string;
-  Province?: string;
-  Access?: string;
-  Jurisdiction?: string;
-  Mile?: number;
-  Subdivision?: string;
-  "Spur Mile"?: number;
-  "Spur Name"?: string;
-  Location?: string;
-  Latitude?: number;
-  Longitude?: number;
-  "Road Authority"?: string;
-  Protection?: string;
-  Accident?: string;
-  Facility?: string;
-  Injury?: string;
-  "Total Trains Daily"?: number;
-  "Vehicles Daily"?: number;
-  "Train Max Speed (mph)"?: number;
-  "Road Speed (km/h)"?: number;
-  Lanes?: number;
-  Tracks?: number;
-  Regulator?: string;
-  Fatality?: number;
-  "Urban Y/N"?: string;
+  Rank?: number
+  'TC Number'?: string
+  Railway?: string
+  Region?: string
+  Province?: string
+  Access?: string
+  Jurisdiction?: string
+  Mile?: number
+  Subdivision?: string
+  'Spur Mile'?: number
+  'Spur Name'?: string
+  Location?: string
+  Latitude?: number
+  Longitude?: number
+  'Road Authority'?: string
+  Protection?: string
+  Accident?: string
+  Facility?: string
+  Injury?: string
+  'Total Trains Daily'?: number
+  'Vehicles Daily'?: number
+  'Train Max Speed (mph)'?: number
+  'Road Speed (km/h)'?: number
+  Lanes?: number
+  Tracks?: number
+  Regulator?: string
+  Fatality?: number
+  'Urban Y/N'?: string
 }
 
 export interface Station {
@@ -235,4 +235,54 @@ export interface Station {
   stncode: string
   stnname: string
   urban: string
+}
+
+export interface FiveOneOneOnwardCall {
+  StopPointRef: string
+  StopPointName: string
+  AimedArrivalTime: string
+  AimedDepartureTime: string
+  ExpectedArrivalTime: string
+  ExpectedDepartureTime: string
+}
+
+export interface FiveOneOneVehicleActivity {
+  RecordedAtTime: string
+  ValidUntilTime: string
+  MonitoredVehicleJourney: {
+    LineRef: string
+    DirectionRef: string
+    FramedVehicleJourneyRef: {
+      DataFrameRef: string
+      DatedVehicleJourneyRef: string
+    }
+    PublishedLineName: string
+    OperatorRef: string
+    OriginRef: string
+    OriginName: string
+    DestinationRef: string
+    DestinationName: string
+    Monitored: boolean
+    InCongestion?: boolean
+    VehicleLocation: {
+      Longitude: string
+      Latitude: string
+    }
+    Bearing?: string
+    Occupancy?: string
+    VehicleRef?: string
+    MonitoredCall?: {
+      StopPointRef: string
+      StopPointName: string
+      VehicleLocationAtStop: string
+      VehicleAtStop: string
+      AimedArrivalTime: string
+      AimedDepartureTime: string
+      ExpectedArrivalTime: string
+      ExpectedDepartureTime: string
+    }
+    OnwardCalls?: {
+      OnwardCall: FiveOneOneOnwardCall[]
+    }
+  }
 }

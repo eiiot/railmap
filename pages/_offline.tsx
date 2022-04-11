@@ -1,10 +1,10 @@
 import Head from 'next/head'
 
-const Custom404 = () => {
+const CustomOffline = () => {
   return (
     <>
       <Head>
-        <title>404</title>
+        <title>Offline</title>
       </Head>
       <style jsx>{`
         .main {
@@ -502,10 +502,7 @@ const Custom404 = () => {
                 <path className="st9" d="M320.3 257.8h549.9" />
                 <g id="Text">
                   <text className="st8 st10" fontSize="21" transform="translate(377.037 230.025)">
-                    404
-                  </text>
-                  <text className="st8 st10" fontSize="24.025" transform="translate(659.5 213.994)">
-                    Page not found.
+                    Offline
                   </text>
                 </g>
                 <g id="ladders">
@@ -534,4 +531,4 @@ const Custom404 = () => {
   )
 }
 
-export default Custom404
+export default CustomOffline

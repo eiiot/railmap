@@ -1,5 +1,6 @@
-import { ControlPosition, MapboxMap, useControl } from 'react-map-gl'
+/* eslint-disable react/no-this-in-sfc */
 import { useRouter } from 'next/router'
+import { ControlPosition, MapboxMap, useControl } from 'react-map-gl'
 
 interface LocationControlProps {
   position?: ControlPosition
@@ -10,7 +11,9 @@ interface LocationControlProps {
 // set onClick using props.onClick
 
 /* eslint-disable complexity,max-statements */
-export default function MapboxLocationControl(props: LocationControlProps) {
+const MapboxLocationControl = (props: LocationControlProps) => {
+  const { svg, location, position } = props
+
   const router = useRouter()
 
   class LocationControl {
@@ -30,13 +33,13 @@ export default function MapboxLocationControl(props: LocationControlProps) {
       mapboxCtrlGroup.className = 'mapboxgl-ctrl-group'
       const mapboxCtrlButton = document.createElement('button')
       const mapboxCtrlButtonIcon = document.createElement('span')
-      mapboxCtrlButtonIcon.innerHTML = props.svg
+      mapboxCtrlButtonIcon.innerHTML = svg
       mapboxCtrlButton.appendChild(mapboxCtrlButtonIcon)
       mapboxCtrlGroup.appendChild(mapboxCtrlButton)
       this._container.appendChild(mapboxCtrlGroup)
 
       mapboxCtrlButton.addEventListener('click', () => {
-        router.push(props.location)
+        router.push(location)
       })
 
       return this._container
@@ -54,9 +57,15 @@ export default function MapboxLocationControl(props: LocationControlProps) {
       return ctrl
     },
     {
-      position: props.position,
+      position: position,
     },
   )
 
   return null
 }
+
+MapboxLocationControl.defaultProps = {
+  position: 'top-right',
+}
+
+export default MapboxLocationControl

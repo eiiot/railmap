@@ -1,32 +1,40 @@
-import { useEffect, useState } from 'react'
+import {
+  CNCrossingData,
+  FiveOneOneVehicleActivity,
+  USBridgeData,
+  USCrossingData,
+} from './MapDataTypes'
+import ACTSidebarContent from './sidebar/ACTSidebarContent'
 import AmtrakSidebarContent from './sidebar/AmtrakSidebarContent'
-import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
-import CNCrossingSidebarContent from './sidebar/CNCrossingSidebarContent'
-import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
-import OSMSidebarContent from './sidebar/OSMSidebarContent'
 import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
+import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
+import CaltrainSidebarContent from './sidebar/CaltrainSidebarContent'
+import CNCrossingSidebarContent from './sidebar/CNCrossingSidebarContent'
+import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
+import OSMSidebarContent from './sidebar/OSMSidebarContent'
+import { trainData } from 'amtrak'
+import { useEffect, useState } from 'react'
 import { MapRef } from 'react-map-gl'
-import { trainData } from './amtrakTypes'
-import { CNCrossingData, USBridgeData, USCrossingData } from './MapDataTypes'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
-
 interface SidebarProps {
   featureData: { [key: string]: unknown } | null
   onTrainClick?: (train: trainData, railmap: MapRef) => void
 }
 
-export default function Sidebar(props: SidebarProps) {
+const Sidebar = (props: SidebarProps) => {
+  const { featureData, onTrainClick } = props
+
   const [showSidebar, setShowSidebar] = useState<boolean>(false)
 
   // on change of featureData show sidebar
   useEffect(() => {
-    if (props.featureData) {
+    if (featureData) {
       setShowSidebar(true)
     }
-  }, [props.featureData])
+  }, [featureData])
 
   function onClickHandler() {
     setShowSidebar(!showSidebar)
@@ -48,48 +56,28 @@ export default function Sidebar(props: SidebarProps) {
         )}
         onClick={onClickHandler}
       >
-        <div className="py-2"></div>
+        <div className="py-2" />
       </div>
-      {props.featureData ? (
-        props.featureData.mapboxLayerId === 'amtrak' ? (
-          <AmtrakSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            trainData={props.featureData as unknown as trainData}
-          />
-        ) : props.featureData.mapboxLayerId === 'Railroad-Crossings' ? (
-          <CrossingSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            crossingData={props.featureData as unknown as USCrossingData}
-          />
-        ) : props.featureData.mapboxLayerId === 'Railroad-Bridges' ? (
-          <BridgeSidebarContent
-            bridgeData={props.featureData as unknown as USBridgeData}
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-          />
-        ) : props.featureData.mapboxLayerId === 'CN-Railroad-Crossings' ? (
-          <CNCrossingSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            crossingData={props.featureData as unknown as CNCrossingData}
-          />
-        ) : props.featureData.mapboxLayerId === 'CN-Railroad-Bridges' ||
-          props.featureData.mapboxLayerId === 'EU-Railroad-Bridges' ? (
-          <OSMSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            osmData={props.featureData}
-            ringColor="ring-blue-400"
-          />
-        ) : props.featureData.mapboxLayerId === 'EU-Railroad-Crossings' ? (
-          <OSMSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            osmData={props.featureData}
-            ringColor="ring-red-400"
-          />
-        ) : props.featureData.mapboxLayerId === 'amtrak-stations' && props.onTrainClick ? (
-          <AmtrakStationSidebarContent
-            className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md"
-            stationData={props.featureData}
-            onTrainClick={props.onTrainClick}
-          />
+      {featureData ? (
+        featureData.mapboxLayerId === 'amtrak' ? (
+          <AmtrakSidebarContent trainData={featureData as unknown as trainData} />
+        ) : featureData.mapboxLayerId === 'caltrain' ? (
+          <CaltrainSidebarContent trainData={featureData as unknown as FiveOneOneVehicleActivity} />
+        ) : featureData.mapboxLayerId === 'act' ? (
+          <ACTSidebarContent busData={featureData as unknown as FiveOneOneVehicleActivity} />
+        ) : featureData.mapboxLayerId === 'Railroad-Crossings' ? (
+          <CrossingSidebarContent crossingData={featureData as unknown as USCrossingData} />
+        ) : featureData.mapboxLayerId === 'Railroad-Bridges' ? (
+          <BridgeSidebarContent bridgeData={featureData as unknown as USBridgeData} />
+        ) : featureData.mapboxLayerId === 'CN-Railroad-Crossings' ? (
+          <CNCrossingSidebarContent crossingData={featureData as unknown as CNCrossingData} />
+        ) : featureData.mapboxLayerId === 'CN-Railroad-Bridges' ||
+          featureData.mapboxLayerId === 'EU-Railroad-Bridges' ? (
+          <OSMSidebarContent osmData={featureData} ringColor="ring-blue-400" />
+        ) : featureData.mapboxLayerId === 'EU-Railroad-Crossings' ? (
+          <OSMSidebarContent osmData={featureData} ringColor="ring-red-400" />
+        ) : featureData.mapboxLayerId === 'amtrak-stations' && onTrainClick ? (
+          <AmtrakStationSidebarContent onTrainClick={onTrainClick} stationData={featureData} />
         ) : (
           <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-t-md bg-white text-center md:rounded-md">
             <span>No additional information is available for this object</span>
@@ -107,8 +95,14 @@ export default function Sidebar(props: SidebarProps) {
         )}
         onClick={onClickHandler}
       >
-        <div className="px-2"></div>
+        <div className="px-2" />
       </div>
     </div>
   )
 }
+
+Sidebar.defaultProps = {
+  onTrainClick: () => {},
+}
+
+export default Sidebar

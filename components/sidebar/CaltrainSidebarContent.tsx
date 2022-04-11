@@ -1,10 +1,10 @@
+import { FiveOneOneOnwardCall, FiveOneOneVehicleActivity } from '../MapDataTypes'
 import { Tab } from '@headlessui/react'
-import { station, trainData } from 'amtrak'
 import moment from 'moment'
 
 interface TrainSidebarContentProps {
   /** Array of style options */
-  trainData: trainData
+  trainData: FiveOneOneVehicleActivity
 }
 
 function classNames(...classes: string[]) {
@@ -39,21 +39,20 @@ function generateBorder(dir: string) {
   return ''
 }
 
-function timeDifferenceRing(start: string | null | undefined, end: string | null | undefined) {
+function generateTimelyStrings(start: string, end: string) {
   if (!(start && end)) {
-    return 'ring-red-500'
+    return '-'
   }
-  const diff = 0 - moment(end).diff(moment(start), 'minutes')
-  if (diff < 5) {
-    return 'ring-green-500'
+  const diff = moment(end).diff(moment(start), 'minutes')
+  if (-3 < diff && diff < 3) {
+    return 'on time'
   }
-  if (diff < 10) {
-    return 'ring-yellow-500'
+  if (diff >= 3) {
+    return moment.duration(moment.utc(start).diff(end)).humanize() + ' late'
   }
-  if (diff < 30) {
-    return 'ring-orange-500'
+  if (diff <= -3) {
+    return moment.duration(moment.utc(end).diff(start)).humanize() + ' early'
   }
-  return 'ring-red-500'
 }
 
 function generateHeading(dir: string) {
@@ -71,46 +70,36 @@ function generateHeading(dir: string) {
   )
 }
 
-function findStation(stations: station[], code: string) {
-  return (
-    stations.find((station?) => station.code == code) ?? {
-      trainNum: null,
-      code: null,
-      tz: null,
-      bus: null,
-      schArr: null,
-      schDep: null,
-      schMnt: null,
-      autoArr: null,
-      autoDep: null,
-      postArr: null,
-      postDep: null,
-      postCmnt: null,
-      estArr: null,
-      estDep: null,
-      estArrCmnt: null,
-      estDepCmnt: null,
-      stationName: null,
-      stationTimely: null,
-    }
-  )
+function timeDifferenceRing(start: string, end: string) {
+  const diff = moment(end).diff(moment(start), 'minutes')
+  if (diff < 5) {
+    return 'ring-green-500'
+  }
+  if (diff < 10) {
+    return 'ring-yellow-500'
+  }
+  if (diff < 30) {
+    return 'ring-orange-500'
+  }
+  return 'ring-red-500'
 }
 
-function capitalize(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1)
-}
-
-const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
+const CaltrainSidebarContent = (props: TrainSidebarContentProps) => {
   const { trainData } = props
-  const stations =
-    typeof trainData.stations === 'string' ? JSON.parse(trainData.stations) : trainData.stations
+
+  const train =
+    typeof trainData.MonitoredVehicleJourney === 'string'
+      ? JSON.parse(trainData.MonitoredVehicleJourney)
+      : trainData.MonitoredVehicleJourney
   return (
     <div className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md">
       <div className="w-full px-2 py-4 text-center text-2xl">
-        {trainData.routeName} {trainData.trainNum}
+        {train.VehicleRef}
+        {' - '}
+        {train.LineRef}
       </div>
       <div className="text-md w-full px-2 pb-2 text-center">
-        {stations[0].stationName} -&gt; {stations[stations.length - 1].stationName}
+        {train.OriginName} -&gt; {train.DestinationName}
       </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-hidden px-2">
         <Tab.Group>
@@ -145,73 +134,34 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
           <Tab.Panels className="mt-2 flex-[1] overflow-auto">
             <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
-                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                  <h3 className="text-sm font-medium leading-5">Speed</h3>
-
-                  <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{(trainData.velocity ?? 0).toFixed(1)} mph</li>
-                  </ul>
-                  <a
-                    className={classNames('absolute inset-0 rounded-md', 'ring-2 ring-blue-400')}
-                    href="#"
-                  />
-                </li>
                 {/* Red if late, green otherwise */}
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                  <h3 className="text-sm font-medium leading-5">Last Station</h3>
+                  <h3 className="text-sm font-medium leading-5">Next Station</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>
-                      {trainData.eventName ?? 'Unknown'} [{trainData.eventCode ?? 'UNK'}] |{' '}
-                      {capitalize(
-                        (
-                          findStation(stations, trainData.eventCode).postCmnt ??
-                          findStation(stations, trainData.eventCode).estArrCmnt ??
-                          findStation(stations, trainData.eventCode).estDepCmnt ??
-                          'unknown'
-                        )
-                          .toLowerCase()
-                          .replace('mi', 'min')
-                          // remove a zero if it's the first character
-                          .replace(/^0/, ''),
-                      )}
-                    </li>
+                    <li>{train.MonitoredCall.StopPointName ?? 'Unknown'}</li>
                   </ul>
                   <a
                     className={classNames(
                       'absolute inset-0 rounded-md',
                       `ring-2 ${timeDifferenceRing(
-                        findStation(stations, trainData.eventCode).postDep ??
-                          findStation(stations, trainData.eventCode).estDep,
-                        findStation(stations, trainData.eventCode).schDep,
+                        train.MonitoredCall.ExpectedArrivalTime,
+                        train.MonitoredCall.AimedArrivalTime,
                       )}`,
                     )}
-                    href="#"
                   />
                 </li>
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                   <h3 className="text-sm font-medium leading-5">Heading</h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{generateHeading(trainData.heading) ?? 'Unknown'}</li>
+                    <li>{generateHeading(train.DirectionRef) ?? 'Unknown'}</li>
                   </ul>
                   <a
                     className={classNames(
                       'absolute inset-0 rounded-md',
-                      `ring-2 ring-blue-400 ${generateBorder(trainData.heading)} border-blue-400`,
+                      `ring-2 ring-blue-400 ${generateBorder(train.DirectionRef)} border-blue-400`,
                     )}
-                    href="#"
-                  />
-                </li>
-                <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                  <h3 className="text-sm font-medium leading-5">Time Zone</h3>
-
-                  <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>{trainData.trainTimeZone ?? 'Unknown'}</li>
-                  </ul>
-                  <a
-                    className={classNames('absolute inset-0 rounded-md', 'ring-2 ring-blue-400')}
-                    href="#"
                   />
                 </li>
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
@@ -220,7 +170,7 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
                       {moment
-                        .duration(-moment().diff(moment.utc(trainData.lastValTS)))
+                        .duration(-moment().diff(moment.utc(trainData.RecordedAtTime)))
                         .humanize(true) ?? 'Unknown'}
                     </li>
                   </ul>
@@ -230,40 +180,32 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                       ' ' +
                       timeDifferenceRing(
                         moment().toISOString(),
-                        moment.utc(trainData.lastValTS).toISOString(),
+                        moment.utc(trainData.RecordedAtTime).toISOString(),
                       )
                     }
-                    href="#"
                   />
                 </li>
               </ul>
             </Tab.Panel>
             <Tab.Panel className="bg-white p-3">
               <ul className="children:mb-4">
-                {stations.map((station: station) => (
-                  <li className="hover:bg-coolGray-100 relative rounded-md p-3" key={station.code}>
+                {train.MonitoredCall ? (
+                  <li
+                    className="hover:bg-coolGray-100 relative rounded-md p-3"
+                    key={train.MonitoredCall.StopPointRef}
+                  >
                     <h3 className="text-sm font-medium leading-5">
-                      {station.stationName ?? station.code ?? 'Unknown Station'}
+                      {train.MonitoredCall.StopPointName}
                     </h3>
 
                     <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                       <li>
-                        {station.postCmnt ? (
-                          <>
-                            Left {station.postCmnt.toLowerCase().replace('mi', 'min')} at{' '}
-                            {moment(station.postDep).format('h:mm a')}
-                          </>
-                        ) : station.estArrCmnt ? (
-                          <>
-                            Arriving {station.estArrCmnt.toLowerCase().replace('mi', 'min')} at{' '}
-                            {moment(station.estArr).format('h:mm a')}
-                          </>
-                        ) : station.estDepCmnt ? (
-                          <>
-                            Leaving {station.estDepCmnt.toLowerCase().replace('mi', 'min')} at{' '}
-                            {moment(station.estDep).format('h:mm a')}
-                          </>
-                        ) : null}
+                        Arriving{' '}
+                        {generateTimelyStrings(
+                          train.MonitoredCall.ExpectedArrivalTime,
+                          train.MonitoredCall.AimedArrivalTime,
+                        )}{' '}
+                        at {moment(train.MonitoredCall.ExpectedArrivalTime).format('h:mm a')}
                       </li>
                     </ul>
 
@@ -271,8 +213,37 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                       className={classNames(
                         'absolute inset-0 rounded-md',
                         `${timeDifferenceRing(
-                          moment.utc(station.postDep ?? station.estDep).toISOString(),
-                          moment.utc(station.schDep).toISOString(),
+                          train.MonitoredCall.ExpectedArrivalTime,
+                          train.MonitoredCall.AimedArrivalTime,
+                        )} ring-2`,
+                      )}
+                    />
+                  </li>
+                ) : null}
+                {train.OnwardCalls.OnwardCall.map((station: FiveOneOneOnwardCall) => (
+                  <li
+                    className="hover:bg-coolGray-100 relative rounded-md p-3"
+                    key={station.StopPointRef}
+                  >
+                    <h3 className="text-sm font-medium leading-5">{station.StopPointName}</h3>
+
+                    <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
+                      <li>
+                        Arriving{' '}
+                        {generateTimelyStrings(
+                          station.ExpectedArrivalTime,
+                          station.AimedArrivalTime,
+                        )}{' '}
+                        at {moment(station.ExpectedArrivalTime).format('h:mm a')}
+                      </li>
+                    </ul>
+
+                    <a
+                      className={classNames(
+                        'absolute inset-0 rounded-md',
+                        `${timeDifferenceRing(
+                          station.ExpectedArrivalTime,
+                          station.AimedArrivalTime,
                         )} ring-2`,
                       )}
                     />
@@ -287,4 +258,4 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
   )
 }
 
-export default AmtrakSidebarContent
+export default CaltrainSidebarContent

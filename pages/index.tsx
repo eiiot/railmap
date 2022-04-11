@@ -1,20 +1,104 @@
-import { useCallback, useState } from 'react'
-import type { NextPage } from 'next'
-import dynamic from 'next/dynamic'
-
-import Sidebar from '../components/sidebar'
 import Loader from '../components/loader'
-import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
-import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
 import LayerControl from '../components/map/LayerControl'
-import StylesControl from '../components/map/StylesControl'
-import { Feature, FeatureCollection } from 'geojson'
 import LocationControl from '../components/map/LocationControl'
+import StylesControl from '../components/map/StylesControl'
+import { FiveOneOneVehicleActivity } from '../components/MapDataTypes'
+import Sidebar from '../components/sidebar'
+import Alert from '../components/trainsitionAlert'
+import { fetchAllTrains } from 'amtrak'
+import { Feature, FeatureCollection } from 'geojson'
+import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
+import dynamic from 'next/dynamic'
+import { useCallback, useEffect, useState } from 'react'
+import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
+import type { NextPage } from 'next'
 
 const Map = dynamic(() => import('../components/mapbox'), {
   loading: () => <Loader />,
   ssr: false,
 })
+
+async function getAmtrak() {
+  // Make a GET request to the API and return the location of the trains.
+  try {
+    const trainNums = await fetchAllTrains()
+    // returns object of trains with the object num as the train number
+
+    // create a geoJSON object
+    const geoJSON: FeatureCollection = {
+      type: 'FeatureCollection',
+      features: [],
+    }
+
+    // iterate through the train numbers
+    for (const key in trainNums) {
+      const trains = trainNums[key]
+
+      // iterate through trains
+      trains.forEach((train) => {
+        const trainObject = {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [train.lon, train.lat],
+          },
+          properties: train,
+        } as Feature
+        // push train to geoJSON
+        geoJSON.features.push(trainObject)
+      })
+    }
+
+    return geoJSON
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function getCaltrain() {
+  // Make a GET request to the API and return the location of the trains.
+  try {
+    const response = await fetch(`https://api.therailmap.com/v1/caltrain`, { method: 'GET' })
+    const responseJSON = await response.json()
+
+    const trains = responseJSON.Siri.ServiceDelivery.VehicleMonitoringDelivery.VehicleActivity
+
+    if (trains === undefined) {
+      throw new Error('No trains found')
+    }
+
+    // Fly the map to the location.
+
+    const geoJson: FeatureCollection = {
+      type: 'FeatureCollection',
+      features: [],
+    }
+
+    trains.forEach((train: FiveOneOneVehicleActivity) => {
+      const trainObject: Feature = {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [
+            +train.MonitoredVehicleJourney.VehicleLocation.Longitude,
+            +train.MonitoredVehicleJourney.VehicleLocation.Latitude,
+          ],
+        },
+        properties: {
+          name: train.MonitoredVehicleJourney.VehicleRef,
+          ...train,
+        },
+      }
+      geoJson.features.push(trainObject)
+    })
+
+    return geoJson
+
+    // Return the location of the trains as GeoJSON.
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState<{
@@ -64,6 +148,7 @@ const Home: NextPage = () => {
     'Railroad-Bridges',
     'CN-Railroad-Crossings',
     'CN-Railroad-Bridges',
+    'caltrain',
   ]
 
   //  * Live Amtrak Trains * //
@@ -98,48 +183,40 @@ const Home: NextPage = () => {
     },
   }
 
-  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
-
-  async function getAmtrak() {
-    // Make a GET request to the API and return the location of the trains.
-    try {
-      const response = await fetch('https://api.amtraker.com/v1/trains', {
-        method: 'GET',
-      })
-      const trainNums = await response.json()
-      // returns object of trains with the object num as the train number
-
-      // create a geoJSON object
-      const geoJSON = {
-        type: 'FeatureCollection',
-        features: [],
-      } as FeatureCollection
-
-      // iterate through the train numbers
-      Object.keys(trainNums).forEach((num) => {
-        const trains = trainNums[num]
-
-        // iterate through trains
-        Object.keys(trains).forEach((key) => {
-          const train = trains[key] // type of train is object
-          const trainObject = {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [train.lon, train.lat],
-            },
-            properties: { ...train },
-          } as Feature
-          // push train to geoJSON
-          geoJSON.features.push(trainObject)
-        })
-      })
-
-      return geoJSON
-    } catch (error) {
-      console.error(error)
-    }
+  const caltrainLayerStyle: LayerProps = {
+    id: 'caltrain',
+    type: 'circle',
+    source: 'caltrain',
+    paint: {
+      'circle-color': '#db3241',
+      'circle-radius': 11,
+      'circle-opacity': 1,
+    },
+    layout: {
+      // Make the layer visible by default.
+      visibility: 'visible',
+    },
   }
+
+  const caltrainLabelsLayerStyle: LayerProps = {
+    id: 'caltrain-labels',
+    type: 'symbol',
+    source: 'amtrak',
+    layout: {
+      'text-field': ['to-string', ['get', 'name']],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': 12,
+      visibility: 'visible',
+    },
+    paint: {
+      'text-color': '#fff',
+    },
+  }
+
+  const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
+  const [caltrainGeoJSON, setCaltrainGeoJSON] = useState<FeatureCollection | undefined>(undefined)
+
+  const [loadingInfo, setLoadingInfo] = useState<boolean>(true)
 
   const onLoadHandler = useCallback(() => {
     // integrate the useEffect hook from above but instead run it on load
@@ -151,10 +228,28 @@ const Home: NextPage = () => {
         console.error(error)
       })
 
+    getCaltrain()
+      .then((geoJSON) => {
+        setCaltrainGeoJSON(geoJSON)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    setLoadingInfo(false)
+
     setInterval(async () => {
       getAmtrak()
         .then((geoJSON) => {
           setAmtrakGeoJSON(geoJSON)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+
+      getCaltrain()
+        .then((geoJSON) => {
+          setCaltrainGeoJSON(geoJSON)
         })
         .catch((error) => {
           console.error(error)
@@ -164,17 +259,63 @@ const Home: NextPage = () => {
 
   // * End Live Amtrak Trains * //
 
+  async function getFeedStale() {
+    try {
+      const response = await fetch('https://api.amtraker.com/v2/dataFeedState')
+      const data = await response.json()
+      return data.isStale
+    } catch (error) {
+      console.error(error)
+      return false
+    }
+  }
+
+  const [amtrakDataStaleWarning, setAmtrakDataStaleWarning] = useState<boolean>(false)
+
+  // * Check if the data feed is stale * //
+  useEffect(() => {
+    getFeedStale().then((isStale) => {
+      if (isStale) {
+        setAmtrakDataStaleWarning(true)
+      }
+    })
+  }, [])
+
+  setTimeout(() => {
+    setAmtrakDataStaleWarning(false)
+  }, 10000)
+
   return (
     <>
-      <Sidebar featureData={featureData}></Sidebar>
+      <Sidebar featureData={featureData} />
+      <Alert
+        className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
+        direction="left"
+        onClose={() => setAmtrakDataStaleWarning(false)}
+        open={amtrakDataStaleWarning}
+        severity="error"
+      >
+        The Amtrak API is currently stale
+      </Alert>
+
+      <Alert
+        className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
+        direction="left"
+        onClose={() => setLoadingInfo(false)}
+        open={loadingInfo}
+        severity="info"
+      >
+        Loading Trains
+      </Alert>
+
       <Map
         initialViewState={mapViewState}
         interactiveLayerIds={mapInteractiveLayerIds}
         mapStyle={stylesSwitcherStyles[0].uri}
         maxBounds={mapMaxBounds}
-        terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
         onClick={featureClickHandler}
         onLoad={onLoadHandler}
+        terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
       >
         <StylesControl styles={stylesSwitcherStyles} />
         <LayerControl layerIds={['amtrak', 'amtrak-numbers']} />
@@ -190,6 +331,11 @@ const Home: NextPage = () => {
         <Source data={amtrakGeoJSON} id="amtrak" type="geojson">
           <Layer {...amtrakLayerStyle} />
           <Layer {...amtrakNumbersLayerStyle} />
+        </Source>
+
+        <Source data={caltrainGeoJSON} id="caltrain" type="geojson">
+          <Layer {...caltrainLayerStyle} />
+          <Layer {...caltrainLabelsLayerStyle} />
         </Source>
 
         <Source
