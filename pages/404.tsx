@@ -1,6 +1,8 @@
 import Head from 'next/head'
 
 const Custom404 = () => {
+  console.log('License: https://www.therailmap.com/404_license.txt')
+
   return (
     <>
       <Head>
