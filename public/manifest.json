@@ -1,6 +1,13 @@
 {
-  "name": "The Rail Map",
-  "short_name": "TheRailMap",
+  "name": "The Rail Map | Track Amtrak, Caltrain, and More",
+  "short_name": "RailMap",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.eiiot.railmap"
+    }
+  ],
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -17,6 +24,56 @@
       "src": "/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Europe",
+      "short_name": "Europe",
+      "description": "View rail lines in Europe",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/android-chrome-384x384.png",
+          "sizes": "384x384",
+          "type": "image/png"
+        },
+        {
+          "src": "/icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ],
+      "url": "/europe"
+    },
+    {
+      "name": "Amtrak",
+      "short_name": "Amtrak",
+      "description": "Track Amtrack",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "/android-chrome-384x384.png",
+          "sizes": "384x384",
+          "type": "image/png"
+        },
+        {
+          "src": "/icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ],
+      "url": "/amtrak"
     }
   ],
   "theme_color": "#ffe93b",
