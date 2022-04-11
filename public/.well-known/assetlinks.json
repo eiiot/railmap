@@ -1,12 +1,6 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.eiiot.railmap",
-      "sha256_cert_fingerprints": [
-        "54:6D:D8:0A:72:AB:8F:84:DA:0C:3E:88:37:7B:BF:BE:67:DD:74:34:6B:3D:9C:0A:3C:FB:D0:D6:94:A6:78:19"
-      ]
-    }
-  }
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "com.eiiot.railmap",
+                     "sha256_cert_fingerprints": ["54:6D:D8:0A:72:AB:8F:84:DA:0C:3E:88:37:7B:BF:BE:67:DD:74:34:6B:3D:9C:0A:3C:FB:D0:D6:94:A6:78:19"] }
+      }
 ]
