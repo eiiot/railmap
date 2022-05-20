@@ -9,7 +9,10 @@ export default class MyDocument extends Document {
           <meta content="yes" name="apple-mobile-web-app-capable" />
           <meta content="default" name="apple-mobile-web-app-status-bar-style" />
           <meta content="The Rail Map" name="apple-mobile-web-app-title" />
-          <meta content="View Railroad Crossings, Live Amtrak, & More" name="description" />
+          <meta
+            content="Discover the world's rail network! Track Amtrak, Caltrain, and more live. Find the status of your train, easier than ever."
+            name="description"
+          />
           <meta content="telephone=no" name="format-detection" />
           <meta content="yes" name="mobile-web-app-capable" />
           <meta content="/browserconfig.xml" name="msapplication-config" />
@@ -33,13 +36,19 @@ export default class MyDocument extends Document {
           <meta content="summary" name="twitter:card" />
           <meta content="https://www.therailmap.com" name="twitter:url" />
           <meta content="The Rail Map" name="twitter:title" />
-          <meta content="View Railroad Crossings, Live Amtrak, & More" name="twitter:description" />
+          <meta
+            content="Discover the world's rail network! Track Amtrak, Caltrain, and more live. Find the status of your train, easier than ever."
+            name="twitter:description"
+          />
           <meta content="/meta.png" name="twitter:image" />
           <meta content="@eiioth" name="twitter:creator" />
 
           <meta content="website" property="og:type" />
           <meta content="The Rail Map" property="og:title" />
-          <meta content="View Railroad Crossings, Live Amtrak, & More" property="og:description" />
+          <meta
+            content="Discover the world's rail network! Track Amtrak, Caltrain, and more live. Find the status of your train, easier than ever."
+            property="og:description"
+          />
           <meta content="The Rail Map" property="og:site_name" />
           <meta content="https://www.therailmap.com" property="og:url" />
           <meta content="/icon-512x512.png" property="og:image" />

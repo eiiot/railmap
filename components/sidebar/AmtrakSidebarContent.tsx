@@ -158,7 +158,11 @@ const AmtrakSidebarContent = (props: TrainSidebarContentProps) => {
                 </li>
                 {/* Red if late, green otherwise */}
                 <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                  <h3 className="text-sm font-medium leading-5">Last Station</h3>
+                  <h3 className="text-sm font-medium leading-5">
+                    {findStation(stations, trainData.eventCode).postCmnt
+                      ? 'Last Station'
+                      : 'Next Station'}
+                  </h3>
 
                   <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
                     <li>
