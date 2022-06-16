@@ -107,10 +107,11 @@ const Sidebar = (props: SidebarProps) => {
     setIsOpen((isOpen) => (isOpen ? false : true))
   }
 
-  function onDragEnd(event: any, info: any) {
+  function onDragEnd(_: any, info: any) {
+    console.log(info.point.y)
     if (isMedium) {
       if (isOpen) {
-        const shouldClose = info.point.x > 150 || info.velocity.x < -40
+        const shouldClose = info.velocity.x < -40
         if (shouldClose) {
           controls.start('hidden')
           onClose()
@@ -121,7 +122,7 @@ const Sidebar = (props: SidebarProps) => {
       }
     } else {
       if (isOpen) {
-        const shouldClose = info.point.y > 500 || info.velocity.y > 40
+        const shouldClose = info.velocity.y > 0
         if (shouldClose) {
           controls.start('hidden')
           onClose()
@@ -130,7 +131,7 @@ const Sidebar = (props: SidebarProps) => {
           onOpen()
         }
       } else {
-        const shouldOpen = info.point.y < 500 || info.velocity.y < -40
+        const shouldOpen = info.velocity.y < 0
         if (shouldOpen) {
           controls.start('visible')
           onOpen()
@@ -154,7 +155,12 @@ const Sidebar = (props: SidebarProps) => {
       )}
       drag={isMedium ? 'x' : 'y'}
       dragConstraints={{ top: 0, right: 0 }}
-      dragElastic={0.2}
+      dragElastic={{
+        top: 0,
+        right: 0,
+        bottom: 0.2,
+        left: 0.2,
+      }}
       initial="hidden"
       onDragEnd={onDragEnd}
       transition={{
@@ -176,7 +182,7 @@ const Sidebar = (props: SidebarProps) => {
     >
       <div
         className={classNames(
-          'relative mx-32 mb-2 cursor-grab rounded-md bg-white active:cursor-grabbing md:hidden',
+          'relative mx-[20%] mb-2 cursor-grab rounded-md bg-white active:cursor-grabbing md:hidden',
         )}
       >
         <div className="z-30 py-3" />
