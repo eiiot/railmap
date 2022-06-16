@@ -29,7 +29,7 @@ const DataFeedAlert = () => {
 
   return (
     <Alert
-      className="fixed top-0 left-0 z-20 m-3 sm:top-auto sm:bottom-0 sm:right-0 sm:left-auto"
+      className="fixed top-0 left-0 z-20 m-3 "
       direction="left"
       onClose={() => setAmtrakDataStaleWarning(false)}
       open={amtrakDataStaleWarning}

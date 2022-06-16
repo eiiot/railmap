@@ -13,7 +13,8 @@ import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
 import OSMSidebarContent from './sidebar/OSMSidebarContent'
 import { classNames } from '../helpers/tailwind/classNames'
 import { trainData } from 'amtrak'
-import { useEffect, useState } from 'react'
+import { motion, useAnimation } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import { MapRef } from 'react-map-gl'
 
 interface SidebarProps {
@@ -21,21 +22,39 @@ interface SidebarProps {
   onTrainClick?: (train: trainData, railmap: MapRef) => void
 }
 
+const usePrevious = (value: any) => {
+  const previousValueRef = useRef()
+
+  useEffect(() => {
+    previousValueRef.current = value
+  }, [value])
+
+  return previousValueRef.current
+}
+
+const useMediaQuery = (query: any) => {
+  const [matches, setMatches] = useState(false)
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    if (media.matches !== matches) {
+      setMatches(media.matches)
+    }
+    const listener = () => {
+      setMatches(media.matches)
+    }
+    addEventListener('resize', listener)
+    // media.addListener(listener)
+    return () => removeEventListener('resize', listener)
+  }, [matches, query])
+
+  return matches
+}
+
 const Sidebar = (props: SidebarProps) => {
   const { mapboxFeatureData, onTrainClick } = props
 
-  const [showSidebar, setShowSidebar] = useState<boolean>(false)
-
-  // on change of featureData show sidebar
-  useEffect(() => {
-    if (mapboxFeatureData) {
-      setShowSidebar(true)
-    }
-  }, [mapboxFeatureData])
-
-  function onClickHandler() {
-    setShowSidebar(!showSidebar)
-  }
+  const isMedium = useMediaQuery('(min-width: 768px)')
 
   const fixEntry = (v: unknown): unknown => {
     if (typeof v === 'string') {
@@ -53,25 +72,114 @@ const Sidebar = (props: SidebarProps) => {
     ? Object.fromEntries(Object.entries(mapboxFeatureData).map(([k, v]) => [k, fixEntry(v)]))
     : null
 
+  // sidebar swiping
+
+  const [isOpen, setIsOpen] = useState(false)
+
+  const prevIsOpen = usePrevious(isOpen)
+
+  function onClose() {
+    setIsOpen(false)
+  }
+
+  function onOpen() {
+    setIsOpen(true)
+  }
+
+  const controls = useAnimation()
+
+  // on change of featureData show sidebar
+  useEffect(() => {
+    if (mapboxFeatureData) {
+      setIsOpen(true)
+    }
+  }, [mapboxFeatureData])
+
+  useEffect(() => {
+    if (prevIsOpen && !isOpen) {
+      controls.start('hidden')
+    } else if (!prevIsOpen && isOpen) {
+      controls.start('visible')
+    }
+  }, [controls, isOpen, prevIsOpen])
+
+  function onClickHandler() {
+    setIsOpen((isOpen) => (isOpen ? false : true))
+  }
+
+  function onDragEnd(event: any, info: any) {
+    if (isMedium) {
+      if (isOpen) {
+        const shouldClose = info.point.x > 150 || info.velocity.x < -40
+        if (shouldClose) {
+          controls.start('hidden')
+          onClose()
+        } else {
+          controls.start('visible')
+          onOpen()
+        }
+      }
+    } else {
+      if (isOpen) {
+        const shouldClose = info.point.y > 500 || info.velocity.y > 40
+        if (shouldClose) {
+          controls.start('hidden')
+          onClose()
+        } else {
+          controls.start('visible')
+          onOpen()
+        }
+      } else {
+        const shouldOpen = info.point.y < 500 || info.velocity.y < -40
+        if (shouldOpen) {
+          controls.start('visible')
+          onOpen()
+        } else {
+          controls.start('hidden')
+          onClose()
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    controls.start('hidden')
+  }, [isMedium, controls]) // hide on window resize
+
   return (
-    <div
+    <motion.div
+      animate={controls}
       className={classNames(
-        'fixed bottom-[32px] z-10 flex h-[calc(70vh-32px)] w-full flex-col transition-transform duration-300 md:top-0 md:m-[10px] md:h-5/6 md:w-[300px] md:translate-y-0 md:flex-row',
-        showSidebar
-          ? 'translate-y-0 md:translate-y-0 md:translate-x-0'
-          : 'translate-y-[calc(100%)] md:translate-y-0 md:translate-x-[calc(-100%-10px)]',
+        'fixed bottom-[32px] z-10 flex h-[calc(70vh-32px)] w-full translate-x-0 cursor-grab flex-col active:cursor-grabbing md:top-0 md:bottom-auto md:m-[10px] md:h-5/6 md:w-[300px] md:translate-x-[calc(-100%-10px)] md:translate-y-0 md:flex-row',
       )}
-      // drag="y"
-      // dragConstraints={{ top: 0, bottom: 33 }}
+      drag={isMedium ? 'x' : 'y'}
+      dragConstraints={{ top: 0, right: 0 }}
+      dragElastic={0.2}
+      initial="hidden"
+      onDragEnd={onDragEnd}
+      transition={{
+        type: 'spring',
+        damping: 40,
+        stiffness: 400,
+      }}
+      variants={
+        isMedium
+          ? {
+              visible: { x: 0, y: 0 },
+              hidden: { x: 'calc(-100% - 10px)', y: 0 },
+            }
+          : {
+              visible: { y: 0, x: 0 },
+              hidden: { y: '100%', x: 0 },
+            }
+      }
     >
       <div
         className={classNames(
-          'my-2 mx-32 rounded-md bg-white md:hidden',
-          showSidebar ? 'cursor-s-resize' : 'cursor-n-resize',
+          'relative mx-32 mb-2 cursor-grab rounded-md bg-white active:cursor-grabbing md:hidden',
         )}
-        onClick={onClickHandler}
       >
-        <div className="py-2" />
+        <div className="z-30 py-3" />
       </div>
       {featureData ? (
         featureData.mapboxLayerId === 'amtrak' ? (
@@ -104,13 +212,13 @@ const Sidebar = (props: SidebarProps) => {
       <div
         className={classNames(
           'my-[35vh] mx-2 hidden rounded-md bg-white shadow-lg md:block',
-          showSidebar ? 'cursor-w-resize' : 'cursor-e-resize',
+          isOpen ? 'cursor-w-resize' : 'cursor-e-resize',
         )}
         onClick={onClickHandler}
       >
-        <div className="px-2" />
+        <div className="z-30 px-2" />
       </div>
-    </div>
+    </motion.div>
   )
 }
 
