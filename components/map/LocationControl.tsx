@@ -11,7 +11,7 @@ interface LocationControlProps {
 // set onClick using props.onClick
 
 /* eslint-disable complexity,max-statements */
-const MapboxLocationControl = (props: LocationControlProps) => {
+const LocationControl = (props: LocationControlProps) => {
   const { svg, location, position } = props
 
   const router = useRouter()
@@ -64,8 +64,8 @@ const MapboxLocationControl = (props: LocationControlProps) => {
   return null
 }
 
-MapboxLocationControl.defaultProps = {
+LocationControl.defaultProps = {
   position: 'top-right',
 }
 
-export default MapboxLocationControl
+export default LocationControl

@@ -246,43 +246,47 @@ export interface FiveOneOneOnwardCall {
   ExpectedDepartureTime: string
 }
 
+export interface FiveOneOneMonitoredCall {
+  StopPointRef: string
+  StopPointName: string
+  VehicleLocationAtStop: string
+  VehicleAtStop: string
+  AimedArrivalTime: string
+  AimedDepartureTime: string
+  ExpectedArrivalTime: string
+  ExpectedDepartureTime: string
+}
+
+export interface FiveOneOneMonitoredVehicleJourney {
+  LineRef: string
+  DirectionRef: string
+  FramedVehicleJourneyRef: {
+    DataFrameRef: string
+    DatedVehicleJourneyRef: string
+  }
+  PublishedLineName: string
+  OperatorRef: string
+  OriginRef: string
+  OriginName: string
+  DestinationRef: string
+  DestinationName: string
+  Monitored: boolean
+  InCongestion?: boolean
+  VehicleLocation: {
+    Longitude: string
+    Latitude: string
+  }
+  Bearing?: string
+  Occupancy?: string
+  VehicleRef?: string
+  MonitoredCall?: FiveOneOneMonitoredCall
+  OnwardCalls?: {
+    OnwardCall: FiveOneOneOnwardCall[]
+  }
+}
+
 export interface FiveOneOneVehicleActivity {
   RecordedAtTime: string
   ValidUntilTime: string
-  MonitoredVehicleJourney: {
-    LineRef: string
-    DirectionRef: string
-    FramedVehicleJourneyRef: {
-      DataFrameRef: string
-      DatedVehicleJourneyRef: string
-    }
-    PublishedLineName: string
-    OperatorRef: string
-    OriginRef: string
-    OriginName: string
-    DestinationRef: string
-    DestinationName: string
-    Monitored: boolean
-    InCongestion?: boolean
-    VehicleLocation: {
-      Longitude: string
-      Latitude: string
-    }
-    Bearing?: string
-    Occupancy?: string
-    VehicleRef?: string
-    MonitoredCall?: {
-      StopPointRef: string
-      StopPointName: string
-      VehicleLocationAtStop: string
-      VehicleAtStop: string
-      AimedArrivalTime: string
-      AimedDepartureTime: string
-      ExpectedArrivalTime: string
-      ExpectedDepartureTime: string
-    }
-    OnwardCalls?: {
-      OnwardCall: FiveOneOneOnwardCall[]
-    }
-  }
+  MonitoredVehicleJourney: FiveOneOneMonitoredVehicleJourney
 }

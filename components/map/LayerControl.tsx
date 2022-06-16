@@ -36,10 +36,10 @@ class LayerControl {
 
         // Toggle layer visibility by changing the layout object's visibility property.
         try {
-          if (visibility === 'visible') {
+          if (visibility === 'visible' || visibility === undefined) {
             map.setLayoutProperty(layerId, 'visibility', 'none')
             this.className = ''
-          } else {
+          } else if (visibility === 'none') {
             this.className = 'active'
             map.setLayoutProperty(layerId, 'visibility', 'visible')
           }

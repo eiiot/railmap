@@ -1,3 +1,4 @@
+import TrainElement from './elements/amtrak/TrainElement'
 import { station, trainData } from 'amtrak'
 import moment from 'moment'
 import { useCallback, useEffect, useState } from 'react'
@@ -23,22 +24,6 @@ interface AmtrakStationSidebarContentProps {
 
 interface stationTrain extends station {
   train: trainData
-}
-
-function timeDifferenceRing(start: string, end: string) {
-  start = start ?? 0
-  end = end ?? new Date().toISOString()
-  const diff = 0 - moment(end).diff(moment(start), 'minutes')
-  if (diff < 5) {
-    return 'ring-green-500'
-  }
-  if (diff < 10) {
-    return 'ring-yellow-500'
-  }
-  if (diff < 30) {
-    return 'ring-orange-500'
-  }
-  return 'ring-red-500'
 }
 
 const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) => {
@@ -69,11 +54,10 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
     })
     setStationTrains(trains)
   }, [stationData])
+
   useEffect(() => {
     getStationTrains()
   }, [getStationTrains])
-
-  const { railmap } = useMap()
 
   return (
     <div className="flex h-full w-full flex-shrink-0 flex-col items-center rounded-t-md bg-white md:rounded-md">
@@ -85,39 +69,14 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
           <ul className="w-full children:mb-4">
             {stationTrains.length > 0 ? (
               stationTrains.map((train) => (
-                <li
-                  className="hover:bg-coolGray-100 relative cursor-pointer rounded-md p-3"
+                <TrainElement
                   key={train.train.trainNum}
-                  onClick={() => {
-                    onTrainClick(train.train, railmap!)
-                  }}
-                >
-                  <h3 className="text-sm font-medium leading-5">
-                    {train.train.routeName} {train.train.trainNum}
-                  </h3>
-
-                  <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                    <li>
-                      Arriving {train.estArrCmnt?.toLowerCase().replace('mi', 'min')}{' '}
-                      {moment(train.estArr).fromNow()} ({moment(train.estArr).format('h:mm a')})
-                    </li>
-                  </ul>
-
-                  <a
-                    className={
-                      'absolute inset-0 rounded-md ring-2' +
-                      ' ' +
-                      timeDifferenceRing(
-                        moment.utc(train.estArr).toISOString(),
-                        moment.utc(train.schArr).toISOString(),
-                      )
-                    }
-                    href="#"
-                  />
-                </li>
+                  onTrainClick={onTrainClick}
+                  train={train}
+                />
               ))
             ) : (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
+              <li className="hover:bg-coolGray-100 relative flex h-full w-full items-center justify-center rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">No Trains Available</h3>
               </li>
             )}
