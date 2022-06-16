@@ -10,7 +10,7 @@ const TrainsLoadingAlert = (props: TrainsLoadingAlertProps) => {
   return (
     <Alert
       className=" fixed top-0 left-0 z-20 m-3"
-      direction="left"
+      direction="right"
       onClose={() => setLoadingInfo(false)}
       open={loadingInfo}
       severity="info"
