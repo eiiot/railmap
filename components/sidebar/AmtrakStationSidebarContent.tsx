@@ -54,6 +54,7 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
     })
     setStationTrains(trains)
   }, [stationData])
+
   useEffect(() => {
     getStationTrains()
   }, [getStationTrains])
@@ -75,7 +76,7 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
                 />
               ))
             ) : (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
+              <li className="hover:bg-coolGray-100 relative flex h-full w-full items-center justify-center rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">No Trains Available</h3>
               </li>
             )}
