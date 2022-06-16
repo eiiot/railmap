@@ -1,4 +1,4 @@
-// @ts-nocheck: Waiting for react-map-gl to be update
+// @ts-nocheck
 
 import MapboxGeocoder, { GeocoderOptions } from '@mapbox/mapbox-gl-geocoder'
 import { ReactElement, useState } from 'react'

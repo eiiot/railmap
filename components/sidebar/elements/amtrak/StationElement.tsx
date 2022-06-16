@@ -1,4 +1,4 @@
-import timeDifferenceRing from '../functions/TimeDifferenceRing'
+import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
 import { station } from 'amtrak'
 import moment from 'moment'
 

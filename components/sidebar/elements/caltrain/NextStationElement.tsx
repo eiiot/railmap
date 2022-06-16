@@ -1,5 +1,5 @@
+import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
 import { FiveOneOneMonitoredCall, FiveOneOneOnwardCall } from '../../../MapDataTypes'
-import timeDifferenceRing from '../functions/TimeDifferenceRing'
 
 interface NextStationElementProps {
   monitoredCall?: FiveOneOneMonitoredCall

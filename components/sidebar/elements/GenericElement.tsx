@@ -1,4 +1,4 @@
-import isEmptyOrSpaces from '../../functions/isEmptyOrSpaces'
+import isEmptyOrSpaces from '../../../helpers/isEmptyOrSpaces'
 
 interface GenericElementProps {
   title: string

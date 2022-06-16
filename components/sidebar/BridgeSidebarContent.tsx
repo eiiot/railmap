@@ -1,5 +1,4 @@
 import GenericElement from './elements/GenericElement'
-import isEmptyOrSpaces from '../functions/isEmptyOrSpaces'
 import { USBridgeData } from '../MapDataTypes'
 
 interface BridgeSidebarContentProps {

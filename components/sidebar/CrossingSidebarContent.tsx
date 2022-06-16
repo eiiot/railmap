@@ -1,8 +1,8 @@
 // OBJECTID
 
 import GenericElement from './elements/GenericElement'
-import isEmptyOrSpaces from '../functions/isEmptyOrSpaces'
-import titleCase from '../functions/titleCase'
+import isEmptyOrSpaces from '../../helpers/isEmptyOrSpaces'
+import titleCase from '../../helpers/titleCase'
 import { USCrossingData } from '../MapDataTypes'
 
 interface CrossingSidebarContentProps {
