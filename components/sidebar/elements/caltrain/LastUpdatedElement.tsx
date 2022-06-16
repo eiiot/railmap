@@ -1,4 +1,4 @@
-import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
+import TimeDifferenceRing from '../../../TimeDifferenceRing'
 import moment from 'moment'
 
 interface LastUpdatedElementProps {
@@ -16,12 +16,10 @@ const LastUpdatedElement = (props: LastUpdatedElementProps) => {
           {moment.duration(-moment().diff(moment.utc(RecordedAtTime))).humanize(true) ?? 'Unknown'}
         </li>
       </ul>
-      <a
-        className={
-          'absolute inset-0 rounded-md ring-2' +
-          ' ' +
-          timeDifferenceRing(moment().toISOString(), moment.utc(RecordedAtTime).toISOString())
-        }
+
+      <TimeDifferenceRing
+        end={moment.utc(RecordedAtTime).toISOString()}
+        start={moment().toISOString()}
       />
     </li>
   )

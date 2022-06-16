@@ -1,6 +1,6 @@
 import generateTimelyStrings from '../../../../helpers/sidebar/GenerateTimelyStrings'
-import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
 import { FiveOneOneMonitoredCall } from '../../../MapDataTypes'
+import TimeDifferenceRing from '../../../TimeDifferenceRing'
 import moment from 'moment'
 
 interface MonitoredCallElementProps {
@@ -24,13 +24,7 @@ const MonitoredCallElement = (props: MonitoredCallElementProps) => {
         </li>
       </ul>
 
-      <a
-        className={
-          'absolute inset-0 rounded-md ring-2' +
-          ' ' +
-          timeDifferenceRing(ExpectedArrivalTime, AimedArrivalTime)
-        }
-      />
+      <TimeDifferenceRing end={AimedArrivalTime} start={ExpectedArrivalTime} />
     </li>
   )
 }

@@ -1,6 +1,6 @@
 import generateTimelyStrings from '../../../../helpers/sidebar/GenerateTimelyStrings'
-import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
 import { FiveOneOneOnwardCall } from '../../../MapDataTypes'
+import TimeDifferenceRing from '../../../TimeDifferenceRing'
 import moment from 'moment'
 
 interface OnwardCallElementProps {
@@ -21,13 +21,7 @@ const OnewardCallElement = (props: OnwardCallElementProps) => {
         </li>
       </ul>
 
-      <a
-        className={
-          'absolute inset-0 rounded-md ring-2' +
-          ' ' +
-          timeDifferenceRing(ExpectedArrivalTime, AimedArrivalTime)
-        }
-      />
+      <TimeDifferenceRing end={AimedArrivalTime} start={ExpectedArrivalTime} />
     </li>
   )
 }

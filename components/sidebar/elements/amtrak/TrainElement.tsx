@@ -1,4 +1,4 @@
-import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
+import TimeDifferenceRing from '../../../TimeDifferenceRing'
 import { station, trainData } from 'amtrak'
 import moment from 'moment'
 import { MapRef, useMap } from 'react-map-gl'
@@ -36,15 +36,9 @@ const TrainElement = (props: TrainElementProps) => {
         </li>
       </ul>
 
-      <a
-        className={
-          'absolute inset-0 rounded-md ring-2' +
-          ' ' +
-          timeDifferenceRing(
-            moment.utc(train.estArr).toISOString(),
-            moment.utc(train.schArr).toISOString(),
-          )
-        }
+      <TimeDifferenceRing
+        end={moment.utc(train.schArr).toISOString()}
+        start={moment.utc(train.estArr).toISOString()}
       />
     </li>
   )

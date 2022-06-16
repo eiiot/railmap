@@ -13,7 +13,6 @@ import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
 import OSMSidebarContent from './sidebar/OSMSidebarContent'
 import { classNames } from '../helpers/tailwind/classNames'
 import { trainData } from 'amtrak'
-import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { MapRef } from 'react-map-gl'
 
@@ -62,7 +61,18 @@ const Sidebar = (props: SidebarProps) => {
           ? 'translate-y-0 md:translate-y-0 md:translate-x-0'
           : 'translate-y-[calc(100%)] md:translate-y-0 md:translate-x-[calc(-100%-10px)]',
       )}
+      // drag="y"
+      // dragConstraints={{ top: 0, bottom: 33 }}
     >
+      <div
+        className={classNames(
+          'my-2 mx-32 rounded-md bg-white md:hidden',
+          showSidebar ? 'cursor-s-resize' : 'cursor-n-resize',
+        )}
+        onClick={onClickHandler}
+      >
+        <div className="py-2" />
+      </div>
       {featureData ? (
         featureData.mapboxLayerId === 'amtrak' ? (
           <AmtrakSidebarContent trainData={featureData as unknown as trainData} />
@@ -96,9 +106,7 @@ const Sidebar = (props: SidebarProps) => {
           'my-[35vh] mx-2 hidden rounded-md bg-white shadow-lg md:block',
           showSidebar ? 'cursor-w-resize' : 'cursor-e-resize',
         )}
-        onClick={() => {
-          onClickHandler()
-        }}
+        onClick={onClickHandler}
       >
         <div className="px-2" />
       </div>

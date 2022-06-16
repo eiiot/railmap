@@ -1,4 +1,4 @@
-import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
+import TimeDifferenceRing from '../../../TimeDifferenceRing'
 import { station } from 'amtrak'
 import moment from 'moment'
 
@@ -35,15 +35,9 @@ const StationElement = (props: StationElementProps) => {
         </li>
       </ul>
 
-      <a
-        className={
-          'absolute inset-0 rounded-md ring-2' +
-          ' ' +
-          timeDifferenceRing(
-            moment.utc(station.postDep ?? station.estDep).toISOString(),
-            moment.utc(station.schDep).toISOString(),
-          )
-        }
+      <TimeDifferenceRing
+        end={moment.utc(station.schDep).toISOString()}
+        start={moment.utc(station.postDep ?? station.estDep).toISOString()}
       />
     </li>
   )

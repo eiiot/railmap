@@ -5,7 +5,6 @@ import StationElement from './elements/amtrak/StationElement'
 import TimeZoneElement from './elements/amtrak/TimeZoneElement'
 import HeadingElement from './elements/HeadingElement'
 import { classNames } from '../../helpers/tailwind/classNames'
-import { mapboxTrainData } from '../../types/mapbox'
 import { Tab } from '@headlessui/react'
 import { station, trainData } from 'amtrak'
 

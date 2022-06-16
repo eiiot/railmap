@@ -1,5 +1,5 @@
-import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
 import { FiveOneOneMonitoredCall, FiveOneOneOnwardCall } from '../../../MapDataTypes'
+import TimeDifferenceRing from '../../../TimeDifferenceRing'
 
 interface NextStationElementProps {
   monitoredCall?: FiveOneOneMonitoredCall
@@ -18,13 +18,8 @@ const NextStationElement = (props: NextStationElementProps) => {
       <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
         <li>{StopPointName ?? 'Unknown'}</li>
       </ul>
-      <a
-        className={
-          'absolute inset-0 rounded-md ring-2' +
-          ' ' +
-          timeDifferenceRing(ExpectedArrivalTime, AimedArrivalTime)
-        }
-      />
+
+      <TimeDifferenceRing end={AimedArrivalTime} start={ExpectedArrivalTime} />
     </li>
   )
 }

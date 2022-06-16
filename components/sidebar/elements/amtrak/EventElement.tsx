@@ -1,6 +1,6 @@
 import capitalize from '../../../../helpers/capitalize'
 import findStation from '../../../../helpers/sidebar/amtrak/FindStation'
-import timeDifferenceRing from '../../../../helpers/sidebar/TimeDifferenceRing'
+import TimeDifferenceRing from '../../../TimeDifferenceRing'
 import { station } from 'amtrak'
 
 interface EventElementProps {
@@ -36,13 +36,7 @@ const EventElement = (props: EventElementProps) => {
           )}
         </li>
       </ul>
-      <a
-        className={
-          'absolute inset-0 rounded-md ring-2' +
-          ' ' +
-          timeDifferenceRing(station.postDep ?? station.estDep, station.schDep)
-        }
-      />
+      <TimeDifferenceRing end={station.schDep} start={station.postDep ?? station.estDep} />
     </li>
   )
 }
