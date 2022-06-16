@@ -16,6 +16,7 @@
     "@types/geojson": "^7946.0.8",
     "@types/mapbox__mapbox-gl-geocoder": "^4.7.2",
     "amtrak": "^2.8.7",
+    "framer-motion": "^6.3.11",
     "mapbox-gl": "^2.7.1",
     "mapbox-gl-style-switcher": "^1.0.11",
     "moment": "^2.29.1",

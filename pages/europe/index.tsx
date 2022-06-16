@@ -60,7 +60,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Sidebar featureData={featureData} />
+      <Sidebar mapboxFeatureData={featureData} />
       <div className="h-screen w-screen">
         <Map
           initialViewState={mapViewState}

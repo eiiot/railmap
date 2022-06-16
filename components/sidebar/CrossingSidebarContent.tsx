@@ -1,5 +1,8 @@
 // OBJECTID
 
+import GenericElement from './elements/GenericElement'
+import isEmptyOrSpaces from '../functions/isEmptyOrSpaces'
+import titleCase from '../functions/titleCase'
 import { USCrossingData } from '../MapDataTypes'
 
 interface CrossingSidebarContentProps {
@@ -74,30 +77,6 @@ const stateCodes = {
   '56': 'Wyoming',
 } as { [key: string]: string }
 
-function isEmptyOrSpaces(str: string | number | undefined) {
-  return typeof str == 'number' || str === undefined || str.match(/^ *$/) !== null
-}
-
-function capitalize(string: string) {
-  return string.charAt(0).toUpperCase() + (string.slice(1) ?? '').toLowerCase()
-}
-
-function titleCase(input: unknown) {
-  if (typeof input === 'string') {
-    return (
-      input
-        // split at non-alphanumeric characters
-        .split(/[^\w]/)
-        .map((word) => (word.length > 2 ? capitalize(word) : word))
-        .join(' ')
-    )
-  } else if (typeof input === 'number') {
-    return input.toString()
-  } else {
-    return ''
-  }
-}
-
 const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
   const { crossingData } = props
   return (
@@ -115,122 +94,50 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-y-scroll px-2">
         <div className="bg-white p-3">
           <ul className="w-full children:mb-4">
-            {!isEmptyOrSpaces(crossingData['RAILROAD']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Railroad</h3>
+            <GenericElement content={crossingData['RAILROAD']} title="Railroad" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['RAILROAD']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['RRSUBDIV']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Subdivision</h3>
+            <GenericElement content={crossingData['RRSUBDIV']} title="Subdivision" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['RRSUBDIV']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['RRDIV']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Division</h3>
+            <GenericElement content={crossingData['RRDIV']} title="Division" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['RRDIV']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['MILEPOST']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Milepost</h3>
+            <GenericElement content={crossingData['MILEPOST']} title="Milepost" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['MILEPOST']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['CROSSING']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Crossing ID</h3>
+            <GenericElement content={crossingData['CROSSING']} title="Crossing ID" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['CROSSING']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['TYPEXING']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Crossing Type</h3>
+            <GenericElement
+              content={
+                crossingData['TYPEXING'] === '2'
+                  ? 'Public'
+                  : crossingData['TYPEXING'] === '3'
+                  ? 'Private'
+                  : 'Other'
+              }
+              title="Crossing Type"
+            />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>
-                    {crossingData['TYPEXING'] === '2'
-                      ? 'Public'
-                      : crossingData['TYPEXING'] === '3'
-                      ? 'Private'
-                      : 'Other'}
-                  </li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['WHISTBAN']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Quiet Zone</h3>
+            <GenericElement
+              content={
+                crossingData['WHISTBAN'] === '0'
+                  ? 'No'
+                  : crossingData['WHISTBAN'] === '1'
+                  ? '24 hr'
+                  : crossingData['WHISTBAN'] === '2'
+                  ? 'Partial'
+                  : crossingData['WHISTBAN'] === '3'
+                  ? 'Chicago Excused'
+                  : 'Unknown Zone Type'
+              }
+              title="Quiet Zone"
+            />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>
-                    {crossingData['WHISTBAN'] === '0'
-                      ? 'No'
-                      : crossingData['WHISTBAN'] === '1'
-                      ? '24 hr'
-                      : crossingData['WHISTBAN'] === '2'
-                      ? 'Partial'
-                      : crossingData['WHISTBAN'] === '3'
-                      ? 'Chicago Excused'
-                      : 'Unknown Zone Type'}
-                  </li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['HIGHWAY']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Highway</h3>
+            <GenericElement content={crossingData['HIGHWAY']} title="Highway" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['HIGHWAY']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['CountyCode']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">County Code</h3>
+            <GenericElement content={crossingData['CountyCode']} title="County Code" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['CountyCode']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['StateCode']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">State</h3>
-
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{stateCodes[crossingData['StateCode']!] ?? 'Unknown State'}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
+            <GenericElement
+              content={stateCodes[crossingData['StateCode']!] ?? 'Unknown State'}
+              title="State"
+            />
             {!isEmptyOrSpaces(crossingData['POLCONT']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">Emergency Telephone</h3>
@@ -265,36 +172,15 @@ const CrossingSidebarContent = (props: CrossingSidebarContentProps) => {
                 />
               </li>
             ) : null}
-            {!isEmptyOrSpaces(crossingData['EFFDATE']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Effective Date</h3>
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['EFFDATE']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['EDATE']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Last Edited</h3>
+            <GenericElement content={crossingData['EFFDATE']} title="Effective Date" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{crossingData['EDATE']}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
-            {!isEmptyOrSpaces(crossingData['REASON']) ? (
-              <li className="hover:bg-coolGray-100 relative rounded-md p-3">
-                <h3 className="text-sm font-medium leading-5">Reason for Edit</h3>
+            <GenericElement content={crossingData['EDATE']} title="Last Edited" />
 
-                <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
-                  <li>{reasonIdData[crossingData['REASON'] ?? 0]}</li>
-                </ul>
-                <a className="absolute inset-0 rounded-md ring-2 ring-red-400" />
-              </li>
-            ) : null}
+            <GenericElement
+              content={reasonIdData[crossingData['REASON'] ?? 0]}
+              title="Reason for Edit"
+            />
             {!isEmptyOrSpaces(crossingData['ACC_LINK']) ? (
               <li className="hover:bg-coolGray-100 relative rounded-md p-3">
                 <h3 className="text-sm font-medium leading-5">ACC Link</h3>

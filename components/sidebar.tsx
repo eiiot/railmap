@@ -4,7 +4,6 @@ import {
   USBridgeData,
   USCrossingData,
 } from './MapDataTypes'
-import ACTSidebarContent from './sidebar/ACTSidebarContent'
 import AmtrakSidebarContent from './sidebar/AmtrakSidebarContent'
 import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
 import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
@@ -12,33 +11,48 @@ import CaltrainSidebarContent from './sidebar/CaltrainSidebarContent'
 import CNCrossingSidebarContent from './sidebar/CNCrossingSidebarContent'
 import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
 import OSMSidebarContent from './sidebar/OSMSidebarContent'
+import { classNames } from '../helpers/tailwind/classNames'
 import { trainData } from 'amtrak'
+import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { MapRef } from 'react-map-gl'
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
 interface SidebarProps {
-  featureData: { [key: string]: unknown } | null
+  mapboxFeatureData: { [key: string]: unknown } | null
   onTrainClick?: (train: trainData, railmap: MapRef) => void
 }
 
 const Sidebar = (props: SidebarProps) => {
-  const { featureData, onTrainClick } = props
+  const { mapboxFeatureData, onTrainClick } = props
 
   const [showSidebar, setShowSidebar] = useState<boolean>(false)
 
   // on change of featureData show sidebar
   useEffect(() => {
-    if (featureData) {
+    if (mapboxFeatureData) {
       setShowSidebar(true)
     }
-  }, [featureData])
+  }, [mapboxFeatureData])
 
   function onClickHandler() {
     setShowSidebar(!showSidebar)
   }
+
+  const fixEntry = (v: unknown): unknown => {
+    if (typeof v === 'string') {
+      try {
+        return JSON.parse(v)
+      } catch (e) {
+        return v
+      }
+    } else {
+      return v
+    }
+  }
+
+  const featureData = mapboxFeatureData
+    ? Object.fromEntries(Object.entries(mapboxFeatureData).map(([k, v]) => [k, fixEntry(v)]))
+    : null
 
   return (
     <div
@@ -49,22 +63,13 @@ const Sidebar = (props: SidebarProps) => {
           : 'translate-y-[calc(100%)] md:translate-y-0 md:translate-x-[calc(-100%-10px)]',
       )}
     >
-      <div
-        className={classNames(
-          'my-2 mx-32 rounded-md bg-white md:hidden',
-          showSidebar ? 'cursor-s-resize' : 'cursor-n-resize',
-        )}
-        onClick={onClickHandler}
-      >
-        <div className="py-2" />
-      </div>
       {featureData ? (
         featureData.mapboxLayerId === 'amtrak' ? (
           <AmtrakSidebarContent trainData={featureData as unknown as trainData} />
+        ) : featureData.mapboxLayerId === 'amtrak-stations' && onTrainClick ? (
+          <AmtrakStationSidebarContent onTrainClick={onTrainClick} stationData={featureData} />
         ) : featureData.mapboxLayerId === 'caltrain' ? (
           <CaltrainSidebarContent trainData={featureData as unknown as FiveOneOneVehicleActivity} />
-        ) : featureData.mapboxLayerId === 'act' ? (
-          <ACTSidebarContent busData={featureData as unknown as FiveOneOneVehicleActivity} />
         ) : featureData.mapboxLayerId === 'Railroad-Crossings' ? (
           <CrossingSidebarContent crossingData={featureData as unknown as USCrossingData} />
         ) : featureData.mapboxLayerId === 'Railroad-Bridges' ? (
@@ -76,8 +81,6 @@ const Sidebar = (props: SidebarProps) => {
           <OSMSidebarContent osmData={featureData} ringColor="ring-blue-400" />
         ) : featureData.mapboxLayerId === 'EU-Railroad-Crossings' ? (
           <OSMSidebarContent osmData={featureData} ringColor="ring-red-400" />
-        ) : featureData.mapboxLayerId === 'amtrak-stations' && onTrainClick ? (
-          <AmtrakStationSidebarContent onTrainClick={onTrainClick} stationData={featureData} />
         ) : (
           <div className="flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-t-md bg-white text-center md:rounded-md">
             <span>No additional information is available for this object</span>
@@ -93,7 +96,9 @@ const Sidebar = (props: SidebarProps) => {
           'my-[35vh] mx-2 hidden rounded-md bg-white shadow-lg md:block',
           showSidebar ? 'cursor-w-resize' : 'cursor-e-resize',
         )}
-        onClick={onClickHandler}
+        onClick={() => {
+          onClickHandler()
+        }}
       >
         <div className="px-2" />
       </div>
