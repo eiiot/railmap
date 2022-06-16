@@ -31,7 +31,11 @@ const TrainElement = (props: TrainElementProps) => {
 
       <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
         <li>
-          Arriving {train.estArrCmnt?.toLowerCase().replace('mi', 'min')}{' '}
+          Arriving{' '}
+          {train.estArrCmnt
+            ?.toLowerCase()
+            .replace('mi', 'min') // remove a zero if it's the first character
+            .replace(/^0/, '')}{' '}
           {moment(train.estArr).fromNow()} ({moment(train.estArr).format('h:mm a')})
         </li>
       </ul>
