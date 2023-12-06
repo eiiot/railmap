@@ -155,7 +155,6 @@ const MapboxGlMap = (props: CustomMapProps) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...otherProps}
     >
       <GeocoderControl

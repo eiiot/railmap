@@ -1,6 +1,7 @@
 import TrainElement from './elements/amtrak/TrainElement'
-import { station, trainData } from 'amtrak'
-import moment from 'moment'
+import { TrainResponse } from '../../types/amtraker'
+import { station, trainData } from '../../types/amtraker'
+import moment from 'dayjs'
 import { useCallback, useEffect, useState } from 'react'
 import { MapRef, useMap } from 'react-map-gl'
 
@@ -33,8 +34,8 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
 
   // set the station trains to an API call
   const getStationTrains = useCallback(async () => {
-    const response = await fetch(`https://api.amtraker.com/v1/trains`)
-    const trainNums: { [key: number]: trainData[] } = await response.json()
+    const response = await fetch(`https://api-v3.amtraker.com/v3/trains`)
+    const trainNums: TrainResponse = await response.json()
     const trains: stationTrain[] = []
     for (const trainNum in trainNums) {
       trainNums[trainNum].forEach((train: trainData) => {
@@ -48,6 +49,7 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
         })
       })
     }
+
     // order stations by closest estArr
     trains.sort((a, b) => {
       return moment(a.estArr).diff(moment(b.estArr))

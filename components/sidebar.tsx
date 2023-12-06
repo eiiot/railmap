@@ -1,3 +1,4 @@
+import { Train } from '../types/amtraker'
 import {
   CNCrossingData,
   FiveOneOneVehicleActivity,
@@ -7,19 +8,17 @@ import {
 import AmtrakSidebarContent from './sidebar/AmtrakSidebarContent'
 import AmtrakStationSidebarContent from './sidebar/AmtrakStationSidebarContent'
 import BridgeSidebarContent from './sidebar/BridgeSidebarContent'
-import CaltrainSidebarContent from './sidebar/CaltrainSidebarContent'
 import CNCrossingSidebarContent from './sidebar/CNCrossingSidebarContent'
 import CrossingSidebarContent from './sidebar/CrossingSidebarContent'
 import OSMSidebarContent from './sidebar/OSMSidebarContent'
-import { classNames } from '../helpers/tailwind/classNames'
-import { trainData } from 'amtrak'
+import classNames from 'clsx'
 import { motion, useAnimation } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { MapRef } from 'react-map-gl'
 
 interface SidebarProps {
   mapboxFeatureData: { [key: string]: unknown } | null
-  onTrainClick?: (train: trainData, railmap: MapRef) => void
+  onTrainClick?: (train: Train, railmap: MapRef) => void
 }
 
 const usePrevious = (value: any) => {
@@ -74,86 +73,70 @@ const Sidebar = (props: SidebarProps) => {
 
   // sidebar swiping
 
-  const [isOpen, setIsOpen] = useState(false)
-
-  const prevIsOpen = usePrevious(isOpen)
-
-  function onClose() {
-    setIsOpen(false)
-  }
-
-  function onOpen() {
-    setIsOpen(true)
-  }
+  const [position, setPosition] = useState<'small' | 'medium' | 'large'>('medium')
 
   const controls = useAnimation()
 
   // on change of featureData show sidebar
   useEffect(() => {
     if (mapboxFeatureData) {
-      setIsOpen(true)
+      setPosition('medium')
+      controls.start('medium')
     }
-  }, [mapboxFeatureData])
+  }, [mapboxFeatureData, controls])
+
+  // initial position small
 
   useEffect(() => {
-    if (prevIsOpen && !isOpen) {
-      controls.start('hidden')
-    } else if (!prevIsOpen && isOpen) {
-      controls.start('visible')
+    if (isMedium) {
+      setPosition('medium')
+      controls.start('medium')
+    } else {
+      setPosition('small')
+      controls.start('small')
     }
-  }, [controls, isOpen, prevIsOpen])
-
-  function onClickHandler() {
-    setIsOpen((isOpen) => (isOpen ? false : true))
-  }
+  }, [isMedium, controls])
 
   function onDragEnd(_: any, info: any) {
-    console.log(info.point.y)
-    if (isMedium) {
-      if (isOpen) {
-        const shouldClose = info.velocity.x < -40
-        if (shouldClose) {
-          controls.start('hidden')
-          onClose()
-        } else {
-          controls.start('visible')
-          onOpen()
-        }
-      }
-    } else {
-      if (isOpen) {
-        const shouldClose = info.velocity.y > 0
-        if (shouldClose) {
-          controls.start('hidden')
-          onClose()
-        } else {
-          controls.start('visible')
-          onOpen()
-        }
+    console.log(info.offset.y)
+    // set the position based on the drag direction and the current position
+
+    if (info.offset.y > 0) {
+      // drag down
+      if (position === 'large') {
+        setPosition('medium')
+        controls.start('medium')
+      } else if (position === 'medium') {
+        setPosition('small')
+        controls.start('small')
       } else {
-        const shouldOpen = info.velocity.y < 0
-        if (shouldOpen) {
-          controls.start('visible')
-          onOpen()
-        } else {
-          controls.start('hidden')
-          onClose()
-        }
+        setPosition('small')
+        controls.start('small')
+      }
+    }
+
+    if (info.offset.y < 0) {
+      // drag up
+      if (position === 'small') {
+        setPosition('medium')
+        controls.start('medium')
+      } else if (position === 'medium') {
+        setPosition('large')
+        controls.start('large')
+      } else {
+        setPosition('large')
+        controls.start('large')
       }
     }
   }
-
-  useEffect(() => {
-    controls.start('hidden')
-  }, [isMedium, controls]) // hide on window resize
 
   return (
     <motion.div
       animate={controls}
       className={classNames(
-        'fixed bottom-[32px] z-10 flex h-[calc(70vh-32px)] w-full translate-x-0 cursor-grab flex-col active:cursor-grabbing md:top-0 md:bottom-auto md:m-[10px] md:h-5/6 md:w-[300px] md:translate-x-[calc(-100%-10px)] md:translate-y-0 md:flex-row',
+        'fixed left-0 top-0 z-10 h-full w-full md:bottom-0 md:top-auto md:m-4 md:h-1/2 md:w-72',
       )}
-      drag={isMedium ? 'x' : 'y'}
+      drag={isMedium ? false : 'y'}
       dragConstraints={{ top: 0, right: 0 }}
       dragElastic={{
         top: 0,
@@ -169,31 +152,22 @@ const Sidebar = (props: SidebarProps) => {
         stiffness: 400,
       }}
       variants={
-        isMedium
-          ? {
-              visible: { x: 0, y: 0 },
-              hidden: { x: 'calc(-100% - 10px)', y: 0 },
-            }
-          : {
-              visible: { y: 0, x: 0 },
-              hidden: { y: '100%', x: 0 },
-            }
+        (!isMedium && {
+          large: { y: 0, x: 0 },
+          medium: { y: '50%', x: 0 },
+          small: { y: '80%', x: 0 },
+        }) || {
+          large: { y: 0, x: 0 },
+          medium: { y: 0, x: 0 },
+          small: { y: 0, x: 0 },
+        }
       }
     >
-      <div
-        className={classNames(
-          'relative mx-[20%] mb-2 cursor-grab rounded-md bg-white active:cursor-grabbing md:hidden',
-        )}
-      >
-        <div className="z-30 py-3" />
-      </div>
       {featureData ? (
         featureData.mapboxLayerId === 'amtrak' ? (
-          <AmtrakSidebarContent trainData={featureData as unknown as trainData} />
+          <AmtrakSidebarContent trainData={featureData as unknown as Train} />
         ) : featureData.mapboxLayerId === 'amtrak-stations' && onTrainClick ? (
           <AmtrakStationSidebarContent onTrainClick={onTrainClick} stationData={featureData} />
-        ) : featureData.mapboxLayerId === 'caltrain' ? (
-          <CaltrainSidebarContent trainData={featureData as unknown as FiveOneOneVehicleActivity} />
         ) : featureData.mapboxLayerId === 'Railroad-Crossings' ? (
           <CrossingSidebarContent crossingData={featureData as unknown as USCrossingData} />
         ) : featureData.mapboxLayerId === 'Railroad-Bridges' ? (
@@ -215,15 +189,6 @@ const Sidebar = (props: SidebarProps) => {
           <span>No Content Selected</span>
         </div>
       )}
-      <div
-        className={classNames(
-          'my-[35vh] mx-2 hidden rounded-md bg-white shadow-lg md:block',
-          isOpen ? 'cursor-w-resize' : 'cursor-e-resize',
-        )}
-        onClick={onClickHandler}
-      >
-        <div className="z-30 px-2" />
-      </div>
     </motion.div>
   )
 }

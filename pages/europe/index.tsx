@@ -21,7 +21,9 @@ const Home: NextPage = () => {
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
     if (e.features) {
-      const clickedFeature = e.features[0].properties
+      const clickedFeatureDef = e.features[0]
+      if (!clickedFeatureDef) return
+      const clickedFeature = clickedFeatureDef.properties
       const featureDataObject = {
         ...clickedFeature,
         mapboxLayerId: e.features[0].layer.id,

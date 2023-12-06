@@ -1,12 +1,12 @@
 import capitalize from '../../../../helpers/capitalize'
 import findStation from '../../../../helpers/sidebar/amtrak/FindStation'
+import { Station } from '../../../../types/amtraker'
 import TimeDifferenceRing from '../../../TimeDifferenceRing'
-import { station } from 'amtrak'
 
 interface EventElementProps {
   eventName: string | null
   eventCode: string | null
-  stations: station[]
+  stations: Station[]
 }
 
 const EventElement = (props: EventElementProps) => {

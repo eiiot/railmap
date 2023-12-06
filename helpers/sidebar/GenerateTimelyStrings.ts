@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'dayjs'
 
 const generateTimelyStrings = (start: string, end: string) => {
   if (!(start && end)) {

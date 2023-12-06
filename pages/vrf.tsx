@@ -11,18 +11,14 @@ import {
   Source,
   GeolocateControl,
   NavigationControl,
+  Map,
 } from 'react-map-gl'
 import type { NextPage } from 'next'
-
-const Map = dynamic(() => import('react-map-gl'), {
-  loading: () => <Loader />,
-  ssr: false,
-})
 
 async function getAmtrak() {
   // Make a GET request to the API and return the location of the trains.
   try {
-    const response = await fetch('https://api.amtraker.com/v1/trains', {
+    const response = await fetch('https://api-v3.amtraker.com/v3/trains', {
       method: 'GET',
     })
     const trainNums = await response.json()

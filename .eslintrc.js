@@ -7,6 +7,7 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:import/typescript',
     // 'plugin:@typescript-eslint',
+    'plugin:you-dont-need-momentjs/recommended',
     'prettier',
   ],
   rules: {

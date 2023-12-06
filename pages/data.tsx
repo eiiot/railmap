@@ -1,11 +1,6 @@
 import dynamic from 'next/dynamic'
-import { LngLatBoundsLike } from 'react-map-gl'
+import { LngLatBoundsLike, Map } from 'react-map-gl'
 import type { NextPage } from 'next'
-
-const Map = dynamic(() => import('react-map-gl'), {
-  loading: () => <p>Loading Map</p>,
-  ssr: false,
-})
 
 const Home: NextPage = () => {
   const mapViewState = {

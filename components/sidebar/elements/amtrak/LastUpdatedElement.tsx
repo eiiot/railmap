@@ -1,5 +1,10 @@
 import TimeDifferenceRing from '../../../TimeDifferenceRing'
-import moment from 'moment'
+import moment from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+import utc from 'dayjs/plugin/utc'
+
+moment.extend(duration)
+moment.extend(utc)
 
 interface LastUpdatedElementProps {
   lastUpdated: string | null

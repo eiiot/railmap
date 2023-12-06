@@ -1,15 +1,18 @@
 import TimeDifferenceRing from '../../../TimeDifferenceRing'
-import { station, trainData } from 'amtrak'
-import moment from 'moment'
+import moment from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { MapRef, useMap } from 'react-map-gl'
+import { Station, Train } from '../../../../types/amtraker'
 
-interface stationTrain extends station {
-  train: trainData
+moment.extend(relativeTime)
+
+interface stationTrain extends Station {
+  train: Train
 }
 
 interface TrainElementProps {
   train: stationTrain
-  onTrainClick: (train: trainData, railmap: MapRef) => void
+  onTrainClick: (train: Train, railmap: MapRef) => void
 }
 
 const TrainElement = (props: TrainElementProps) => {

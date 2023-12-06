@@ -1,6 +1,6 @@
-import { station } from 'amtrak'
+import { Station } from '../../../types/amtraker'
 
-const findStation = (stations: station[], code: string) => {
+const findStation = (stations: Station[], code: string) => {
   return (
     stations.find((station) => station.code == code) ?? {
       trainNum: null,

@@ -1,31 +1,23 @@
-import Loader from '../components/loader'
-import DataFeedAlert from '../components/map/amtrak/DataFeedAlert'
-import TrainsLoadingAlert from '../components/map/amtrak/TrainsLoadingAlert'
-import CustomControl from '../components/map/CustomControl'
 import LayerControl from '../components/map/LayerControl'
 import LocationControl from '../components/map/LocationControl'
 import * as styles from '../components/map/styles'
 import StylesControl from '../components/map/StylesControl'
 import TerrainControl from '../components/map/TerrainControl'
-import { FiveOneOneVehicleActivity } from '../components/MapDataTypes'
+import MapboxMap from '../components/mapbox'
 import Sidebar from '../components/sidebar'
-import { fetchAllTrains, trainData } from 'amtrak'
 import { Feature, FeatureCollection } from 'geojson'
 import { MapboxStyleDefinition } from 'mapbox-gl-style-switcher'
-import dynamic from 'next/dynamic'
-import { useCallback, useEffect, useState } from 'react'
-import { Layer, LayerProps, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
+import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
+import { Layer, LngLatBoundsLike, MapLayerMouseEvent, Source } from 'react-map-gl'
 import type { NextPage } from 'next'
-
-const Map = dynamic(() => import('../components/mapbox'), {
-  loading: () => <Loader />,
-  ssr: false,
-})
+import { TrainResponse } from '../types/amtraker'
 
 async function getAmtrak() {
   // Make a GET request to the API and return the location of the trains.
   try {
-    const trainNums = await fetchAllTrains()
+    const response = await fetch('https://api-v3.amtraker.com/v3/trains')
+    const trainNums = (await response.json()) as TrainResponse
     // returns object of trains with the object num as the train number
 
     // create a geoJSON object
@@ -59,51 +51,6 @@ async function getAmtrak() {
   }
 }
 
-async function getCaltrain() {
-  // Make a GET request to the API and return the location of the trains.
-  try {
-    const response = await fetch(`https://api.therailmap.com/v1/caltrain`, { method: 'GET' })
-    const responseJSON = await response.json()
-
-    const trains = responseJSON.Siri.ServiceDelivery.VehicleMonitoringDelivery.VehicleActivity
-
-    if (trains === undefined) {
-      throw new Error('No trains found')
-    }
-
-    // Fly the map to the location.
-
-    const geoJson: FeatureCollection = {
-      type: 'FeatureCollection',
-      features: [],
-    }
-
-    trains.forEach((train: FiveOneOneVehicleActivity) => {
-      const trainObject: Feature = {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [
-            +train.MonitoredVehicleJourney.VehicleLocation.Longitude,
-            +train.MonitoredVehicleJourney.VehicleLocation.Latitude,
-          ],
-        },
-        properties: {
-          name: train.MonitoredVehicleJourney.VehicleRef,
-          ...train,
-        },
-      }
-      geoJson.features.push(trainObject)
-    })
-
-    return geoJson
-
-    // Return the location of the trains as GeoJSON.
-  } catch (err) {
-    console.error(err)
-  }
-}
-
 const Home: NextPage = () => {
   const [featureData, setFeatureData] = useState<{
     [key: string]: unknown
@@ -111,7 +58,9 @@ const Home: NextPage = () => {
 
   const featureClickHandler = useCallback((e: MapLayerMouseEvent) => {
     if (e.features) {
-      const clickedFeature = e.features[0].properties
+      const clickedFeatureDef = e.features[0]
+      if (!clickedFeatureDef) return
+      const clickedFeature = clickedFeatureDef.properties
       const featureDataObject = {
         ...clickedFeature,
         mapboxLayerId: e.features[0].layer.id,
@@ -153,23 +102,17 @@ const Home: NextPage = () => {
     'Railroad-Bridges',
     'CN-Railroad-Crossings',
     'CN-Railroad-Bridges',
-    'caltrain',
   ]
 
-  //  * Live Amtrak Trains * //
-
   const [amtrakGeoJSON, setAmtrakGeoJSON] = useState<FeatureCollection | undefined>(undefined)
-  const [caltrainGeoJSON, setCaltrainGeoJSON] = useState<FeatureCollection | undefined>(undefined)
 
-  const [terrain, setTerrain] = useState<boolean>(false)
-
-  const [loadingInfo, setLoadingInfo] = useState<boolean>(true)
-
-  const onLoadHandler = useCallback((event) => {
+  const onLoadHandler = useCallback(async (event) => {
     const map = event.target
     map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 })
-    // integrate the useEffect hook from above but instead run it on load
-    getAmtrak()
+
+    let toastId = toast.loading('Loading Amtrak data...')
+
+    await getAmtrak()
       .then((geoJSON) => {
         setAmtrakGeoJSON(geoJSON)
       })
@@ -177,15 +120,7 @@ const Home: NextPage = () => {
         console.error(error)
       })
 
-    getCaltrain()
-      .then((geoJSON) => {
-        setCaltrainGeoJSON(geoJSON)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-
-    setLoadingInfo(false)
+    toast.dismiss(toastId)
 
     setInterval(async () => {
       getAmtrak()
@@ -195,18 +130,10 @@ const Home: NextPage = () => {
         .catch((error) => {
           console.error(error)
         })
-
-      getCaltrain()
-        .then((geoJSON) => {
-          setCaltrainGeoJSON(geoJSON)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
     }, 60000)
   }, [])
 
-  const trainButtonClickHandler = useCallback((train: trainData, railmap) => {
+  const trainButtonClickHandler = useCallback((train: Train, railmap) => {
     const { lon, lat } = train
     railmap.flyTo({ center: [lon, lat], zoom: 13, duration: 2000 })
     const featureDataObject = {
@@ -216,15 +143,11 @@ const Home: NextPage = () => {
     setFeatureData(featureDataObject)
   }, [])
 
-  // * End Live Amtrak Trains * //
-
   return (
     <>
       <Sidebar mapboxFeatureData={featureData} onTrainClick={trainButtonClickHandler} />
-      <DataFeedAlert />
-      <TrainsLoadingAlert loadingInfo={loadingInfo} setLoadingInfo={setLoadingInfo} />
 
-      <Map
+      <MapboxMap
         initialViewState={mapViewState}
         interactiveLayerIds={mapInteractiveLayerIds}
         mapStyle={stylesSwitcherStyles[0].uri}
@@ -244,8 +167,6 @@ const Home: NextPage = () => {
             'Railroad-Bridges',
             'CN-Railroad-Crossings',
             'CN-Railroad-Bridges',
-            'caltrain',
-            'caltrain-labels',
             'amtrak-routes',
             'amtrak-routes-zoomed',
           ]}
@@ -277,11 +198,6 @@ const Home: NextPage = () => {
           <Layer {...styles.amtrakNumbers} />
         </Source>
 
-        <Source data={caltrainGeoJSON} id="caltrain" type="geojson">
-          <Layer {...styles.caltrain} />
-          <Layer {...styles.caltrainLabels} />
-        </Source>
-
         <Source
           id="mapbox-dem"
           maxzoom={14}
@@ -289,7 +205,7 @@ const Home: NextPage = () => {
           type="raster-dem"
           url="mapbox://mapbox.mapbox-terrain-dem-v1"
         />
-      </Map>
+      </MapboxMap>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import { classNames } from '../helpers/tailwind/classNames'
-import moment from 'moment'
+import moment from 'dayjs'
 
 interface TimeDifferenceRingProps {
   start: string | null | undefined
