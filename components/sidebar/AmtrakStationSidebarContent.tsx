@@ -36,11 +36,15 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
   const getStationTrains = useCallback(async () => {
     const response = await fetch(`https://api-v3.amtraker.com/v3/trains`)
     const trainNums: TrainResponse = await response.json()
+    console.log(stationData)
     const trains: stationTrain[] = []
     for (const trainNum in trainNums) {
       trainNums[trainNum].forEach((train: trainData) => {
         train.stations.forEach((station: station) => {
-          if (station.code === stationData['stncode'] && station.estArr) {
+          if (
+            station.code === stationData['stncode'] &&
+            station.status.toLowerCase() === 'enroute'
+          ) {
             trains.push({
               ...station,
               train: train,
@@ -50,9 +54,11 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
       })
     }
 
+    console.log('trains', trains)
+
     // order stations by closest estArr
     trains.sort((a, b) => {
-      return moment(a.estArr).diff(moment(b.estArr))
+      return moment(a.train.estArr).diff(moment(b.train.estArr))
     })
     setStationTrains(trains)
   }, [stationData])
@@ -68,7 +74,7 @@ const AmtrakStationSidebarContent = (props: AmtrakStationSidebarContentProps) =>
       </div>
       <div className="flex w-full max-w-md flex-[1] flex-col overflow-y-scroll px-2">
         <div className="bg-white p-3">
-          <ul className="w-full children:mb-4">
+          <ul className="children:mb-4 w-full">
             {stationTrains.length > 0 ? (
               stationTrains.map((train) => (
                 <TrainElement

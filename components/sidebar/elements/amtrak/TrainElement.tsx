@@ -35,18 +35,18 @@ const TrainElement = (props: TrainElementProps) => {
       <ul className="text-coolGray-500 mt-1 flex space-x-1 text-xs font-normal leading-4">
         <li>
           Arriving{' '}
-          {train.estArrCmnt
+          {train.arrCmnt
             ?.toLowerCase()
             .replace('mi', 'min') // remove a zero if it's the first character
             .replace(/^0/, '')}{' '}
-          {moment(train.estArr).fromNow()} ({moment(train.estArr).format('h:mm a')})
+          {moment(train.train.estArr).fromNow()} ({moment(train.train.estArr).format('h:mm a')})
         </li>
       </ul>
 
-      <TimeDifferenceRing
+      {/* <TimeDifferenceRing
         end={moment.utc(train.schArr).toISOString()}
         start={moment.utc(train.estArr).toISOString()}
-      />
+      /> */}
     </li>
   )
 }
